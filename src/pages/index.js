@@ -1,9 +1,13 @@
-export default function Home() {
+import LoginForm from '@/components/LoginForm';
+import React from 'react';
+
+function HomePage() {
   return (
     <>
-      <div>
-        <h1>hello!</h1>
-      </div>
+      <LoginForm/>
     </>
+    
   )
 }
+
+export default HomePage;
