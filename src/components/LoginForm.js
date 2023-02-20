@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-function LoginForm() {
+export default function LoginForm() {
   const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,8 +10,12 @@ function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://ena.jegal.shop:8080/register', { "username":username, "password":password });
+      const response = await axios.post('http://15.164.145.252:8080/register', { "username":username, "password":password });
       console.log(response.data);
+
+      // 로그인에 성공하면 메인화면으로 이동
+      router.push('/room');
+
     } catch (error) {
       console.error(error);
     }
@@ -57,14 +61,14 @@ function LoginForm() {
 
         <div className="flex items-center justify-between">
           <button
-            className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             로그인
           </button>
         </div>
-        
-        <div className="flex justify-end mt-4">
+
+        <div className="flex justify-end mt-4 mb-4">
         <a
             className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800"
             href="#" onClick={handleRegisterClick}
@@ -73,10 +77,34 @@ function LoginForm() {
             회원가입
           </a>
         </div>
+
+        <div className="flex items-center justify-between mb-1">
+          <button className="w-full bg-yellow-300 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
+            <div className="flex items-center">
+              <img src="https://cdn-icons-png.flaticon.com/512/2111/2111466.png" alt="" style={{ width: '20px' }} className="mr-2" />
+              <span className="flex-1">카카오 로그인</span>
+            </div>
+          </button>
+        </div>
+        <div className="flex items-center justify-between mb-1">
+          <button className="w-full bg-white-500 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
+            <div className="flex items-center">
+              <img src="https://cdn-icons-png.flaticon.com/128/2504/2504739.png" alt="" style={{ width: '20px' }} className="mr-2" />
+              <span className="flex-1">Google 로그인</span>
+            </div>
+          </button>
+        </div>
+        <div className="flex items-center justify-between mb-1">
+          <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
+            <div className="flex items-center">
+              <img src="https://cdn1.iconfinder.com/data/icons/computer-techologies-outline-free/128/ic_naver_logo-256.png" alt="" style={{ width: '20px' }} className="mr-2" />
+              <span className="flex-1">네이버 로그인</span>
+            </div>
+          </button>
+        </div>
+
         
       </form>
     </div>
   );
 }
-
-export default LoginForm;

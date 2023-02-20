@@ -10,10 +10,15 @@ function SignupForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post('/api/signup', { id, password });
+      const response = await axios.post('http://15.164.145.252:8080/register', { "username":id, "password":password });
       console.log(response.data);
+
+      // 가입에 성공한 경우, 첫 로그인 화면으로 이동
+      window.location.href = '/';
     } catch (error) {
       console.error(error);
+      // 가입에 실패한 경우,
+
     }
   };
 

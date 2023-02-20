@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Navbar from './Navbar'
 
 const rooms = [
   { id: 1, name: '게임 방 1', participants: 4, started: false },
@@ -12,9 +13,11 @@ const RoomList = () => {
   const [selected, setSelected] = useState(0);
 
   return (
-    <div className="flex flex-col items-center style={{ width: '90vw' }}">      
-      <div className="w-full mt-5 overflow-x-auto style={{ width: '90vw' }}">
-        <table className="w-full table-auto style={{ width: '90vw' }}">
+    <>
+    <Navbar/>
+    <div className="relative flex flex-col items-center">      
+      <div className="w-full mt-5 overflow-x-auto" style={{ width: '90vw' }}>
+        <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-800 text-white">
               <th className="w-1/4 py-2 px-4">방 제목</th>
@@ -43,19 +46,15 @@ const RoomList = () => {
               </tr>
             ))}
           </tbody>
-          <button className="fixed bottom-4 right-4 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          </button>
         </table>
       </div>
-      <button className="fixed bottom-4 right-4 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center">
+      <button className="fixed bottom-20 right-20 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
         </svg>
       </button>
     </div>
+    </>
   );
 };
 
