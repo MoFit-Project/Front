@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const TestButton = () => {
   const handleButtonClick = () => {
-    axios.get('https://jsonplaceholder.typicode.com/todos/1')
+    axios.get('http://175.126.107.18:8080/naver')
       .then((response) => {
         console.log(response.data);
       })

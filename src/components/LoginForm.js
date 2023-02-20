@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 export default function LoginForm() {
   const [username, setEmail] = useState('');
@@ -10,8 +11,10 @@ export default function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://15.164.145.252:8080/register', { "username":username, "password":password });
-      console.log(response.data);
+      const response = await axios.post('http://15.164.145.252:8080/login', { "username":username, "password":password });
+
+      // 서버에서 받은 토큰을 쿠키에 저장
+      Cookies.set('token', response.data.access_token);
 
       // 로그인에 성공하면 메인화면으로 이동
       router.push('/room');
@@ -20,10 +23,15 @@ export default function LoginForm() {
       console.error(error);
     }
   };
+  
   const router = useRouter();
 
   const handleRegisterClick = () => {
   router.push('/signup');
+  };
+
+  const handleNaverLoginClick = () => {
+    window.location.href = 'https://openapi.naver.com/v1/nid/me';
   };
 
   return (
@@ -79,14 +87,6 @@ export default function LoginForm() {
         </div>
 
         <div className="flex items-center justify-between mb-1">
-          <button className="w-full bg-yellow-300 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
-            <div className="flex items-center">
-              <img src="https://cdn-icons-png.flaticon.com/512/2111/2111466.png" alt="" style={{ width: '20px' }} className="mr-2" />
-              <span className="flex-1">카카오 로그인</span>
-            </div>
-          </button>
-        </div>
-        <div className="flex items-center justify-between mb-1">
           <button className="w-full bg-white-500 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
             <div className="flex items-center">
               <img src="https://cdn-icons-png.flaticon.com/128/2504/2504739.png" alt="" style={{ width: '20px' }} className="mr-2" />
@@ -94,13 +94,17 @@ export default function LoginForm() {
             </div>
           </button>
         </div>
+        
         <div className="flex items-center justify-between mb-1">
-          <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
-            <div className="flex items-center">
-              <img src="https://cdn1.iconfinder.com/data/icons/computer-techologies-outline-free/128/ic_naver_logo-256.png" alt="" style={{ width: '20px' }} className="mr-2" />
-              <span className="flex-1">네이버 로그인</span>
-            </div>
-          </button>
+        <button
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2"
+          onClick={handleNaverLoginClick}
+        >
+          <div className="flex items-center">
+            <img src="https://cdn1.iconfinder.com/data/icons/computer-techologies-outline-free/128/ic_naver_logo-256.png" alt="" style={{ width: '20px' }} className="mr-2" />
+            <span className="flex-1">네이버 로그인</span>
+          </div>
+        </button>
         </div>
 
         
