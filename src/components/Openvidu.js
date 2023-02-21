@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from './UserVideo';
 import { getToken } from '../public/createToken';
-
+import axios from 'axios';
 
 export default function OpenViduComponent() {
 
     const [OV, setOV] = useState(null);
+
     const [mySessionId, setMySessionId] = useState('SessionA');
     const [myUserName, setMyUserName] = useState(`Participant${Math.floor(Math.random() * 100)}`);
     const [session, setSession] = useState(undefined);
@@ -14,15 +15,25 @@ export default function OpenViduComponent() {
     const [publisher, setPublisher] = useState(undefined);
     const [subscribers, setSubscribers] = useState([]);
 
+    const currentVideoDeviceRef = useRef(null);
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', onbeforeunload);
+        return () => {
+            window.removeEventListener('beforeunload', onbeforeunload);
+        };
+    }, []);
+
+    const sendSignal = async () => {
+        const response = await axios.post('https://ena.jegal.shop:8080/mofit/gameStart', { session: mySessionId });
+    }
+
+    const onbeforeunload = (event) => {
+        leaveSession();
+    };
 
     const handleChangeSessionId = event => setMySessionId(event.target.value);
     const handleChangeUserName = event => setMyUserName(event.target.value);
-
-    const handleMainVideoStream = (stream) => {
-        if (mainStreamManager !== stream) {
-            setMainStreamManager(stream);
-        }
-    }
 
     const deleteSubscriber = (streamManager) => {
         let newSubscribers = subscribers;
@@ -55,19 +66,24 @@ export default function OpenViduComponent() {
             mySession.on('streamCreated', (event) => {
                 // Subscribe to the Stream to receive it. Second parameter is undefined
                 // so OpenVidu doesn't create an HTML video by its own
-                var subscriber = mySession.subscribe(event.stream, undefined);
-                var newSubscribers = subscribers;
-                newSubscribers.push(subscriber);
-
+                var newsubscriber = mySession.subscribe(event.stream, undefined);
+                //var newSubscribers = subscribers;
+                //newSubscribers.push(newsubscriber);
                 // Update the state with the new subscribers
-                setSubscribers(newSubscribers);
+                setSubscribers([...subscribers, newsubscriber]);
             });
 
             // On every Stream destroyed...
             mySession.on('streamDestroyed', (event) => {
-
                 // Remove the stream from 'subscribers' array
                 deleteSubscriber(event.stream.streamManager);
+            });
+
+            // On every asynchronous exception...
+            mySession.on('start', (event) => {
+                console.log(event.data); // Message
+                //console.log(event.from); // Connection object of the sender
+                console.log(event.type); // The type of message
             });
 
             // On every asynchronous exception...
@@ -106,15 +122,15 @@ export default function OpenViduComponent() {
                         var currentVideoDevice = videoDevices.find(device => device.deviceId === currentVideoDeviceId);
 
                         // Set the main video in the page to display our webcam and store our Publisher
+                        currentVideoDeviceRef.current = currentVideoDevice;
                         setMainStreamManager(publisher);
                         setPublisher(publisher);
-                        currentVideoDevice = currentVideoDevice;
-
                     })
                     .catch((error) => {
                         console.log('There was an error connecting to the session:', error.code, error.message);
                     });
             });
+
         }
     }, [session]);
 
@@ -131,9 +147,6 @@ export default function OpenViduComponent() {
         <div className="container">
             {session === undefined ? (
                 <div id="join">
-                    <div id="img-div">
-                        {/* <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" /> */}
-                    </div>
                     <div id="join-dialog" className="jumbotron vertical-center">
                         <h1> Join a video session </h1>
                         <form className="form-group" onSubmit={joinSession}>
@@ -166,7 +179,6 @@ export default function OpenViduComponent() {
                     </div>
                 </div>
             ) : null}
-
             {session !== undefined ? (
                 <div id="session">
                     <div id="session-header">
@@ -179,28 +191,15 @@ export default function OpenViduComponent() {
                             value="Leave session"
                         />
                     </div>
-
                     {mainStreamManager !== undefined ? (
                         <div id="main-video" className="col-md-6">
                             <UserVideo streamManager={mainStreamManager} />
-                            {/* <input
-                                className="btn btn-large btn-success"
-                                type="button"
-                                id="buttonSwitchCamera"
-                                // onClick={switchCamera}
-                                value="Switch Camera"
-                            /> */}
-
+                            <button onClick={sendSignal}>클릭하기</button>
                         </div>
                     ) : null}
                     <div id="video-container" className="col-md-6">
-                        {publisher !== undefined ? (
-                            <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-                                <UserVideo streamManager={publisher} />
-                            </div>
-                        ) : null}
                         {subscribers.map((sub, i) => (
-                            <div key={i} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
+                            <div key={i} className="stream-container col-md-6 col-xs-6">
                                 <UserVideo streamManager={sub} />
                             </div>
                         ))}

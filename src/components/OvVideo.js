@@ -10,5 +10,9 @@ export default function OvVideo(props) {
         }
     }, [props]);
 
-    return <video autoPlay={true} ref={videoRef} />;
+    return (
+        <>
+            <video autoPlay={true} ref={videoRef} />
+        </>
+    );
 }
