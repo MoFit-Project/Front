@@ -17,6 +17,7 @@ export default function OpenViduComponent() {
 
     const handleChangeSessionId = event => setMySessionId(event.target.value);
     const handleChangeUserName = event => setMyUserName(event.target.value);
+
     const handleMainVideoStream = (stream) => {
         if (mainStreamManager !== stream) {
             setMainStreamManager(stream);
@@ -56,7 +57,7 @@ export default function OpenViduComponent() {
                 // so OpenVidu doesn't create an HTML video by its own
                 var subscriber = mySession.subscribe(event.stream, undefined);
                 var newSubscribers = subscribers;
-                subscribers.push(newSubscribers);
+                newSubscribers.push(subscriber);
 
                 // Update the state with the new subscribers
                 setSubscribers(newSubscribers);
