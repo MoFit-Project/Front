@@ -1,15 +1,14 @@
 
-import LoginForm from '@/components/loginForm';
+import LoginForm from '../components/LoginForm';
 import React from 'react';
-import Navbar from './Navbar'
+import OpenVidu from '../components/Openvidu';
 
-function HomePage() {
+export default function HomePage() {
   return (
     <>
-      <LoginForm/>
+      {/* <LoginForm/> */}
+      <OpenVidu />
     </>
-    
+
   )
 }
-
-export default HomePage;
