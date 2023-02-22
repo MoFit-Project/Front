@@ -3,19 +3,23 @@ import { OpenVidu } from 'openvidu-browser';
 import UserVideo from './UserVideo';
 import { getToken } from '../public/createToken';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
-export default function OpenViduComponent() {
+export default function OpenViduComponent({ roomName, userName }) {
 
     const [OV, setOV] = useState(null);
+    const [mySessionId, setMySessionId] = useState(roomName);
+    const [myUserName, setMyUserName] = useState(userName);
 
-    const [mySessionId, setMySessionId] = useState('SessionA');
-    const [myUserName, setMyUserName] = useState(`Participant${Math.floor(Math.random() * 100)}`);
+    
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
     const [publisher, setPublisher] = useState(undefined);
     const [subscribers, setSubscribers] = useState([]);
+    const router = useRouter();
 
     const currentVideoDeviceRef = useRef(null);
+
 
     useEffect(() => {
         window.addEventListener('beforeunload', onbeforeunload);
@@ -24,16 +28,35 @@ export default function OpenViduComponent() {
         };
     }, []);
 
-    const sendSignal = async () => {
-        const response = await axios.post('https://ena.jegal.shop:8080/mofit/gameStart', { session: mySessionId });
+    useEffect(() => {
+        joinSession();
+    }, []);
+
+    const sendSignal = () => {
+        let timer = 30;
+        setInterval(() => {
+            timer--;
+            session.signal({
+                data: timer,  // Any string (optional)
+                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: 'game_start'             // The type of message (optional)
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }, 1000);
+
     }
 
     const onbeforeunload = (event) => {
         leaveSession();
     };
 
-    const handleChangeSessionId = event => setMySessionId(event.target.value);
-    const handleChangeUserName = event => setMyUserName(event.target.value);
+    // const handleChangeSessionId = event => setMySessionId(event.target.value);
+    // const handleChangeUserName = event => setMyUserName(event.target.value);
 
     const deleteSubscriber = (streamManager) => {
         let newSubscribers = subscribers;
@@ -53,10 +76,12 @@ export default function OpenViduComponent() {
         setOV(null);
         setSession(undefined);
         setSubscribers([]);
-        setMySessionId('SessionA');
-        setMyUserName(`Participant${Math.floor(Math.random() * 100)}`);
+        //setMySessionId('SessionA');
+        //setMyUserName(`Participant${Math.floor(Math.random() * 100)}`);
         setMainStreamManager(undefined);
         setPublisher(undefined);
+
+        router.push(`/`);
     }
 
     useEffect(() => {
@@ -67,8 +92,7 @@ export default function OpenViduComponent() {
                 // Subscribe to the Stream to receive it. Second parameter is undefined
                 // so OpenVidu doesn't create an HTML video by its own
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
-                //var newSubscribers = subscribers;
-                //newSubscribers.push(newsubscriber);
+
                 // Update the state with the new subscribers
                 setSubscribers([...subscribers, newsubscriber]);
             });
@@ -80,7 +104,7 @@ export default function OpenViduComponent() {
             });
 
             // On every asynchronous exception...
-            mySession.on('start', (event) => {
+            mySession.on('signal:game_start', (event) => {
                 console.log(event.data); // Message
                 //console.log(event.from); // Connection object of the sender
                 console.log(event.type); // The type of message
@@ -145,50 +169,16 @@ export default function OpenViduComponent() {
 
     return (
         <div className="container">
-            {session === undefined ? (
-                <div id="join">
-                    <div id="join-dialog" className="jumbotron vertical-center">
-                        <h1> Join a video session </h1>
-                        <form className="form-group" onSubmit={joinSession}>
-                            <p>
-                                <label>Participant: </label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    id="userName"
-                                    value={myUserName}
-                                    onChange={handleChangeUserName}
-                                    required
-                                />
-                            </p>
-                            <p>
-                                <label> Session: </label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    id="sessionId"
-                                    value={mySessionId}
-                                    onChange={handleChangeSessionId}
-                                    required
-                                />
-                            </p>
-                            <p className="text-center">
-                                <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            ) : null}
             {session !== undefined ? (
                 <div id="session">
                     <div id="session-header">
-                        <h1 id="session-title">{mySessionId}</h1>
+                        <h1 id="session-title">{roomName}</h1>
                         <input
                             className="btn btn-large btn-danger"
                             type="button"
                             id="buttonLeaveSession"
                             onClick={leaveSession}
-                            value="Leave session"
+                            value="방 나가기"
                         />
                     </div>
                     {mainStreamManager !== undefined ? (

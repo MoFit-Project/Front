@@ -11,7 +11,7 @@ export default function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://15.164.145.252:8080/login', { "username":username, "password":password });
+      const response = await axios.post('http://54.224.29.112:8080/login', { "username": username, "password": password });
 
       // 서버에서 받은 토큰을 쿠키에 저장
       Cookies.set('token', response.data.access_token);
@@ -23,11 +23,11 @@ export default function LoginForm() {
       console.error(error);
     }
   };
-  
+
   const router = useRouter();
 
   const handleRegisterClick = () => {
-  router.push('/signup');
+    router.push('/signup');
   };
 
   const handleNaverLoginClick = () => {
@@ -36,7 +36,7 @@ export default function LoginForm() {
 
   return (
     <div className="max-w-md mx-auto mt-10">
-      <img class="mx-auto h-12 w-auto" src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png" alt="Your Company"></img>
+      <img className="mx-auto h-12 w-auto" src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png" alt="Your Company"></img>
       <h1 className="text-4xl font-bold text-center text-green-800">Mofit</h1>
       <form className="bg-white rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -77,10 +77,10 @@ export default function LoginForm() {
         </div>
 
         <div className="flex justify-end mt-4 mb-4">
-        <a
+          <a
             className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800"
             href="#" onClick={handleRegisterClick}
-            
+
           >
             회원가입
           </a>
@@ -94,20 +94,20 @@ export default function LoginForm() {
             </div>
           </button>
         </div>
-        
+
         <div className="flex items-center justify-between mb-1">
-        <button
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2"
-          onClick={handleNaverLoginClick}
-        >
-          <div className="flex items-center">
-            <img src="https://cdn1.iconfinder.com/data/icons/computer-techologies-outline-free/128/ic_naver_logo-256.png" alt="" style={{ width: '20px' }} className="mr-2" />
-            <span className="flex-1">네이버 로그인</span>
-          </div>
-        </button>
+          <button
+            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2"
+            onClick={handleNaverLoginClick}
+          >
+            <div className="flex items-center">
+              <img src="https://cdn1.iconfinder.com/data/icons/computer-techologies-outline-free/128/ic_naver_logo-256.png" alt="" style={{ width: '20px' }} className="mr-2" />
+              <span className="flex-1">네이버 로그인</span>
+            </div>
+          </button>
         </div>
 
-        
+
       </form>
     </div>
   );

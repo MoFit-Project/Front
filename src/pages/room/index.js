@@ -1,18 +1,27 @@
-import { useState } from 'react';
-import Navbar from '../components/Navbar'
+import { useState, useEffect } from 'react';
+import Navbar from '../../components/Navbar'
+import { useRouter } from "next/router";
+import axios from 'axios';
 
-const rooms = [
-  { id: 1, name: '스쿼트왕', participants: 4, started: false },
-  { id: 2, name: '한판 ㄱㄱ', participants: 2, started: false },
-  { id: 3, name: '사람구함', participants: 3, started: true }
-
-];
-
-const RoomList = () => {
+export default function RoomList() {
   const [selected, setSelected] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomName, setRoomName] = useState('');
   const [roomList, setRoomList] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get('https://ena.jegal.shop:8080/mofit/rooms');
+        console.log(response.data)
+        setRoomList((roomList) => [...roomList, ...response.data]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchRooms();
+  }, []);
 
 
   // 모달창 열기 이벤트 핸들러
@@ -25,15 +34,25 @@ const RoomList = () => {
     setIsModalOpen(false);
   };
 
-  const handleCreateRoom = async () => {
-    try {
-      const response = await axios.post('/api/rooms', { name: roomName });
-      setRoomList([...roomList, response.data]);
-      setRoomName('');
-    } catch (error) {
-      console.error(error);
-    }
+  const handleCreateRoom = (event) => {
+    event.preventDefault();
+    router.push(`/room/${roomName}`);
+    //const newRoom = { id: 1, roomName: roomName, participants: 1, started: false };
+    //setRoomList([...roomList, newRoom]);
+
+    // try {
+    //   const response = await axios.post('/api/rooms', { name: roomName });
+    //   setRoomList([...roomList, response.data]);
+    //   setRoomName('');
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
+
+
+  const handleRoomEnter = (roomId) => {
+    router.push(`/room/${roomId}`);
+  }
 
   const handleChangeRoomName = (event) => {
     setRoomName(event.target.value);
@@ -86,25 +105,25 @@ const RoomList = () => {
               <tr className="bg-gray-800 text-white">
                 <th className="w-1/4 py-2 px-4">방 제목</th>
                 <th className="w-1/4 py-2 px-4">참여 인원</th>
-                <th className="w-1/4 py-2 px-4">상태</th>
                 <th className="w-1/4 py-2 px-4">액션</th>
               </tr>
             </thead>
 
             <tbody>
-              {roomList.map((room) => (
-                <tr key={room.id} className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
-                  <td className="py-2 px-4 text-center font-bold">{room.name}</td>
-                  <td className="py-2 px-4 text-center">{room.participants} / 4</td>
-                  <td className="py-2 px-4 text-center">
+              {roomList?.map((room) => (
+                <tr key={room.roomId} className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
+                  <td className="py-2 px-4 text-center font-bold">{room.roomId}</td>
+                  <td className="py-2 px-4 text-center">{room.participant}</td>
+                  {/* <td className="py-2 px-4 text-center">
                     {room.started ? (
                       <span className="text-green-500 font-bold">게임 중</span>
                     ) : (
                       <span className="text-yellow-500 font-bold">대기 중</span>
                     )}
-                  </td>
+                  </td> */}
                   <td className="py-2 px-4">
-                    <button className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block">
+                    <button className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block"
+                      onClick={() => { handleRoomEnter(room.roomId) }}>
                       참여하기
                     </button>
                   </td>
@@ -123,5 +142,3 @@ const RoomList = () => {
     </>
   );
 };
-
-export default RoomList;

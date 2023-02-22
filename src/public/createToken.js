@@ -10,6 +10,7 @@ export const getToken = async (mySessionId) => {
 }
 
 const createSession = async (sessionId) => {
+    console.log(sessionId);
     const response = await axios.post(APPLICATION_SERVER_URL + 'mofit/sessions', { customSessionId: sessionId }, {
         headers: {
             'Content-Type': 'application/json'
