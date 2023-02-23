@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import RefreshToken from "./RefreshToken";
 
 export default function LoginForm() {
   const [username, setEmail] = useState("");
@@ -9,24 +10,22 @@ export default function LoginForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     // https://mofit.bobfriend.site:8080/login
     try {
-      const response = await axios.post(
-        "https://mofit.kraftonjungle.shop/login",
-        { account: username, password: password }
-      );
-
+      const response = await axios.post("/mofit/login", {
+        account: username,
+        password: password,
+      });
       console.log("####");
       console.log(response.data);
-
       // 서버에서 받은 토큰을 쿠키에 저장
       Cookies.set("token", response.data.token.access_token);
-
+      Cookies.set("refresh", response.data.token.refresh_token);
       // 로그인에 성공하면 메인화면으로 이동
       router.push("/room");
     } catch (error) {
       console.error(error);
-
       const { response } = error;
       if (response) {
         //모달
@@ -36,6 +35,7 @@ export default function LoginForm() {
             window.alert("인증되지 않은 사용자입니다.");
             break;
           case 403:
+            // 이전페이지로 리다이렉트
             window.alert("접근 권한이 없습니다.");
             break;
           case 500:
