@@ -2,9 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import RefreshToken from "./RefreshToken";
 
-export default function LoginForm() {
+export default function Login() {
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,9 +15,10 @@ export default function LoginForm() {
       const response = await axios.post("/mofit/login", {
         account: username,
         password: password,
-      });
-      console.log("####");
-      console.log(response.data);
+      }).then(
+
+      )
+
       // 서버에서 받은 토큰을 쿠키에 저장
       Cookies.set("token", response.data.token.access_token);
       Cookies.set("refresh", response.data.token.refresh_token);
@@ -69,6 +69,7 @@ export default function LoginForm() {
       <form
         className="bg-white rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit}
+
       >
         <div className="mb-4">
           <label
@@ -86,7 +87,6 @@ export default function LoginForm() {
             placeholder=""
           />
         </div>
-
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -121,37 +121,6 @@ export default function LoginForm() {
           >
             회원가입
           </a>
-        </div>
-
-        <div className="flex items-center justify-between mb-1">
-          <button className="w-full bg-white-500 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2">
-            <div className="flex items-center">
-              <img
-                src="https://cdn-icons-png.flaticon.com/128/2504/2504739.png"
-                alt=""
-                style={{ width: "20px" }}
-                className="mr-2"
-              />
-              <span className="flex-1">Google 로그인</span>
-            </div>
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between mb-1">
-          <button
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-2"
-            onClick={handleNaverLoginClick}
-          >
-            <div className="flex items-center">
-              <img
-                src="https://cdn1.iconfinder.com/data/icons/computer-techologies-outline-free/128/ic_naver_logo-256.png"
-                alt=""
-                style={{ width: "20px" }}
-                className="mr-2"
-              />
-              <span className="flex-1">네이버 로그인</span>
-            </div>
-          </button>
         </div>
       </form>
     </div>

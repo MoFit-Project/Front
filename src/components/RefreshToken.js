@@ -11,7 +11,7 @@ function RefreshToken() {
 
     if (!refreshToken) {
       // 로그인 페이지로 리다이렉트
-      router.push("/");
+      router.push("/login");
       return;
     }
 
@@ -38,7 +38,7 @@ function RefreshToken() {
               // refresh 토큰이 만료되었을 때 로그인 페이지로 리다이렉트
               Cookies.remove("token");
               Cookies.remove("refresh");
-              router.push("/");
+              router.push("/login");
               break;
             default:
               console.log("Unexpected Error");
