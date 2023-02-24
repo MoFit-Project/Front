@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
-      <change afterPath="$PROJECT_DIR$/src/public/background/background_dragon.webm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/dragon.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/styles/background.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/sftp.json" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/background/test.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navbar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/loginForm.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/Home.module.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -75,7 +74,7 @@
       <option name="presentableId" value="Default" />
       <updated>1677218997842</updated>
       <workItem from="1677218998982" duration="2697000" />
-      <workItem from="1677223018002" duration="13648000" />
+      <workItem from="1677223018002" duration="14702000" />
     </task>
     <task id="LOCAL-00001" summary="feat : JWT 쿠기 유/무로 페이지 접근제어 추가">
       <created>1677227365915</created>
