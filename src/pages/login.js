@@ -1,11 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoginFail, setIsLoginFail] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -15,24 +18,21 @@ export default function Login() {
       const response = await axios.post("/mofit/login", {
         account: username,
         password: password,
-      }).then(
+      }).then(response => {
+        Cookies.set("token", response.data.token.access_token);
+        Cookies.set("refresh", response.data.token.refresh_token);
+        // 로그인에 성공하면 메인화면으로 이동
+        router.push("/room");
+      });
 
-      )
-
-      // 서버에서 받은 토큰을 쿠키에 저장
-      Cookies.set("token", response.data.token.access_token);
-      Cookies.set("refresh", response.data.token.refresh_token);
-      // 로그인에 성공하면 메인화면으로 이동
-      router.push("/room");
     } catch (error) {
       console.error(error);
       const { response } = error;
       if (response) {
-        //모달
         switch (response.status) {
           case 401:
             // 텍스트만 변경
-            window.alert("인증되지 않은 사용자입니다.");
+            setIsLoginFail(true);
             break;
           case 403:
             // 이전페이지로 리다이렉트
@@ -46,16 +46,6 @@ export default function Login() {
         }
       }
     }
-  };
-
-  const router = useRouter();
-
-  const handleRegisterClick = () => {
-    router.push("/signup");
-  };
-
-  const handleNaverLoginClick = () => {
-    window.location.href = "https://openapi.naver.com/v1/nid/me";
   };
 
   return (
@@ -103,7 +93,12 @@ export default function Login() {
             placeholder=""
           />
         </div>
-
+        {
+          isLoginFail &&
+          <p style={{ color: red }} >
+            아이디와 비밀번호를 확인해주세요.
+          </p>
+        }
         <div className="flex items-center justify-between">
           <button
             className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -114,15 +109,15 @@ export default function Login() {
         </div>
 
         <div className="flex justify-end mt-4 mb-4">
-          <a
-            className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800"
-            href="#"
-            onClick={handleRegisterClick}
-          >
-            회원가입
-          </a>
+          <Link href={'/signup'} legacyBehavior>
+            < a
+              className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800"
+            >
+              회원가입
+            </a>
+          </Link>
         </div>
-      </form>
-    </div>
+      </form >
+    </div >
   );
 }

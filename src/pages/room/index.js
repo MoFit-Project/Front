@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import CreateRoomModal from "../../components/CreateRoomModal";
 import Cookies from "js-cookie";
-import RefreshToken from "../../components/RefreshToken";
+import RefreshToken from "../../public/refreshToken";
 
-function RoomList() {
+export default function RoomList() {
   const [selected, setSelected] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomList, setRoomList] = useState([]);
@@ -24,6 +24,8 @@ function RoomList() {
         );
         console.log(response.data);
         setRoomList((roomList) => [...roomList, ...response.data]);
+
+
       } catch (error) {
         console.error(error);
 
@@ -32,6 +34,9 @@ function RoomList() {
           //모달
           switch (response.status) {
             case 401:
+              // 엑세스 토큰 만료 || 없거나
+
+
               //////////////////////// 예시
               // refresh 토큰이 있다면, access가 만료된 것을 의미한다.
 
@@ -43,6 +48,7 @@ function RoomList() {
               // 성공일 때, 데이터가 존재할 때 Cookies.set('token') access토큰을 받는다
               //          데이터가 존재하지 않을 때, 로그인 페이지로
               // error 무조건 로그인 페이지
+
               RefreshToken();
 
               window.alert("인증되지 않은 사용자입니다.");
@@ -165,5 +171,3 @@ function RoomList() {
     </>
   );
 }
-
-export default RoomList;
