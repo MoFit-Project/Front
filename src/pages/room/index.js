@@ -4,10 +4,25 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import CreateRoomModal from "../../components/CreateRoomModal";
 import Cookies from "js-cookie";
-import RefreshToken from "../../public/refreshToken";
 
-export default function RoomList() {
-  const [selected, setSelected] = useState(0);
+export default function ProtectedPage() {
+  const router = useRouter();
+  const token = Cookies.get("token");
+
+
+  if (!token) {
+    // 로그인 페이지로 이동시키기
+    if (typeof window !== "undefined") {
+      router.push("/login");
+    }
+    return null;
+  }
+
+  return RoomList();
+}
+
+
+function RoomList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomList, setRoomList] = useState([]);
   const router = useRouter();
