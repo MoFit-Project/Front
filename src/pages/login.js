@@ -5,7 +5,23 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import Background from "../components/Background";
 
-export default function Login() {
+export default function ProtectedPage() {
+    const router = useRouter();
+    const token = Cookies.get("token");
+
+
+    if (token) {
+        // 로그인 페이지로 이동시키기
+        if (typeof window !== "undefined") {
+            router.push("/room");
+        }
+        return null;
+    }
+
+    return Login();
+}
+
+function Login() {
     const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginFail, setIsLoginFail] = useState(false);
