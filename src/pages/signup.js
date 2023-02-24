@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Background from "../components/Background";
 
 export default function SignupForm() {
   const [id, setId] = useState("");
@@ -32,6 +33,10 @@ export default function SignupForm() {
   };
 
   return (
+      <div>
+      <div>
+        <Background />
+      </div>
     <div className="max-w-md mx-auto mt-10">
       <img
         class="mx-auto h-12 w-auto"
@@ -98,5 +103,6 @@ export default function SignupForm() {
         </div>
       </form>
     </div>
+      </div>
   );
 }
