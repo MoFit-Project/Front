@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import CreateRoomModal from "../../components/CreateRoomModal";
 import Cookies from "js-cookie";
+import RefreshToken from "../../components/RefreshToken";
 
 function RoomList() {
   const [selected, setSelected] = useState(0);
@@ -18,17 +19,68 @@ function RoomList() {
         console.log("로그인요청");
         console.log(token);
         const response = await axios.get(
-          "https://mofit.bobfriend.site:8080/mofit/rooms",
+          "/mofit/rooms",
           { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
         );
         console.log(response.data);
         setRoomList((roomList) => [...roomList, ...response.data]);
       } catch (error) {
         console.error(error);
+
+        const { response } = error;
+        if (response) {
+          //모달
+          switch (response.status) {
+            case 401:
+              //////////////////////// 예시
+              // refresh 토큰이 있다면, access가 만료된 것을 의미한다.
+
+              // -> /mofit/refresh POST 요청
+              // 헤더 불필요
+              // 바디에 refresh 토큰 보내기
+              // JSON 양식 {refresh_token : ""}
+              // 응답 받았을 때,
+              // 성공일 때, 데이터가 존재할 때 Cookies.set('token') access토큰을 받는다
+              //          데이터가 존재하지 않을 때, 로그인 페이지로
+              // error 무조건 로그인 페이지
+              RefreshToken();
+
+              window.alert("인증되지 않은 사용자입니다.");
+              break;
+            case 403:
+              // 이전페이지로 리다이렉트
+              window.alert("접근 권한이 없습니다.");
+              break;
+            case 500:
+              window.alert("서버 오류가 발생했습니다.");
+              break;
+            default:
+              console.log("Unexpected Error");
+          }
+        }
       }
     };
     fetchRooms();
   }, []);
+  const RefreshToken = async () => {
+    try {
+      const refreshToken = Cookies.get("refresh");
+
+      const response = await axios.post("/mofit/refresh", {
+        refresh_token: refreshToken,
+      });
+
+      const { access_token } = response.data;
+      Cookies.set("token", access_token);
+      console.log("Token is refreshed!");
+    } catch (error) {
+      console.error(error);
+      Cookies.remove("token");
+      Cookies.remove("refresh");
+      console.log("Token is removed!");
+      router.push("/");
+    }
+  };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);

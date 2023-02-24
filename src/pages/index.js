@@ -1,14 +1,12 @@
 
-import LoginForm from '../components/LoginForm';
 import React from 'react';
-import OpenVidu from '../components/OpenviduComponent';
-import Room from '../pages/room/index'
+import RefreshToken from './../components/RefreshToken';
 
 export default function HomePage() {
   return (
     <>
-      <LoginForm />
-      {/* <Room /> */}
+      <RefreshToken>
+      </RefreshToken>
     </>
 
   )

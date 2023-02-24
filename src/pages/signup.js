@@ -1,11 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 function SignupForm() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +22,7 @@ function SignupForm() {
 
       let check = response.data;
       if (check) {
-        window.location.href = "/";
+        router.push("/login");
       } else {
         window.alert("이미 존재하는 계정입니다.");
       }
@@ -41,19 +43,6 @@ function SignupForm() {
         Mofit
       </h1>
       <form onSubmit={handleSubmit}>
-        {/* <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-              이름
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder=""
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-          </div> */}
         <div className="mb-4 ">
           <label htmlFor="id" className="block text-gray-700 font-bold mb-2">
             아이디
@@ -67,7 +56,6 @@ function SignupForm() {
             onChange={(event) => setId(event.target.value)}
           />
         </div>
-
         <div className="mb-4">
           <label
             htmlFor="nickname"
@@ -84,7 +72,6 @@ function SignupForm() {
             onChange={(event) => setNickname(event.target.value)}
           />
         </div>
-
         <div className="mb-4">
           <label
             htmlFor="password"
