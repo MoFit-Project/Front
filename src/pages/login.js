@@ -1,24 +1,20 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import {useRouter} from "next/router";
+import Router, {useRouter} from "next/router";
 import Background from "../components/Background";
 
 export default function ProtectedPage() {
-    const router = useRouter();
-    const token = Cookies.get("token");
+    useEffect(() => {
+        const token = Cookies.get("token");
 
-
-    if (token) {
-        // 로그인 페이지로 이동시키기
-        if (typeof window !== "undefined") {
-            router.push("/room");
+        if (token) {
+            // 로그인 페이지로 이동
+            Router.push("/room");
         }
-        return null;
-    }
-
-    return Login();
+    }, []);
+    return <Login />
 }
 
 function Login() {
@@ -41,7 +37,8 @@ function Login() {
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
             // 로그인에 성공하면 메인화면으로 이동
-            await router.push("/room");
+
+            router.push("/room");
 
         } catch (error) {
             console.error(error);
@@ -71,11 +68,6 @@ function Login() {
 
             <title>MOFIT 로그인</title>
 
-            {/*<div>*/}
-            {/*    <video className="bg-video" autoPlay loop muted>*/}
-            {/*        <source src="/dragon.mp4" type="video/mp4"/>*/}
-            {/*    </video>*/}
-            {/*</div>*/}
             <div>
                 <Background />
             </div>
@@ -150,24 +142,6 @@ function Login() {
                     </div>
                 </form>
             </div>
-            {/*<style jsx>{`*/}
-            {/*  .bg-video {*/}
-            {/*    position: absolute;*/}
-            {/*    top: 0;*/}
-            {/*    left: 0;*/}
-            {/*    height: 100%;*/}
-            {/*    width: 100%;*/}
-            {/*    z-index: -1;*/}
-            {/*    object-fit: cover;*/}
-            {/*    //z-index: -1; //투명도*/}
-
-            {/*    }*/}
-            {/*  */}
-
-            {/*`}*/}
-
-
-            {/*</style>*/}
         </div>
 
     );

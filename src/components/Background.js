@@ -1,8 +1,6 @@
 const background = () => (
     <div>
-        <video className="bg-video" autoPlay loop muted>
-            <source src="/dragon.mp4" type="video/mp4"/>
-        </video>
+        <img className={"bg-video"} src = "dragon.gif"/>
         <style jsx>{`
           .bg-video {
             position: absolute;

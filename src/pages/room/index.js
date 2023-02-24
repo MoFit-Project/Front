@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
-import { useRouter } from "next/router";
+import Router, {useRouter} from "next/router";
 import axios from "axios";
 import CreateRoomModal from "../../components/CreateRoomModal";
 import Cookies from "js-cookie";
 
+
 export default function ProtectedPage() {
-  const router = useRouter();
-  const token = Cookies.get("token");
+  useEffect(() => {
+    const token = Cookies.get("token");
 
-
-  if (!token) {
-    // 로그인 페이지로 이동시키기
-    return router.push("/login");
-  }
-
-  return RoomList();
+    if (!token) {
+      // 로그인 페이지로 이동
+      Router.push("/login");
+    }
+  }, []);
+  return <RoomList />
 }
 
 
