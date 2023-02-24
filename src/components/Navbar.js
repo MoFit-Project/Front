@@ -30,7 +30,9 @@ export default function Example() {
                   </div>
                 </div>
                 <div>
-                  <LogoutButton/>
+                  <button className="bg-green-800 text-white font-bold py-1 px-3 ml-12 rounded-md block mt-1" onClick={LogoutButton}>
+                    로그아웃
+                  </button>
                 </div>
               </div>
             </div>
