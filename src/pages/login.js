@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import {useRouter} from "next/router";
-
+import Background from "../components/Background";
 
 export default function Login() {
     const [username, setEmail] = useState("");
@@ -19,15 +19,13 @@ export default function Login() {
             const response = await axios.post("/mofit/login", {
                 account: username,
                 password: password,
-            }).then(
-
-            )
+            })
 
             // 서버에서 받은 토큰을 쿠키에 저장
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
             // 로그인에 성공하면 메인화면으로 이동
-            router.push("/room");
+            await router.push("/room");
 
         } catch (error) {
             console.error(error);
@@ -57,12 +55,14 @@ export default function Login() {
 
             <title>MOFIT 로그인</title>
 
+            {/*<div>*/}
+            {/*    <video className="bg-video" autoPlay loop muted>*/}
+            {/*        <source src="/dragon.mp4" type="video/mp4"/>*/}
+            {/*    </video>*/}
+            {/*</div>*/}
             <div>
-                <video className="bg-video" autoPlay loop muted>
-                    <source src="/dragon.mp4" type="video/mp4"/>
-                </video>
+                <Background />
             </div>
-
 
             <div className="max-w-md mx-auto mt-10">
                 <img
@@ -134,23 +134,24 @@ export default function Login() {
                     </div>
                 </form>
             </div>
-            <style jsx>{`
-              .bg-video {
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 100%;
-                z-index: -1;
-                object-fit: cover;
+            {/*<style jsx>{`*/}
+            {/*  .bg-video {*/}
+            {/*    position: absolute;*/}
+            {/*    top: 0;*/}
+            {/*    left: 0;*/}
+            {/*    height: 100%;*/}
+            {/*    width: 100%;*/}
+            {/*    z-index: -1;*/}
+            {/*    object-fit: cover;*/}
+            {/*    //z-index: -1; //투명도*/}
 
-                }
-              
+            {/*    }*/}
+            {/*  */}
 
-            `}
+            {/*`}*/}
 
 
-            </style>
+            {/*</style>*/}
         </div>
 
     );
