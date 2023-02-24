@@ -1,6 +1,6 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
-import logout from "./logout";
+import LogoutButton from "./LogoutButton";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -30,9 +30,7 @@ export default function Example() {
                   </div>
                 </div>
                 <div>
-                  <button className="bg-green-800 text-white font-bold py-1 px-3 ml-12 rounded-md block mt-1" onClick={logout}>
-                    로그아웃
-                  </button>
+                  <LogoutButton/>
                 </div>
               </div>
             </div>
