@@ -19,12 +19,15 @@ export default function Login() {
             const response = await axios.post("/mofit/login", {
                 account: username,
                 password: password,
-            }).then(response => {
-                Cookies.set("token", response.data.token.access_token);
-                Cookies.set("refresh", response.data.token.refresh_token);
-                // 로그인에 성공하면 메인화면으로 이동
-                router.push("/");
-            });
+            }).then(
+
+            )
+
+            // 서버에서 받은 토큰을 쿠키에 저장
+            Cookies.set("token", response.data.token.access_token);
+            Cookies.set("refresh", response.data.token.refresh_token);
+            // 로그인에 성공하면 메인화면으로 이동
+            router.push("/room");
 
         } catch (error) {
             console.error(error);
@@ -52,12 +55,12 @@ export default function Login() {
     return (
         <div>
 
-                <title>MOFIT 로그인</title>
+            <title>MOFIT 로그인</title>
 
-            <div className={"bg-video"}>
-            <video className="bg-video__content" autoPlay loop muted>
-                <source src="/dragon.mp4" type="video/mp4"/>
-            </video>
+            <div>
+                <video className="bg-video" autoPlay loop muted>
+                    <source src="/dragon.mp4" type="video/mp4"/>
+                </video>
             </div>
 
 
@@ -139,14 +142,10 @@ export default function Login() {
                 height: 100%;
                 width: 100%;
                 z-index: -1;
-                opacity: 0.15;
+                object-fit: cover;
 
-                &__content {
-                  height: 100%;
-                  width: 100%;
-                  object-fit: cover; // background-size: cover 와 비슷함. (HTML 요소 or 비디오와 작동)
                 }
-              }
+              
 
             `}
 
