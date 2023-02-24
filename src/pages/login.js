@@ -3,7 +3,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import
 
 
 export default function Login() {
@@ -24,7 +23,7 @@ export default function Login() {
                 Cookies.set("token", response.data.token.access_token);
                 Cookies.set("refresh", response.data.token.refresh_token);
                 // 로그인에 성공하면 메인화면으로 이동
-                router.push("/room");
+                router.push("/");
             });
 
         } catch (error) {

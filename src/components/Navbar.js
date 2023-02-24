@@ -1,6 +1,6 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
-import logout from "@/components/logout";
+import logout from "./logout";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
