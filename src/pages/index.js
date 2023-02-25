@@ -34,7 +34,7 @@ export default function Home() {
                     </h1>
                     <div className="text-center">
                         <Link href={'/singleMode'}>
-                            <button type={"button"}
+                            <button
                                 className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             >
                                 싱글 플레이
@@ -43,7 +43,7 @@ export default function Home() {
                     </div>
                     <div className="text-center">
                         <Link href={'/room'}>
-                            <button type={"button"}
+                            <button
                                 className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             >
                                 멀티 플레이

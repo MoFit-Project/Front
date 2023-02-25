@@ -15,7 +15,7 @@ export function refreshToken() {
 const fetchAccessToken = async () => {
   const API_URL = process.env.API_URL;
   try {
-    const response = await axios.post(API_URL + "/mofit/refresh", {
+    const response = await axios.post(API_URL + "/refresh", {
       refresh_token: refreshToken,
     });
 

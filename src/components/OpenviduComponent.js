@@ -70,7 +70,6 @@ export default function OpenViduComponent({ roomName, userName, token }) {
 
                 // Update the state with the new subscribers
                 setSubscribers([...subscribers, newsubscriber]);
-                console.log(subscribers.length);
             });
 
             // On every Stream destroyed...
