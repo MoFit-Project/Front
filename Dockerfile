@@ -1,5 +1,5 @@
 # 이미지 기반으로 ubuntu를 사용합니다.
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 # 필요한 패키지들을 설치합니다.
 RUN apt-get update && apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_18.x | bash && apt-get install -y nodejs
