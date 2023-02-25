@@ -6,7 +6,11 @@ import Cookies from "js-cookie";
 export default function GameRoom() {
     const token = Cookies.get("token");
     const router = useRouter();
-    if (!token) router.push("/login");
+
+    useEffect(() => {
+        if (!token) router.push("/login");
+    }, [])
+
     const roomName = router.query.roomName;
     const userName = "juhong";
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
 

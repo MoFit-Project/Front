@@ -5,7 +5,6 @@ import axios from 'axios';
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-
 export const getToken = async (mySessionId, jwtToken) => {
     const sessionId = await createSession(mySessionId, jwtToken);
     return await createToken(sessionId, jwtToken);

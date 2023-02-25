@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { OpenVidu } from 'openvidu-browser';
 import OvVideo from './OvVideo';
-import { getToken } from '../public/createToken';
+import { getToken } from '../../public/createToken.js';
 import { useRouter } from 'next/router';
-import Loading from './Loding';
 
 export default function OpenViduComponent({ roomName, userName, token }) {
 
@@ -145,26 +144,27 @@ export default function OpenViduComponent({ roomName, userName, token }) {
     }
 
     return (
-        <div className='flex justify-center items-center h-screen'>
-            <div className="container flex justify-center">
+        <div className='h-screen'>
+            <div className='flex justify-center border-solid hover:border-dotted' style={{ border: 'solid black' }}>
+                <h1 id="session-title">{roomName}</h1>
+                <button
+                    className=""
+                    id="buttonLeaveSession"
+                    onClick={leaveSession}
+
+                >
+                    방 나가기
+                </button>
+            </div>
+            <div className="flex justify-center">
                 {session !== undefined ? (
                     <div id="session">
-                        <div id="session-header justify-center items-center">
-                            <h1 id="session-title">{roomName}</h1>
-                            <input
-                                className="btn btn-large btn-danger"
-                                type="button"
-                                id="buttonLeaveSession"
-                                onClick={leaveSession}
-                                value="방 나가기"
-                            />
-                        </div>
                         {mainStreamManager !== undefined ? (
                             <div id="main-video" className="col-md-6">
                                 <OvVideo streamManager={mainStreamManager} />
                             </div>
                         ) : null}
-                        <div id="video-container" className="col-md-6">
+                        <div id="sub-video" className="col-md-6">
                             {subscribers.map((sub, i) => (
                                 <div key={i} className="stream-container col-md-6 col-xs-6">
                                     <OvVideo streamManager={sub} />
@@ -172,7 +172,7 @@ export default function OpenViduComponent({ roomName, userName, token }) {
                             ))}
                         </div>
                     </div>
-                ) : <Loading />}
+                ) : null}
             </div>
         </div>
     );

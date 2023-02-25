@@ -2,27 +2,27 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Background from "../components/Background";
 
-export default function ProtectedPage() {
-    useEffect(() => {
-        const token = Cookies.get("token");
+export default function Login() {
 
-        if (token) {
-            Router.push("/mode-select");
-        }
-    }, []);
-    return <Login />
-}
-
-function Login() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
     const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginFail, setIsLoginFail] = useState(false);
     const router = useRouter();
+
+    const checkIfLoggedIn = () => {
+        const token = Cookies.get("token");
+        if (token) {
+            router.push("/");
+        }
+    }
+
+    useEffect(() => {
+        checkIfLoggedIn();
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -38,7 +38,7 @@ function Login() {
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
             // 로그인에 성공하면 메인화면으로 이동
-            router.push("/mode-select");
+            router.push("/");
 
         } catch (error) {
 
