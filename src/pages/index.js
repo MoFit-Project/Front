@@ -9,7 +9,7 @@ export default function Home() {
     useEffect(() => {
         if (token) {
             // 이미 로그인한 경우에는 메인 페이지로 이동시키기
-            router.push("/room");
+            router.push("/modeSelect");
         } else {
             // 로그인되어 있지 않은 경우 로그인 페이지로 이동시키기
             router.push("/login");
