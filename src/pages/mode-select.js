@@ -18,8 +18,6 @@ function ModeSelect() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter();
 
-
-
     return (
         <div>
             <div>

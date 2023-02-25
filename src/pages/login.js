@@ -10,13 +10,15 @@ export default function ProtectedPage() {
         const token = Cookies.get("token");
 
         if (token) {
-            Router.push("/modeSelect");
+            Router.push("/mode-select");
         }
     }, []);
     return <Login />
 }
 
 function Login() {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
     const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginFail, setIsLoginFail] = useState(false);
@@ -25,9 +27,9 @@ function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // https://mofit.bobfriend.site:8080/login
+        // https://mofit.bobfriend.site:8080/mofit/login
         try {
-            const response = await axios.post("/mofit/login", {
+            const response = await axios.post(API_URL + "/mofit/login", {
                 account: username,
                 password: password,
             })
@@ -36,10 +38,10 @@ function Login() {
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
             // 로그인에 성공하면 메인화면으로 이동
-
             router.push("/mode-select");
 
         } catch (error) {
+
             console.error(error);
             const { response } = error;
             if (response) {

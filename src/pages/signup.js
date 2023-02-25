@@ -9,12 +9,13 @@ export default function SignupForm() {
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      await axios.post("/mofit/register", {
+      await axios.post(API_URL + "/mofit/register", {
         account: id,
         nickname: nickname,
         password: password,
@@ -33,79 +34,79 @@ export default function SignupForm() {
   };
 
   return (
-      <div>
-        <title>
-          MOFIT 회원가입
-        </title>
+    <div>
+      <title>
+        MOFIT 회원가입
+      </title>
       <div>
         <Background />
       </div>
-    <div className="max-w-md mx-auto mt-10">
-      <img
-        class="mx-auto h-12 w-auto"
-        src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
-        alt="Your Company"
-      ></img>
-      <h1 className="text-4xl font-bold text-center mb-8 text-green-700">
-        Mofit
-      </h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4 ">
-          <label htmlFor="id" className="block text-gray-700 font-bold mb-2">
-            아이디
-          </label>
-          <input
-            type="text"
-            id="id"
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder=""
-            value={id}
-            onChange={(event) => setId(event.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="nickname"
-            className="block text-gray-700 font-bold mb-2"
-          >
-            닉네임
-          </label>
-          <input
-            type="text"
-            id="nickname"
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder=""
-            value={nickname}
-            onChange={(event) => setNickname(event.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 font-bold mb-2"
-          >
-            비밀번호
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder=""
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
+      <div className="max-w-md mx-auto mt-10">
+        <img
+          class="mx-auto h-12 w-auto"
+          src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
+          alt="Your Company"
+        ></img>
+        <h1 className="text-4xl font-bold text-center mb-8 text-green-700">
+          Mofit
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4 ">
+            <label htmlFor="id" className="block text-gray-700 font-bold mb-2">
+              아이디
+            </label>
+            <input
+              type="text"
+              id="id"
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder=""
+              value={id}
+              onChange={(event) => setId(event.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="nickname"
+              className="block text-gray-700 font-bold mb-2"
+            >
+              닉네임
+            </label>
+            <input
+              type="text"
+              id="nickname"
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder=""
+              value={nickname}
+              onChange={(event) => setNickname(event.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-bold mb-2"
+            >
+              비밀번호
+            </label>
+            <input
+              type="password"
+              id="password"
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder=""
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </div>
 
-        <div className="text-center">
-          <button
-            type="submit"
-            className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            가입하기
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="text-center">
+            <button
+              type="submit"
+              className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              가입하기
+            </button>
+          </div>
+        </form>
       </div>
+    </div>
   );
 }
