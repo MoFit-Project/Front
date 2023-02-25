@@ -43,9 +43,9 @@ export default function RoomList() {
             //          데이터가 존재하지 않을 때, 로그인 페이지로
             // error 무조건 로그인 페이지
 
-            //refreshToken();
+            // refreshToken();
 
-            //window.alert("인증되지 않은 사용자입니다.");
+            // window.alert("인증되지 않은 사용자입니다.");
             break;
           case 403:
             // 이전페이지로 리다이렉트
@@ -63,8 +63,6 @@ export default function RoomList() {
 
 
   useEffect(() => {
-
-
     fetchRooms();
   }, []);
   const refreshToken = async () => {
@@ -81,6 +79,7 @@ export default function RoomList() {
       Cookies.set("token", access_token);
 
       console.log("Token is refreshed!");
+
     } catch (error) {
       console.error(error);
       Cookies.remove("token");
