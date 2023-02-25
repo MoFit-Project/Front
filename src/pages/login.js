@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import Router, {useRouter} from "next/router";
 import Background from "../components/Background";
+import Result from "../components/Result";
 
 export default function ProtectedPage() {
     useEffect(() => {
@@ -71,7 +72,10 @@ function Login() {
             <div>
                 <Background />
             </div>
+            <div> 
+                <Result/>
 
+            </div>
             <div className="max-w-md mx-auto mt-10">
                 <img
                     className="mx-auto h-12 w-auto"
