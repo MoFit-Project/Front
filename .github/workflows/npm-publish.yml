@@ -34,11 +34,11 @@ jobs:
       - name: make env.production
         if: contains(github.ref, 'main') # branch가 main일 때
         run: | 
-          cd .
-          touch ./env.production # env.production 파일 생성 
+
+          #touch ./env.production # env.production 파일 생성 
 
           # GitHub-Actions에서 설정한 값을 /env.production 파일에 쓰기
-          echo "${{ secrets.PRODUCTION }}" > ./env.production
+          echo "${{ secrets.PRODUCTION }}" > .env.production
         shell: bash
 
 
