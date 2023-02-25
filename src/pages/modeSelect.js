@@ -1,13 +1,33 @@
-import {useRouter} from "next/router";
+import Router, {useRouter} from "next/router";
+import {useEffect} from "react";
+import Cookies from "js-cookie";
+import Background from "@/components/Background";
 
 
-function modeSelect() {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+export default function ProtectedPage() {
+    useEffect(() => {
+        const token = Cookies.get("token");
+
+        if (!token) {
+            // 로그인 페이지로 이동
+            Router.push("/login");
+        }
+    }, []);
+    return <ModeSelect />
+}
+function ModeSelect() {
     const router = useRouter();
 
 
 
     return (
+        <div>
+        <title>
+            MOFIT 게임 모드
+        </title>
+            <div>
+                <Background/>
+            </div>
         <div className="max-w-md mx-auto mt-10">
             <img
                 className="mx-auto h-12 w-auto"
@@ -34,6 +54,6 @@ function modeSelect() {
                 </button>
             </div>
         </div>
+        </div>
     );
 }
-    export default modeSelect;
