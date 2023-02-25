@@ -11,7 +11,7 @@ export default function OpenViduComponent({ roomName, userName }) {
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
 
-    
+
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
     const [publisher, setPublisher] = useState(undefined);

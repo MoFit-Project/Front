@@ -2,8 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Background from "../components/Background";
 
-function SignupForm() {
+export default function SignupForm() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
@@ -13,19 +14,18 @@ function SignupForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("/register", {
+      await axios.post("/mofit/register", {
         account: id,
         nickname: nickname,
         password: password,
-      });
-      console.log(response.data);
-
-      let check = response.data;
-      if (check) {
-        router.push("/login");
-      } else {
-        window.alert("이미 존재하는 계정입니다.");
-      }
+      }).then(response => {
+        const check = response.data;
+        if (check) {
+          router.push("/login");
+        } else {
+          window.alert("이미 존재하는 계정입니다.");
+        }
+      })
     } catch (error) {
       window.alert("가입에 실패했습니다 다시 시도하세요");
       // 가입에 실패한 경우,
@@ -33,6 +33,10 @@ function SignupForm() {
   };
 
   return (
+      <div>
+      <div>
+        <Background />
+      </div>
     <div className="max-w-md mx-auto mt-10">
       <img
         class="mx-auto h-12 w-auto"
@@ -99,7 +103,6 @@ function SignupForm() {
         </div>
       </form>
     </div>
+      </div>
   );
 }
-
-export default SignupForm;
