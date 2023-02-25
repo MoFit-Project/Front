@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import Router, {useRouter} from "next/router";
 import Background from "../components/Background";
-import Result from "../components/Result";
 
 export default function ProtectedPage() {
     useEffect(() => {
