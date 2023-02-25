@@ -1,13 +1,30 @@
-import {useRouter} from "next/router";
+import Router, {useRouter} from "next/router";
+import {useEffect} from "react";
+import Cookies from "js-cookie";
+import Background from "../components/Background";
 
+export default function ProtectedPage() {
+    useEffect(() => {
+        const token = Cookies.get("token");
 
-function modeSelect() {
+        if (!token) {
+            // 로그인 페이지로 이동
+            Router.push("/login");
+        }
+    }, []);
+    return <ModeSelect />
+}
+function ModeSelect() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter();
 
 
 
     return (
+        <div>
+            <div>
+                <Background/>
+        </div>
         <div className="max-w-md mx-auto mt-10">
             <img
                 className="mx-auto h-12 w-auto"
@@ -34,6 +51,6 @@ function modeSelect() {
                 </button>
             </div>
         </div>
+        </div>
     );
 }
-    export default modeSelect;

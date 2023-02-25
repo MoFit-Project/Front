@@ -12,7 +12,7 @@ export default function ProtectedPage() {
 
         if (token) {
             // 로그인 페이지로 이동
-            Router.push("/room");
+            Router.push("/modeSelect");
         }
     }, []);
     return <Login />
