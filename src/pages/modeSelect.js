@@ -1,8 +1,6 @@
 import Router, {useRouter} from "next/router";
 import {useEffect} from "react";
 import Cookies from "js-cookie";
-import Background from "@/components/Background";
-
 
 export default function ProtectedPage() {
     useEffect(() => {
@@ -16,18 +14,12 @@ export default function ProtectedPage() {
     return <ModeSelect />
 }
 function ModeSelect() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter();
 
 
 
     return (
-        <div>
-        <title>
-            MOFIT 게임 모드
-        </title>
-            <div>
-                <Background/>
-            </div>
         <div className="max-w-md mx-auto mt-10">
             <img
                 className="mx-auto h-12 w-auto"
@@ -53,7 +45,6 @@ function ModeSelect() {
                     멀티 플레이
                 </button>
             </div>
-        </div>
         </div>
     );
 }
