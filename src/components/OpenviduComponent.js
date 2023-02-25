@@ -1,16 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { OpenVidu } from 'openvidu-browser';
-import UserVideo from './UserVideo';
-import { getToken } from '../public/createToken';
-import axios from 'axios';
+import OvVideo from './OvVideo';
+import { getToken } from '../../public/createToken.js';
 import { useRouter } from 'next/router';
 
-export default function OpenViduComponent({ roomName, userName }) {
+export default function OpenViduComponent({ roomName, userName, token }) {
 
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
-
 
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -32,31 +30,9 @@ export default function OpenViduComponent({ roomName, userName }) {
         joinSession();
     }, []);
 
-    const sendSignal = () => {
-        let timer = 30;
-        setInterval(() => {
-            timer--;
-            session.signal({
-                data: timer,  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'game_start'             // The type of message (optional)
-            })
-                .then(() => {
-                    console.log('Message successfully sent');
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }, 1000);
-
-    }
-
     const onbeforeunload = (event) => {
         leaveSession();
     };
-
-    // const handleChangeSessionId = event => setMySessionId(event.target.value);
-    // const handleChangeUserName = event => setMyUserName(event.target.value);
 
     const deleteSubscriber = (streamManager) => {
         let newSubscribers = subscribers;
@@ -73,15 +49,14 @@ export default function OpenViduComponent({ roomName, userName }) {
         if (mySession) {
             mySession.disconnect();
         }
+
         setOV(null);
         setSession(undefined);
         setSubscribers([]);
-        //setMySessionId('SessionA');
-        //setMyUserName(`Participant${Math.floor(Math.random() * 100)}`);
         setMainStreamManager(undefined);
         setPublisher(undefined);
 
-        router.push(`/`);
+        router.push(`/room`);
     }
 
     useEffect(() => {
@@ -95,6 +70,7 @@ export default function OpenViduComponent({ roomName, userName }) {
 
                 // Update the state with the new subscribers
                 setSubscribers([...subscribers, newsubscriber]);
+                console.log(subscribers.length);
             });
 
             // On every Stream destroyed...
@@ -115,7 +91,7 @@ export default function OpenViduComponent({ roomName, userName }) {
                 console.warn(exception);
             });
 
-            getToken(mySessionId).then((token) => {
+            getToken(mySessionId, token).then((token) => {
                 // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
                 // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
                 mySession.connect(token, { clientData: myUserName })
@@ -168,34 +144,36 @@ export default function OpenViduComponent({ roomName, userName }) {
     }
 
     return (
-        <div className="container">
-            {session !== undefined ? (
-                <div id="session">
-                    <div id="session-header">
-                        <h1 id="session-title">{roomName}</h1>
-                        <input
-                            className="btn btn-large btn-danger"
-                            type="button"
-                            id="buttonLeaveSession"
-                            onClick={leaveSession}
-                            value="방 나가기"
-                        />
-                    </div>
-                    {mainStreamManager !== undefined ? (
-                        <div id="main-video" className="col-md-6">
-                            <UserVideo streamManager={mainStreamManager} />
-                            <button onClick={sendSignal}>클릭하기</button>
-                        </div>
-                    ) : null}
-                    <div id="video-container" className="col-md-6">
-                        {subscribers.map((sub, i) => (
-                            <div key={i} className="stream-container col-md-6 col-xs-6">
-                                <UserVideo streamManager={sub} />
+        <div className='h-screen'>
+            <div className='flex justify-center border-solid hover:border-dotted' style={{ border: 'solid black' }}>
+                <h1 id="session-title">{roomName}</h1>
+                <button
+                    className=""
+                    id="buttonLeaveSession"
+                    onClick={leaveSession}
+
+                >
+                    방 나가기
+                </button>
+            </div>
+            <div className="flex justify-center">
+                {session !== undefined ? (
+                    <div id="session">
+                        {mainStreamManager !== undefined ? (
+                            <div id="main-video" className="col-md-6">
+                                <OvVideo streamManager={mainStreamManager} />
                             </div>
-                        ))}
+                        ) : null}
+                        <div id="sub-video" className="col-md-6">
+                            {subscribers.map((sub, i) => (
+                                <div key={i} className="stream-container col-md-6 col-xs-6">
+                                    <OvVideo streamManager={sub} />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            ) : null}
+                ) : null}
+            </div>
         </div>
     );
 } 

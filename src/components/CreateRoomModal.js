@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 
-function CreateRoomModal({ isOpen, onClose, onSubmit }) {
+function CreateRoomModal({ isOpen, onClose }) {
   const [roomName, setRoomName] = useState("");
-
+  const router = useRouter();
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(roomName);
     setRoomName("");
+    router.push(`/room/${roomName}`);
   };
 
   const handleChangeRoomName = (event) => {

@@ -1,34 +1,35 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import Router, {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import Background from "../components/Background";
 
-export default function ProtectedPage() {
-    useEffect(() => {
-        const token = Cookies.get("token");
+export default function Login() {
 
-        if (token) {
-            // 로그인 페이지로 이동
-            Router.push("/modeSelect");
-        }
-    }, []);
-    return <Login />
-}
-
-function Login() {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginFail, setIsLoginFail] = useState(false);
     const router = useRouter();
 
+    const checkIfLoggedIn = () => {
+        const token = Cookies.get("token");
+        if (token) {
+            router.push("/");
+        }
+    }
+
+    useEffect(() => {
+        checkIfLoggedIn();
+    }, []);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // https://mofit.bobfriend.site:8080/login
+        // https://mofit.bobfriend.site:8080/mofit/login
         try {
-            const response = await axios.post("/mofit/login", {
+            const response = await axios.post(API_URL + "/mofit/login", {
                 account: username,
                 password: password,
             })
@@ -37,12 +38,12 @@ function Login() {
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
             // 로그인에 성공하면 메인화면으로 이동
-
-            router.push("/room");
+            router.push("/");
 
         } catch (error) {
+
             console.error(error);
-            const {response} = error;
+            const { response } = error;
             if (response) {
                 switch (response.status) {
                     case 401:
@@ -117,7 +118,7 @@ function Login() {
                     </div>
                     {
                         isLoginFail &&
-                        <p style={{color: red}}>
+                        <p style={{ color: red }}>
                             아이디와 비밀번호를 확인해주세요.
                         </p>
                     }
