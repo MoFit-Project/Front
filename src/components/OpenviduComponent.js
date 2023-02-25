@@ -144,13 +144,12 @@ export default function OpenViduComponent({ roomName, userName, token }) {
 
     return (
         <div className='h-screen'>
-            <div className='flex justify-center border-solid hover:border-dotted' style={{ border: 'solid black' }}>
+            <div className='flex justify-center' style={{ border: 'solid black' }}>
                 <h1 id="session-title">{roomName}</h1>
                 <button
                     className=""
                     id="buttonLeaveSession"
                     onClick={leaveSession}
-
                 >
                     방 나가기
                 </button>
