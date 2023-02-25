@@ -11,7 +11,7 @@ export const getToken = async (mySessionId, jwtToken) => {
 }
 
 const createSession = async (sessionId, jwtToken) => {
-    const response = await axios.post(API_URL + '/mofit/sessions', { customSessionId: sessionId }, {
+    const response = await axios.post(API_URL + '/sessions', { customSessionId: sessionId }, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${jwtToken}`,
@@ -21,7 +21,7 @@ const createSession = async (sessionId, jwtToken) => {
 }
 
 const createToken = async (sessionId, jwtToken) => {
-    const response = await axios.post(API_URL + '/mofit/sessions/' + sessionId + '/connections', {}, {
+    const response = await axios.post(API_URL + '/sessions/' + sessionId + '/connections', {}, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${jwtToken}`,

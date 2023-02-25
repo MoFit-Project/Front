@@ -29,7 +29,7 @@ export default function Login() {
 
         // https://mofit.bobfriend.site:8080/mofit/login
         try {
-            const response = await axios.post(API_URL + "/mofit/login", {
+            const response = await axios.post(API_URL + "/login", {
                 account: username,
                 password: password,
             })

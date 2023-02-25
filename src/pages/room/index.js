@@ -17,7 +17,7 @@ export default function RoomList() {
     try {
       const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
       const response = await axios.get(
-        API_URL + "/mofit/rooms",
+        API_URL + "/rooms",
         { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
       );
 
@@ -34,7 +34,7 @@ export default function RoomList() {
             //////////////////////// 예시
             // refresh 토큰이 있다면, access가 만료된 것을 의미한다.
 
-            // -> /mofit/refresh POST 요청
+            // -> /refresh POST 요청
             // 헤더 불필요
             // 바디에 refresh 토큰 보내기
             // JSON 양식 {refresh_token : ""}
@@ -72,7 +72,7 @@ export default function RoomList() {
       const refreshToken = Cookies.get("refresh");
       if (!refreshToken) router.push('/login');
 
-      const response = await axios.post("/mofit/refresh", {
+      const response = await axios.post("/refresh", {
         refresh_token: refreshToken,
       });
 
@@ -109,7 +109,7 @@ export default function RoomList() {
   return (
     <>
       <LayoutAuthenticated>
-        <title>MOFIT 멀티 게임</title>
+        <title>멀티 게임</title>
         <Navbar />
         <div className="relative flex flex-col items-center">
           <div className="w-full mt-5 overflow-x-auto" style={{ width: "90vw" }}>
