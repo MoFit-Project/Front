@@ -6,25 +6,28 @@ import CreateRoomModal from "../../components/CreateRoomModal";
 import Cookies from "js-cookie";
 
 
-export default function ProtectedPage() {
-  useEffect(() => {
-    const token = Cookies.get("token");
-    console.log(token);
-    if (!token) {
-      // 로그인 페이지로 이동
-      Router.push("/login");
-    }
-  }, []);
-  return <RoomList />
-}
+// function ProtectedPage() {
+//   useEffect(() => {
+//     const token = Cookies.get("token");
+//     console.log(token);
+//     if (!token) {
+//       // 로그인 페이지로 이동
+//     }
+//   }, []);
+//   return <RoomList />
+// }
 
 
-function RoomList() {
+export default function RoomList() {
+  const token = Cookies.get("token");
+  if (!token) Router.push("/login");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomList, setRoomList] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
+
     const fetchRooms = async () => {
       try {
         const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
@@ -76,7 +79,7 @@ function RoomList() {
   const RefreshToken = async () => {
     try {
       const refreshToken = Cookies.get("refresh");
-
+      if (!refreshToken) router.push('/login');
       const response = await axios.post("/mofit/refresh", {
         refresh_token: refreshToken,
       });

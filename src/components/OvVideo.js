@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
-export default function OvVideo(props) {
+export default function OvVideo({ streamManager }) {
     const videoRef = useRef(null);
 
     useEffect(() => {
-        if (props && !!videoRef.current) {
-            props.streamManager.addVideoElement(videoRef.current);
+        if (streamManager && !!videoRef.current) {
+            streamManager.addVideoElement(videoRef.current);
         }
-    }, [props]);
+    }, [streamManager]);
 
     return (
         <video autoPlay={true} ref={videoRef} />
