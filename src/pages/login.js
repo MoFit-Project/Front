@@ -71,10 +71,6 @@ function Login() {
             <div>
                 <Background />
             </div>
-            <div> 
-                <Result/>
-
-            </div>
             <div className="max-w-md mx-auto mt-10">
                 <img
                     className="mx-auto h-12 w-auto"
