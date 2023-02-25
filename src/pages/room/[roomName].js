@@ -2,6 +2,7 @@ import OpenViduComponent from "../../components/OpenviduComponent";
 import { useRouter } from "next/router";
 import { useRef, useEffect } from "react";
 import Cookies from "js-cookie";
+import { LayoutAuthenticated } from '../../components/LayoutAuthticated';
 
 export default function GameRoom() {
     const token = Cookies.get("token");
@@ -15,8 +16,6 @@ export default function GameRoom() {
     const userName = "juhong";
 
     return (
-        <>
-            <OpenViduComponent roomName={roomName} userName={userName} token={token} />
-        </>
+        <OpenViduComponent roomName={roomName} userName={userName} jwtToken={token} />
     );
 }

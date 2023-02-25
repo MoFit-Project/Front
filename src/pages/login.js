@@ -4,6 +4,10 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
+import { createPoseDetector } from "public/createPoseDetector";
+import { useRecoilState } from "recoil";
+import { poseDetector } from "../recoil/states.js";
+
 
 export default function Login() {
 
@@ -12,6 +16,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [isLoginFail, setIsLoginFail] = useState(false);
     const router = useRouter();
+    //const [detector, setPoseDetector] = useRecoilState(poseDetector);
 
     const checkIfLoggedIn = () => {
         const token = Cookies.get("token");
@@ -21,6 +26,7 @@ export default function Login() {
     }
 
     useEffect(() => {
+        //setPoseDetector(createPoseDetector());
         checkIfLoggedIn();
     }, []);
 
