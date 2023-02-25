@@ -34,6 +34,9 @@ export default function SignupForm() {
 
   return (
       <div>
+        <title>
+          MOFIT 회원가입
+        </title>
       <div>
         <Background />
       </div>
