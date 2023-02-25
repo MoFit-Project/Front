@@ -1,11 +1,9 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import LogoutButton from "./LogoutButton";
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
-export default function Example() {
+
+export default function NavBar() {
   return (
     <Disclosure as="nav" className="bg-green-200">
       {({ open }) => (
@@ -30,7 +28,7 @@ export default function Example() {
                   </div>
                 </div>
                 <div>
-                  <LogoutButton/>
+                  <LogoutButton />
                 </div>
               </div>
             </div>

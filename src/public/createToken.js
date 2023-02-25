@@ -1,28 +1,30 @@
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL = "https://ena.jegal.shop:8080/";
+
 // 커스텀 APPLICATION_SERVER_URL: api 대신 mofit으로 대체하기.
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
-export const getToken = async (mySessionId) => {
-    const sessionId = await createSession(mySessionId);
-    return await createToken(sessionId);
+export const getToken = async (mySessionId, jwtToken) => {
+    const sessionId = await createSession(mySessionId, jwtToken);
+    return await createToken(sessionId, jwtToken);
 }
 
-const createSession = async (sessionId) => {
+const createSession = async (sessionId, jwtToken) => {
     console.log(sessionId);
-    const response = await axios.post(APPLICATION_SERVER_URL + 'mofit/sessions', { customSessionId: sessionId }, {
+    const response = await axios.post('/mofit/sessions', { customSessionId: sessionId }, {
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`,
         },
     });
     return response.data; // The sessionId
 }
 
-const createToken = async (sessionId) => {
-    const response = await axios.post(APPLICATION_SERVER_URL + 'mofit/sessions/' + sessionId + '/connections', {}, {
+const createToken = async (sessionId, jwtToken) => {
+    const response = await axios.post('/mofit/sessions/' + sessionId + '/connections', {}, {
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`,
         },
     });
     return response.data; // The token

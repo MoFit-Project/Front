@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
-import Router, {useRouter} from "next/router";
+import Router, { useRouter } from "next/router";
 import axios from "axios";
 import CreateRoomModal from "../../components/CreateRoomModal";
 import Cookies from "js-cookie";
@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 export default function ProtectedPage() {
   useEffect(() => {
     const token = Cookies.get("token");
-
+    console.log(token);
     if (!token) {
       // 로그인 페이지로 이동
       Router.push("/login");
@@ -28,27 +28,20 @@ function RoomList() {
     const fetchRooms = async () => {
       try {
         const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
-        console.log("로그인요청");
-        console.log(token);
         const response = await axios.get(
           "/mofit/rooms",
           { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
         );
-        console.log(response.data);
         setRoomList((roomList) => [...roomList, ...response.data]);
-
-
+        console.log(response.data)
       } catch (error) {
         console.error(error);
-
         const { response } = error;
         if (response) {
           //모달
           switch (response.status) {
             case 401:
               // 엑세스 토큰 만료 || 없거나
-
-
               //////////////////////// 예시
               // refresh 토큰이 있다면, access가 만료된 것을 의미한다.
 
@@ -118,7 +111,7 @@ function RoomList() {
 
   return (
     <>
-        <title>MOFIT 멀티 게임</title>
+      <title>MOFIT 멀티 게임</title>
       <Navbar />
       <div className="relative flex flex-col items-center">
         <div className="w-full mt-5 overflow-x-auto" style={{ width: "90vw" }}>
@@ -179,7 +172,6 @@ function RoomList() {
       <CreateRoomModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onCreateRoom={handleCreateRoom}
       />
     </>
   );

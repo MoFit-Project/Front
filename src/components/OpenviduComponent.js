@@ -5,12 +5,14 @@ import { getToken } from '../public/createToken';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-export default function OpenViduComponent({ roomName, userName }) {
+export default function OpenViduComponent({ roomName, userName, token }) {
+    console.log("jwt: " + token);
+    console.log("roomName: " + roomName);
+    console.log("userName: " + userName);
 
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
-
 
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -115,7 +117,7 @@ export default function OpenViduComponent({ roomName, userName }) {
                 console.warn(exception);
             });
 
-            getToken(mySessionId).then((token) => {
+            getToken(mySessionId, token).then((token) => {
                 // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
                 // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
                 mySession.connect(token, { clientData: myUserName })
