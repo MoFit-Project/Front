@@ -8,7 +8,7 @@ const sampleData = [
 
 export default function Ranking() {
   const [data, setData] = useState([]);
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   // useEffect(() => {
   //   // 데이터 가져오는 코드
   //   setData(sampleData);
@@ -17,7 +17,7 @@ export default function Ranking() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/mofit/ranking");
+        const response = await axios.get(API_URL+"/ranking");
         setData((data) => [...data, ...response.data]);
       } catch (error) {
         console.error(error);
