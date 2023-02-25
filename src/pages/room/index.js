@@ -118,6 +118,7 @@ function RoomList() {
 
   return (
     <>
+        <title>MOFIT 멀티 게임</title>
       <Navbar />
       <div className="relative flex flex-col items-center">
         <div className="w-full mt-5 overflow-x-auto" style={{ width: "90vw" }}>
