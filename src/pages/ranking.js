@@ -30,7 +30,7 @@ export default function Ranking() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-10 mt-2" style={{ width: "60vw" }}>
+      <div className="container mx-auto my-10 mt-2 w-8/12">
         <div className="mt-2 rounded-lg">
           <table className="table-fixed w-full">
             <thead>
