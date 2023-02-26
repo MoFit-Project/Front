@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import LayoutAuthenticated from "../../components/LayoutAuthticated";
 
 export default function RoomList() {
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,15 +18,13 @@ export default function RoomList() {
       const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
       const response = await axios.get(
         API_URL + "/rooms",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
       );
-      setRoomList([...roomList, ...response.data]);
-    } catch (error) {
 
+      setRoomList((roomList) => [...roomList, ...response.data]);
+
+    } catch (error) {
+      console.error(error);
       const { response } = error;
       if (response) {
         //모달
@@ -44,7 +43,7 @@ export default function RoomList() {
             //          데이터가 존재하지 않을 때, 로그인 페이지로
             // error 무조건 로그인 페이지
 
-            refreshToken();
+            // refreshToken();
 
             // window.alert("인증되지 않은 사용자입니다.");
             break;
@@ -62,27 +61,24 @@ export default function RoomList() {
     }
   };
 
+
   useEffect(() => {
     fetchRooms();
-    return setRoomList([]);
   }, []);
-
   const refreshToken = async () => {
     try {
       const refreshToken = Cookies.get("refresh");
+      if (!refreshToken) router.push('/login');
 
-      if (!refreshToken) router.push("/login");
-
-      const response = await axios.post(API_URL + "/refresh", {
-        access_token: Cookies.get("token"), // 수정해라 안주홍
+      const response = await axios.post("/refresh", {
         refresh_token: refreshToken,
       });
 
       const { access_token } = response.data;
 
       Cookies.set("token", access_token);
+
       console.log("Token is refreshed!");
-      window.location.reload();
 
     } catch (error) {
       console.error(error);
@@ -114,66 +110,49 @@ export default function RoomList() {
       <LayoutAuthenticated>
         <title>MOFIT 멀티 게임</title>
         <Navbar>
-          <div className="flex flex-col items-center justify-end">
-            <div className="mt-2" style={{ width: "60vw" }}>
-              <table className="w-full table-auto">
-                <thead>
-                  <tr className="bg-gray-800 text-white">
-                    <th className="w-1/4 py-2 px-4">방 제목</th>
-                    <th className="w-1/4 py-2 px-4">참여 인원</th>
-                    <th className="w-1/4 py-2 px-4">액션</th>
-                  </tr>
-                </thead>
+        <div className="flex-col items-center flex h-screen ">
+          <div className="mt-2 w-8/12 " style={{ width: "60vw" }}>
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="w-1/4 py-2 px-4">방 제목</th>
+                  <th className="w-1/4 py-2 px-4">참여 인원</th>
+                  <th className="w-1/4 py-2 px-4">액션</th>
+                </tr>
+              </thead>
 
-                <tbody>
-                  {roomList?.map((room) => (
-                    <tr
-                      key={room.roomId}
-                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-                    >
-                      <td className="py-2 px-4 text-center font-bold">
-                        {room.roomId}
-                      </td>
-                      <td className="py-2 px-4 text-center">{room.participant}</td>
-                      <td className="py-2 px-4">
-                        <button
-                          className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block"
-                          onClick={() => {
-                            handleRoomEnter(room.roomId);
-                          }}
-                        >
-                          참여하기
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="ml-auto">
-              <button
-                className="w-12 h-12 bg-teal-700 text-white rounded-full flex items-center justify-center"
-                onClick={handleOpenModal}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-10 w-10"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-              </button>
-            </div>
+              
+            </table>    
           </div>
+          <div className="flex justify-end items-end w-7/12 h-4/5">
+            <button
+              className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl"
+              onClick={handleOpenModal}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </button>
+
+          </div>
+            
+        </div>
         </Navbar>
-        <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
+        <CreateRoomModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
       </LayoutAuthenticated>
     </>
   );
