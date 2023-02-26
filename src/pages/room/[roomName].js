@@ -7,20 +7,21 @@ import { isRoomHostState } from "../../recoil/states";
 
 export default function GameRoom() {
     const token = Cookies.get("token");
+    // let base64Payload = token.split('.')[1];
+    // let payload = Buffer.from(base64Payload, 'base64');
+    // let result = JSON.parse(payload.toString());
+
     const router = useRouter();
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     console.log(isRoomHost);
-    let base64Payload = token.split('.')[1];
-    let payload = Buffer.from(base64Payload, 'base64');
-    let result = JSON.parse(payload.toString())
-    console.log(result);
+
 
     useEffect(() => {
         if (!token) router.push("/login");
     }, [])
 
     const roomName = router.query.roomName;
-    const userName = result.sub;
+    const userName = "juhong";
 
     return (
         <>
