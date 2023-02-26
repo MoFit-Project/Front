@@ -97,7 +97,7 @@ export default function Login() {
                             type="text"
                             value={username}
                             onChange={(event) => setEmail(event.target.value)}
-                            placeholder="ID"
+                            placeholder="아이디"
                         />
                     </div>
                     <div className="mb-6">
@@ -107,7 +107,7 @@ export default function Login() {
                             type="password"
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
-                            placeholder="PASSWORD"
+                            placeholder="비밀번호"
                         />
                     </div>
                     {

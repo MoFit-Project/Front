@@ -18,10 +18,14 @@ export default function RoomList() {
       const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
       const response = await axios.get(
         API_URL + "/rooms",
-        { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
 
-      setRoomList((roomList) => [...roomList, ...response.data]);
+      setRoomList([...roomList, ...response.data]);
 
     } catch (error) {
       console.error(error);
@@ -45,7 +49,7 @@ export default function RoomList() {
 
             // refreshToken();
 
-            // window.alert("인증되지 않은 사용자입니다.");
+            console.log("???");
             break;
           case 403:
             // 이전페이지로 리다이렉트
@@ -61,10 +65,11 @@ export default function RoomList() {
     }
   };
 
-
   useEffect(() => {
     fetchRooms();
+    return setRoomList([]);
   }, []);
+
   const refreshToken = async () => {
     try {
       const refreshToken = Cookies.get("refresh");
@@ -122,7 +127,7 @@ export default function RoomList() {
               </thead>
 
               <tbody>
-                {roomList?.map((room) => (
+                {roomList ? roomList.map((room) => (
                   <tr
                     key={room.roomId}
                     className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
@@ -142,7 +147,7 @@ export default function RoomList() {
                       </button>
                     </td>
                   </tr>
-                ))}
+                )) : null}
               </tbody>
             </table>
           </div>

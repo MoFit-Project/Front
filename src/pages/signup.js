@@ -42,7 +42,7 @@ export default function SignupForm() {
       </div>
       <div className="max-w-md mx-auto mt-10">
         <img
-          class="mx-auto h-12 w-auto"
+          className="mx-auto h-12 w-auto"
           src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
           alt="Your Company"
         ></img>
