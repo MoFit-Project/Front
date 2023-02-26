@@ -143,7 +143,9 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
     }
 
     return (
+
         <div className='h-screen'>
+            
             <div className='flex justify-center' style={{ border: 'solid black' }}>
                 <h1 id="session-title">{roomName}</h1>
                 <button

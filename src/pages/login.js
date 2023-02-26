@@ -110,13 +110,13 @@ export default function Login() {
                             placeholder="비밀번호"
                         />
                         {
-                        isLoginFail &&
-                        <p style={{ color: 'red' }}>
-                            아이디와 비밀번호를 확인해주세요.
-                        </p>
-                    }
+                            isLoginFail &&
+                            <p style={{ color: 'red' }}>
+                                아이디와 비밀번호를 확인해주세요.
+                            </p>
+                        }
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                         <button
                             className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -129,7 +129,7 @@ export default function Login() {
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={'/signup'} legacyBehavior>
                             < a
-                                className="inline-block align-baseline font-bold text-lg text-black-500 hover:underline"
+                                className="inline-block align-baseline font-bold text-md text-black-500"
                             >
                                 회원가입
                             </a>

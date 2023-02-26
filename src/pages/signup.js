@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
+import Link from "next/link";
 
 export default function SignupForm() {
   const [id, setId] = useState("");
@@ -40,16 +41,17 @@ export default function SignupForm() {
       <div>
         <Background />
       </div>
-      <div className="flex justify-center">
-      <div className="max-w-md mx-auto mt-10" style={{ width: "70vw" }}>
-        <img
-          className="mx-auto h-12 w-auto"
-          src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
-          alt="Your Company"
-        ></img>
-        <h1 className="text-4xl font-bold text-center mb-8 text-green-800">
-          Mofit
-        </h1>
+      <div className="max-w-md mx-auto mt-10" style={{ width: '25vw' }}>
+        <Link href="/login">
+          <img
+            className="mx-auto h-12 w-auto"
+            src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
+            alt="Your Company"
+          ></img>
+          <h1 className="text-4xl font-bold text-center mb-8 text-green-800">
+            Mofit
+          </h1>
+        </Link>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 ">
             <input
@@ -91,7 +93,6 @@ export default function SignupForm() {
             </button>
           </div>
         </form>
-      </div>
       </div>
     </div>
   );
