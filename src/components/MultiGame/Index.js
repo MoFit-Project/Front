@@ -20,6 +20,7 @@ export default function Index() {
       // height: window.innerHeight * window.devicePixelRatio,
       backgroundColor: '#ffffff',
 
+
     };
 
     const game = new Phaser.Game(config);

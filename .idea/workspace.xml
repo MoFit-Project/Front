@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
-      <change afterPath="$PROJECT_DIR$/public/assets/ball.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/MultiGame/Index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/multigame.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/knight.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +68,7 @@
       <recent name="$PROJECT_DIR$/src/public/background" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/assets" />
       <recent name="$PROJECT_DIR$/src/public" />
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
@@ -89,7 +86,7 @@
       <workItem from="1677347038757" duration="175000" />
       <workItem from="1677347221959" duration="144000" />
       <workItem from="1677347373528" duration="3556000" />
-      <workItem from="1677393833193" duration="4846000" />
+      <workItem from="1677393833193" duration="6898000" />
     </task>
     <task id="LOCAL-00001" summary="feat : JWT 쿠기 유/무로 페이지 접근제어 추가">
       <created>1677227365915</created>
