@@ -5,7 +5,7 @@ import { getToken } from '../../../public/createToken.js';
 import { useRouter } from 'next/router';
 
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
-
+    
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
