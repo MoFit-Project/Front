@@ -120,8 +120,29 @@ export default function RoomList() {
                   <th className="w-1/4 py-2 px-4">액션</th>
                 </tr>
               </thead>
-
-              
+              <tbody>
+                  {roomList?.map((room) => (
+                    <tr
+                      key={room.roomId}
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                    >
+                      <td className="py-2 px-4 text-center font-bold">
+                        {room.roomId}
+                      </td>
+                      <td className="py-2 px-4 text-center">{room.participant}</td>
+                      <td className="py-2 px-4">
+                        <button
+                          className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block"
+                          onClick={() => {
+                            handleRoomEnter(room.roomId);
+                          }}
+                        >
+                          참여하기
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
             </table>    
           </div>
           <div className="flex justify-end items-end w-7/12 h-4/5">
