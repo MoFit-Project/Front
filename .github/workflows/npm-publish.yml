@@ -20,16 +20,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3.2.0
 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
 
-      - name: Install Yarn
-        run: npm install -g yarn
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: make env.production
         if: contains(github.ref, 'main') # branch가 main일 때
