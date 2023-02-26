@@ -122,6 +122,7 @@ export default function RoomList() {
                       key={room.roomId}
                       className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
                     >
+
                       <td className="py-2 px-4 text-center font-bold">
                         {room.roomId}
                       </td>
@@ -168,4 +169,5 @@ export default function RoomList() {
       </LayoutAuthenticated>
     </>
   );
+
 }
