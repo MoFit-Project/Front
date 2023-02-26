@@ -29,9 +29,8 @@ export default function Ranking() {
   return (
     <>
     <Navbar />
-    <div className="container mx-auto my-10 " style={{ width: "90vw" }}>
-      <h1 className="text-3xl font-bold text-green-700 text-center">Rank List</h1>
-      <div className="mt-5 rounded-lg">
+    <div className="container mx-auto my-10 mt-2" style={{ width: "60vw" }}>
+      <div className="mt-2 rounded-lg">
         <table className="table-fixed w-full">
           <thead>
             <tr className="bg-green-200 text-green-600 text-sm uppercase">
