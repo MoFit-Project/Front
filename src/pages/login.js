@@ -29,7 +29,7 @@ export default function Login() {
 
         // https://mofit.bobfriend.site:8080/mofit/login
         try {
-            const response = await axios.post(API_URL + "/mofit/login", {
+            const response = await axios.post(API_URL + "/login", {
                 account: username,
                 password: password,
             })
@@ -91,7 +91,7 @@ export default function Login() {
                             type="text"
                             value={username}
                             onChange={(event) => setEmail(event.target.value)}
-                            placeholder="ID"
+                            placeholder="아이디"
                         />
                     </div>
                     <div className="mb-6">
@@ -101,15 +101,16 @@ export default function Login() {
                             type="password"
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
-                            placeholder="PASSWORD"
+                            placeholder="비밀번호"
                         />
-                    </div>
-                    {
+                        {
                         isLoginFail &&
-                        <p style={{ color: red }}>
+                        <p style={{ color: 'red' }}>
                             아이디와 비밀번호를 확인해주세요.
                         </p>
                     }
+                    </div>
+                    
                     <div className="flex items-center justify-between">
                         <button
                             className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -122,7 +123,7 @@ export default function Login() {
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={'/signup'} legacyBehavior>
                             < a
-                                className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800"
+                                className="inline-block align-baseline font-bold text-lg text-black-500 hover:underline"
                             >
                                 회원가입
                             </a>

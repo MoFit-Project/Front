@@ -110,9 +110,9 @@ export default function RoomList() {
     <>
       <LayoutAuthenticated>
         <title>MOFIT 멀티 게임</title>
-        <Navbar />
-        <div className="relative flex flex-col items-center">
-          <div className="w-full mt-5 overflow-x-auto" style={{ width: "90vw" }}>
+        <Navbar>
+        <div className="flex flex-col items-center justify-end">
+          <div className="mt-2" style={{ width: "60vw" }}>
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-800 text-white">
@@ -145,28 +145,31 @@ export default function RoomList() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table>    
           </div>
-          <button
-            className="fixed bottom-20 right-20 w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center"
-            onClick={handleOpenModal}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <div className="ml-auto">
+            <button
+              className="w-12 h-12 bg-teal-700 text-white rounded-full flex items-center justify-center"
+              onClick={handleOpenModal}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
+        </Navbar>
         <CreateRoomModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
