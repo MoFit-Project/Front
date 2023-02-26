@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { OpenVidu } from 'openvidu-browser';
 import OvVideo from './OvVideo';
-import { getToken } from '../../public/createToken.js';
+import { getToken } from '../../../public/createToken.js';
 import { useRouter } from 'next/router';
 
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
-
+    
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
@@ -145,7 +145,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
     return (
 
         <div className='h-screen'>
-            
+
             <div className='flex justify-center' style={{ border: 'solid black' }}>
                 <h1 id="session-title">{roomName}</h1>
                 <button

@@ -4,9 +4,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
-import { createPoseDetector } from "public/createPoseDetector";
-import { useRecoilState } from "recoil";
-import { poseDetector } from "../recoil/states.js";
+
 
 export default function Login() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
