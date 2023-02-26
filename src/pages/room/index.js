@@ -45,7 +45,6 @@ export default function RoomList() {
             // error 무조건 로그인 페이지
 
             refreshToken();
-
             // window.alert("인증되지 않은 사용자입니다.");
             break;
           case 403:

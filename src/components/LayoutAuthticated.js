@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 export default function LayoutAuthenticated(props) {
+
     const router = useRouter();
     useEffect(() => {
         return checkIsLoggedIn();
@@ -17,10 +18,9 @@ export default function LayoutAuthenticated(props) {
 
         }
     }
-
     return (
-        <>
+        <div className='w-full h-full'>
             {props.children}
-        </>
+        </div>
     )
 }
