@@ -17,7 +17,7 @@ export default function RoomList() {
     try {
       const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
       const response = await axios.get(
-        API_URL + "/mofit/rooms",
+        API_URL + "/rooms",
         { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
       );
 
@@ -34,7 +34,7 @@ export default function RoomList() {
             //////////////////////// 예시
             // refresh 토큰이 있다면, access가 만료된 것을 의미한다.
 
-            // -> /mofit/refresh POST 요청
+            // -> /refresh POST 요청
             // 헤더 불필요
             // 바디에 refresh 토큰 보내기
             // JSON 양식 {refresh_token : ""}
@@ -43,9 +43,9 @@ export default function RoomList() {
             //          데이터가 존재하지 않을 때, 로그인 페이지로
             // error 무조건 로그인 페이지
 
-            //refreshToken();
+            // refreshToken();
 
-            //window.alert("인증되지 않은 사용자입니다.");
+            // window.alert("인증되지 않은 사용자입니다.");
             break;
           case 403:
             // 이전페이지로 리다이렉트
@@ -63,8 +63,6 @@ export default function RoomList() {
 
 
   useEffect(() => {
-
-
     fetchRooms();
   }, []);
   const refreshToken = async () => {
@@ -72,7 +70,7 @@ export default function RoomList() {
       const refreshToken = Cookies.get("refresh");
       if (!refreshToken) router.push('/login');
 
-      const response = await axios.post("/mofit/refresh", {
+      const response = await axios.post("/refresh", {
         refresh_token: refreshToken,
       });
 
@@ -81,6 +79,7 @@ export default function RoomList() {
       Cookies.set("token", access_token);
 
       console.log("Token is refreshed!");
+
     } catch (error) {
       console.error(error);
       Cookies.remove("token");

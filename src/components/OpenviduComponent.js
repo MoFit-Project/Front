@@ -4,7 +4,7 @@ import OvVideo from './OvVideo';
 import { getToken } from '../../public/createToken.js';
 import { useRouter } from 'next/router';
 
-export default function OpenViduComponent({ roomName, userName, token }) {
+export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
@@ -70,7 +70,6 @@ export default function OpenViduComponent({ roomName, userName, token }) {
 
                 // Update the state with the new subscribers
                 setSubscribers([...subscribers, newsubscriber]);
-                console.log(subscribers.length);
             });
 
             // On every Stream destroyed...
@@ -91,7 +90,7 @@ export default function OpenViduComponent({ roomName, userName, token }) {
                 console.warn(exception);
             });
 
-            getToken(mySessionId, token).then((token) => {
+            getToken(mySessionId, jwtToken).then((token) => {
                 // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
                 // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
                 mySession.connect(token, { clientData: myUserName })
@@ -145,13 +144,12 @@ export default function OpenViduComponent({ roomName, userName, token }) {
 
     return (
         <div className='h-screen'>
-            <div className='flex justify-center border-solid hover:border-dotted' style={{ border: 'solid black' }}>
+            <div className='flex justify-center' style={{ border: 'solid black' }}>
                 <h1 id="session-title">{roomName}</h1>
                 <button
                     className=""
                     id="buttonLeaveSession"
                     onClick={leaveSession}
-
                 >
                     방 나가기
                 </button>

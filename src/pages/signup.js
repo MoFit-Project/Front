@@ -14,7 +14,7 @@ export default function SignupForm() {
     event.preventDefault();
 
     try {
-      await axios.post(API_URL + "/mofit/register", {
+      await axios.post(API_URL + "/register", {
         account: id,
         nickname: nickname,
         password: password,
