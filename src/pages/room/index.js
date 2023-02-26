@@ -17,12 +17,15 @@ export default function RoomList() {
       const token = Cookies.get("token"); // 쿠키에서 토큰 가져오기
       const response = await axios.get(
         API_URL + "/rooms",
-        { headers: { Authorization: `Bearer ${token}` } } // headers에 토큰 추가
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
-
-      setRoomList((roomList) => [...roomList, ...response.data]);
+      setRoomList([...roomList, ...response.data]);
     } catch (error) {
-      console.error(error);
+
       const { response } = error;
       if (response) {
         //모달
@@ -61,7 +64,9 @@ export default function RoomList() {
 
   useEffect(() => {
     fetchRooms();
+    return setRoomList([]);
   }, []);
+
   const refreshToken = async () => {
     try {
       const refreshToken = Cookies.get("refresh");
@@ -76,8 +81,9 @@ export default function RoomList() {
       const { access_token } = response.data;
 
       Cookies.set("token", access_token);
-
       console.log("Token is refreshed!");
+      window.location.reload();
+
     } catch (error) {
       console.error(error);
       Cookies.remove("token");
@@ -128,9 +134,7 @@ export default function RoomList() {
                       <td className="py-2 px-4 text-center font-bold">
                         {room.roomId}
                       </td>
-                      <td className="py-2 px-4 text-center">
-                        {room.participant}
-                      </td>
+                      <td className="py-2 px-4 text-center">{room.participant}</td>
                       <td className="py-2 px-4">
                         <button
                           className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block"

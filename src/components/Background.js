@@ -1,6 +1,6 @@
 const background = () => (
     <div>
-        <img className={"bg-video"} src = "dragon.gif"/>
+        <img className={"bg-video"} src="dragon.gif" />
         <style jsx>{`
           .bg-video {
             position: absolute;
