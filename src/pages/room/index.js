@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import LayoutAuthenticated from "../../components/LayoutAuthticated";
 
 export default function RoomList() {
-
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,6 +45,8 @@ export default function RoomList() {
             // error 무조건 로그인 페이지
 
             refreshToken();
+
+            // window.alert("인증되지 않은 사용자입니다.");
             break;
           case 403:
             // 이전페이지로 리다이렉트
@@ -69,16 +70,17 @@ export default function RoomList() {
   const refreshToken = async () => {
     try {
       const refreshToken = Cookies.get("refresh");
-      if (!refreshToken) router.push('/login');
+
+      if (!refreshToken) router.push("/login");
 
       const response = await axios.post(API_URL + "/refresh", {
+        access_token: Cookies.get("token"), // 수정해라 안주홍
         refresh_token: refreshToken,
       });
 
       const { access_token } = response.data;
 
       Cookies.set("token", access_token);
-
       console.log("Token is refreshed!");
       window.location.reload();
 
@@ -124,7 +126,7 @@ export default function RoomList() {
                 </thead>
 
                 <tbody>
-                  {roomList ? roomList.map((room) => (
+                  {roomList?.map((room) => (
                     <tr
                       key={room.roomId}
                       className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
@@ -144,7 +146,7 @@ export default function RoomList() {
                         </button>
                       </td>
                     </tr>
-                  )) : null}
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -171,10 +173,7 @@ export default function RoomList() {
             </div>
           </div>
         </Navbar>
-        <CreateRoomModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
+        <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
       </LayoutAuthenticated>
     </>
   );
