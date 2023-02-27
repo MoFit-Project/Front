@@ -17,6 +17,11 @@ export default class Main extends Phaser.Scene {
 
   attackSpeed = 1000;
 
+  // 배경화면 설정
+  bg;
+  windowWidth = window.innerWidth;
+  windowHeight = window.innerHeight;
+
   constructor() {
     super();
   }
@@ -44,6 +49,9 @@ export default class Main extends Phaser.Scene {
     );
     //가이드라인 삽입
     this.load.image('guildLine', 'assets/dot_line.png')
+
+    //배경화면
+    this.load.image('backGround','assets/backgroundDungeon.png')
   }
 
 
@@ -54,6 +62,9 @@ export default class Main extends Phaser.Scene {
 
 
   create() {
+    //배경 삽입
+    this.bg = this.add.image(0,0,'backGround').setOrigin(0,0)
+    this.bg.setDisplaySize(this.windowWidth, this.windowHeight);
 
     // 캐릭터 설정
     // 캐릭터 설정 Left
