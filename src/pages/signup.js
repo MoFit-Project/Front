@@ -7,7 +7,6 @@ import Link from "next/link";
 export default function SignupForm() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -17,7 +16,6 @@ export default function SignupForm() {
     try {
       await axios.post(API_URL + "/register", {
         account: id,
-        nickname: nickname,
         password: password,
       }).then(response => {
         const check = response.data;
@@ -61,16 +59,6 @@ export default function SignupForm() {
               placeholder="아이디"
               value={id}
               onChange={(event) => setId(event.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="text"
-              id="nickname"
-              className="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="닉네임"
-              value={nickname}
-              onChange={(event) => setNickname(event.target.value)}
             />
           </div>
           <div className="mb-4">

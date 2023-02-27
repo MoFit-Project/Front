@@ -1,15 +1,10 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
 
 export default function MyPage() {
-  const [email, setEmail] = useState("John");
-  const [name, setName] = useState("브자브맨");
+  const [Id, setId] = useState("John");
   const [password, setPassword] = useState("");
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -17,7 +12,7 @@ export default function MyPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ name, email, password });
+    console.log({ Id, password });
   };
 
   return (
@@ -36,23 +31,8 @@ export default function MyPage() {
               type="email"
               id="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={email}
+              value={Id}
               disabled
-            />
-          </div>
-          <div className="mb-2">
-            <label
-              htmlFor="name"
-              className="block text-gray-700 font-bold mb-2"
-            >
-              닉네임
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={name}
-              onChange={handleNameChange}
             />
           </div>
           <div className="mb-5">
