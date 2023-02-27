@@ -6,13 +6,14 @@ export default class Main extends Phaser.Scene {
   leftThrowAngle = -45;
   leftThrowLaunched = false;
   leftGuildLine;
-
+  ledftDead;
 
   rightPlayer;
   rightThrow;
   rightThrowAngle = -135;
   rightThrowLaunched = false;
   rightGuildLine;
+  rightDead;
 
 
   attackSpeed = 1000;
@@ -37,7 +38,14 @@ export default class Main extends Phaser.Scene {
       "knight",
       "assets/knight.png",
       { frameWidth: 128, frameHeight: 128 },
-      25
+      33
+    );
+    //캐릭터 죽음
+    this.load.spritesheet(
+        "knightDead",
+        "assets/knight_dead.png",
+        { frameWidth: 256, frameHeight: 256 },
+        10
     );
 
     // 투사체 추가
@@ -69,32 +77,17 @@ export default class Main extends Phaser.Scene {
     // 캐릭터 설정
     // 캐릭터 설정 Left
     this.leftPlayer = this.physics.add
-      .sprite(300, 500, "knight")
+      .sprite(300, 500, "knight",16)
       .setScale(3);
     this.leftPlayer.setOffset(14, 60).setBodySize(45, 50, false);
 
     // 캐릭터 설정 Right
     this.rightPlayer = this.physics.add
-      .sprite(1500, 500, "knight")
+      .sprite(1500, 500, "knight",16)
       .setScale(3)
       .toggleFlipX();
     this.rightPlayer.setOffset(69, 60).setBodySize(45, 50, false);
     // this.rightPlayer.setGravity(0, -200);
-
-
-
-    // 애니메이션 설정 (걷기)
-    // attack 애니메이션이 끝나고 실행 할 애니메이션  play 인자가 true라면 무한반복됨 
-
-    // 애니메이션 Left
-    this.leftPlayer.on("animationcomplete-attackAct", () => {
-      this.leftPlayer.anims.play("walk", true);
-    });
-
-    // 애니메이션 Right
-    this.rightPlayer.on("animationcomplete-attackAct", () => {
-      this.rightPlayer.anims.play("walk", true);
-    });
 
 
     // 투사체 던지기 모션
@@ -156,17 +149,44 @@ export default class Main extends Phaser.Scene {
 
     this.anims.create({
       key: "attackAct", //액션이름
-      frames: this.anims.generateFrameNumbers("knight", { start: 0, end: 3 }), //프레임 불러오기 (불러올 스프라이트, 프레임)[1,2,3,4]
+      frames: this.anims.generateFrameNumbers("knight", { start: 5, end: 11 }), //프레임 불러오기 (불러올 스프라이트, 프레임)[1,2,3,4]
       frameRate: 10, // 초당 프레임 개수
       repeat: 0, // 0 : 한번만 반복
     });
     this.anims.create({
+      key: "run",
+      frames: this.anims.generateFrameNumbers("knight", { start: 17, end: 24 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+    this.anims.create({
       key: "walk",
-      frames: this.anims.generateFrameNumbers("knight", { start: 12, end: 17 }),
+      frames: this.anims.generateFrameNumbers("knight", { start: 25, end: 30 }),
       frameRate: 10,
       repeat: -1,
     });
-    
+    this.anims.create({
+      key: "hurt",
+      frames: this.anims.generateFrameNumbers("knight", { start: 12, end: 15 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+    this.anims.create({
+      key: "dead",
+      frames: this.anims.generateFrameNumbers("knightDead", { start: 0, end: 9 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+// 애니메이션 Left
+    this.leftPlayer.on("animationcomplete", () => {
+      this.leftPlayer.anims.play("walk", true);
+    });
+    this.leftPlayer.play("walk");
+    // 애니메이션 Right
+    this.rightPlayer.on("animationcomplete", () => {
+      this.rightPlayer.anims.play("walk", true);
+    });
+    this.rightPlayer.play("walk");
     // 콘솔키 설정
     this.cursors = this.input.keyboard.createCursorKeys();
   }
@@ -185,26 +205,30 @@ export default class Main extends Phaser.Scene {
 
 
     // 각도 조절 Left
-    if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-      this.leftThrowAngle -= 5;
+    if (this.cursors.up.isDown) {
+      this.leftPlayer.anims.play("run", true);
+      this.leftThrowAngle -= 1;
       if (this.leftThrowAngle < -90) {
         this.leftThrowAngle = -90;
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.cursors.down)) {
-      this.leftThrowAngle += 5;
+    } else if (this.cursors.down.isDown) {
+      this.leftPlayer.anims.play("run", true);
+      this.leftThrowAngle += 1;
       if (this.leftThrowAngle > 0) {
         this.leftThrowAngle = 0;
       }
     }
 
     // 각도 조절 Right
-    if (Phaser.Input.Keyboard.JustDown(this.cursors.left)) {
-      this.rightThrowAngle -= 5;
+    if (this.cursors.left.isDown) {
+      this.rightPlayer.anims.play("run", true);
+      this.rightThrowAngle -= 1;
       if (this.rightThrowAngle < -180) {
         this.rightThrowAngle = -180;
       }
-    } else if (Phaser.Input.Keyboard.JustDown(this.cursors.right)) {
-      this.rightThrowAngle += 5;
+    } else if (this.cursors.right.isDown) {
+      this.rightPlayer.anims.play("run", true);
+      this.rightThrowAngle += 1;
       if (this.rightThrowAngle > -90) {
         this.rightThrowAngle = -90;
       }
@@ -295,6 +319,7 @@ export default class Main extends Phaser.Scene {
 
   // Right Hitted
   rightPlayerHitted() {
+    this.rightPlayer.anims.play('hurt', true)
     this.leftThrow.setGravity(0);
     this.leftThrowLaunched = false;
     this.leftThrow.body.stop();
@@ -307,6 +332,7 @@ export default class Main extends Phaser.Scene {
   }
   // left Hitted
   leftPlayerHitted() {
+    this.leftPlayer.anims.play('hurt', true)
     this.rightThrow.setGravity(0);
     this.rightThrowLaunched = false;
     this.rightThrow.body.stop();
