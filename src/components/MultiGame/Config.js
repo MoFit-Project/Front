@@ -57,14 +57,17 @@ export default class Main extends Phaser.Scene {
 
     // 캐릭터 설정
     // 캐릭터 설정 Left
-    this.leftPlayer = this.physics.add.sprite(300, 500, "knight").setScale(3);
+    this.leftPlayer = this.physics.add
+      .sprite(300, 500, "knight")
+      .setScale(3);
+    this.leftPlayer.setOffset(14, 60).setBodySize(45, 50, false);
 
     // 캐릭터 설정 Right
     this.rightPlayer = this.physics.add
       .sprite(1500, 500, "knight")
       .setScale(3)
       .toggleFlipX();
-    this.rightPlayer.setOffset(74,60).setBodySize(45,50,false);
+    this.rightPlayer.setOffset(69, 60).setBodySize(45, 50, false);
     // this.rightPlayer.setGravity(0, -200);
 
 
