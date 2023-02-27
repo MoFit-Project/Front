@@ -21,11 +21,12 @@ export default function GameRoom() {
     }, [])
 
     const roomName = router.query.roomName;
-    const userName = "juhong";
+    //const userName = result.sub;
 
     return (
         <>
-            <OpenViduComponent roomName={roomName} userName={userName} jwtToken={token} />
+            <title>MOFIT 게임룸</title>
+            <OpenViduComponent roomName={roomName} userName={'juhong'} jwtToken={token} />
         </>
     );
 }

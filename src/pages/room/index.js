@@ -143,7 +143,7 @@ export default function RoomList() {
                   ))}
                 </tbody>
               </table>
-              <div className="fixed right-56 top-3/4 mt-20">
+              <div className="fixed right-80 top-3/4 mt-20">
                 <button
                   className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl"
                   onClick={handleOpenModal}

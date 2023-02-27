@@ -34,30 +34,30 @@ export default function SignupForm() {
   };
 
   return (
-    <div>
+    <div className="flex w-screen h-screen justify-center items-center">
       <title>
         MOFIT 회원가입
       </title>
       <div>
         <Background />
       </div>
-      <div className="max-w-md mx-auto mt-10" style={{ width: '25vw' }}>
+      <div className="max-w-md mx-auto w-full">
         <Link href="/login">
           <img
             className="mx-auto h-12 w-auto"
             src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
             alt="Your Company"
           ></img>
-          <h1 className="text-4xl font-bold text-center mb-8 text-green-800">
+          <h1 className="text-4xl font-bold text-center text-green-800">
             Mofit
           </h1>
         </Link>
-        <form onSubmit={handleSubmit}>
+        <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
           <div className="mb-4 ">
             <input
               type="text"
               id="id"
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="아이디"
               value={id}
               onChange={(event) => setId(event.target.value)}
@@ -67,7 +67,7 @@ export default function SignupForm() {
             <input
               type="text"
               id="nickname"
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="닉네임"
               value={nickname}
               onChange={(event) => setNickname(event.target.value)}
@@ -77,7 +77,7 @@ export default function SignupForm() {
             <input
               type="password"
               id="password"
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="비밀번호"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
