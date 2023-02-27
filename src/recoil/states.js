@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export const poseDetector = atom({
-    key: "poseDetector",
-    default: null,
+export const isRoomHostState = atom({
+    key: "isRoomHostState",
+    default: { roomName: '', isHost: false },
 })
