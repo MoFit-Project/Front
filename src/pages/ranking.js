@@ -3,8 +3,8 @@ import Navbar from "../components/Navbar"
 import axios from "axios";
 
 const sampleData = [
-  { rank: 1, name: "John", score: 300 },
-  { rank: 2, name: "George", score: 100 }
+  { rank: 1, Id: "John", score: 300 },
+  { rank: 2, Id: "George", score: 100 }
 ];
 
 export default function Ranking() {
@@ -36,16 +36,16 @@ export default function Ranking() {
             <thead>
               <tr className="bg-green-200 text-green-600 text-sm uppercase">
                 <th className="w-1/5 py-3 px-4 font-semibold">RANK</th>
-                <th className="w-1/5 py-3 px-4 font-semibold">NICK NAME</th>
+                <th className="w-1/5 py-3 px-4 font-semibold">Id</th>
                 <th className="w-1/5 py-3 px-4 font-semibold">SCORE</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 text-sm font-bold">
               {data.map((item) => (
-                <tr className="border-b border-gray-200 hover:bg-gray-100" key={item.rank}>
-                  <td className="py-3 px-4 text-center whitespace-nowrap">{item.rank}</td>
-                  <td className="py-3 px-4 text-center">{item.name}</td>
-                  <td className="py-3 px-4 text-center">{item.score}</td>
+                <tr className="border-b border-gray-200 hover:bg-gray-100" key={item.Rank}>
+                  <td className="py-3 px-4 text-center whitespace-nowrap">{item.Rank}</td>
+                  <td className="py-3 px-4 text-center">{item.Id}</td>
+                  <td className="py-3 px-4 text-center">{item.Score}</td>
                 </tr>
               ))}
             </tbody>
