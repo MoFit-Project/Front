@@ -19,14 +19,16 @@ export default function Index() {
       // width: window.innerWidth * window.devicePixelRatio,
       // height: window.innerHeight * window.devicePixelRatio,
       backgroundColor: '#FFFFFF',
+      // scale: {
+      //   mode: Phaser.Scale.Fit
+      // },
       physics :{
         default :'arcade',
         arcade:{
-          gravity:{y:200}
+          debug : true,
+          // gravity:{y:200}
         }
       }
-
-
     };
 
     const game = new Phaser.Game(config);
