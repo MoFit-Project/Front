@@ -15,6 +15,6 @@ export default function OvVideo({ streamManager, userName }) {
 
     return (
 
-        <video autoPlay={true} videoRef={videoRef} useName={userName} />
+        <video autoPlay={true} ref={videoRef} useName={userName} />
     );
 }
