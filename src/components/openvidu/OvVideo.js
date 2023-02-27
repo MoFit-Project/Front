@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
 
 
-export default function OvVideo({ streamManager }) {
+export default function OvVideo({ streamManager, userName }) {
     const videoRef = useRef(null);
     //const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     //console.log(isRoomHost);
@@ -14,6 +14,7 @@ export default function OvVideo({ streamManager }) {
     }, [streamManager]);
 
     return (
-        <video autoPlay={true} ref={videoRef} />
+
+        <video autoPlay={true} ref={videoRef} useName={userName} />
     );
 }

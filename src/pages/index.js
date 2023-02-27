@@ -1,33 +1,36 @@
 import Background from "../components/Background";
 import LayoutAuthenticated from "../components/LayoutAuthticated";
 import Link from "next/link";
+import Head from "next/head";
 
 export default function Home() {
     return (
         <LayoutAuthenticated>
-            <div className="container flex justify-center items-center h-screen">
+            <title>
+                MOFIT 모드 선택
+            </title>
+            <div className="flex h-full justify-center items-center">
                 <div>
                     <Background />
                 </div>
                 <div >
-                    <div className="text-center" style={{ width: '30vw' }}>
+                    <div className="text-center">
                         <Link href={'/single-mode'}>
                             <button
-                                className="w-full bg-green-500 hover:bg-green-700 text-white h-20 mb-10 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="w-full bg-green-500 py-8 hover:bg-green-700 text-white mb-6 font-bold text-3xl px-4 rounded-full focus:outline-none focus:shadow-outline"
                             >
                                 싱글 플레이
                             </button>
                         </Link>
-                    </div>
-                    <div className="text-center">
                         <Link href={'/room'}>
                             <button
-                                className="w-full bg-green-500 hover:bg-green-700 text-white h-20 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="w-full bg-green-500 py-8 hover:bg-green-700 text-white mt-6 font-bold text-3xl px-4 rounded-full focus:outline-none focus:shadow-outline"
                             >
                                 멀티 플레이
                             </button>
                         </Link>
                     </div>
+
                 </div>
             </div>
         </LayoutAuthenticated>

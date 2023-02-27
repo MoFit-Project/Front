@@ -19,7 +19,7 @@ export default function LayoutAuthenticated(props) {
         }
     }
     return (
-        <div className='w-full h-full'>
+        <div className='w-full h-screen'>
             {props.children}
         </div>
     )

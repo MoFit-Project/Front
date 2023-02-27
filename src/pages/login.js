@@ -65,13 +65,13 @@ export default function Login() {
     };
 
     return (
-        <div>
+        <div className="flex w-screen h-screen justify-center items-center">
             <title>MOFIT 로그인</title>
 
             <div>
                 <Background />
             </div>
-            <div className="max-w-md mx-auto mt-10">
+            <div className="max-w-md mt-10 w-full">
                 <img
                     className="mx-auto h-12 w-auto"
                     src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
@@ -79,9 +79,9 @@ export default function Login() {
                 ></img>
                 <h1 className="text-4xl font-bold text-center text-green-800">Mofit</h1>
                 <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             username="username"
                             type="text"
                             value={username}
@@ -91,7 +91,7 @@ export default function Login() {
                     </div>
                     <div className="mb-6">
                         <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             username="password"
                             type="password"
                             value={password}
@@ -103,7 +103,7 @@ export default function Login() {
                         )}
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="text-center">
                         <button
                             className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
@@ -114,7 +114,7 @@ export default function Login() {
 
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/signup"} legacyBehavior>
-                            <a className="inline-block align-baseline font-bold text-lg text-black-500 hover:underline">
+                            <a className="inline-block align-baseline font-bold text-md text-black-500">
                                 회원가입
                             </a>
                         </Link>

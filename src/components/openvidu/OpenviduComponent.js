@@ -3,12 +3,17 @@ import { OpenVidu } from 'openvidu-browser';
 import OvVideo from './OvVideo';
 import { getToken } from '../../../public/createToken.js';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { isRoomHostState } from "../../recoil/states";
 
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
-    
+
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
+
+    const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
+    console.log(isRoomHost);
 
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -31,6 +36,10 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         joinSession();
     }, []);
 
+    useEffect(() => {
+        console.log(subscribers)
+    }, [subscribers, publisher]);
+
     const onbeforeunload = (event) => {
         leaveSession();
     };
@@ -46,7 +55,6 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
     const leaveSession = () => {
         const mySession = session;
-
         if (mySession) {
             mySession.disconnect();
         }
@@ -67,14 +75,21 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 // Subscribe to the Stream to receive it. Second parameter is undefined
                 // so OpenVidu doesn't create an HTML video by its own
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
-
+                console.log('streamCreated: ' + newsubscriber);
                 // Update the state with the new subscribers
                 setSubscribers([...subscribers, newsubscriber]);
+                console.log(isRoomHost);
+                console.log(subscribers);
             });
 
             // On every Stream destroyed...
             mySession.on('streamDestroyed', (event) => {
                 // Remove the stream from 'subscribers' array
+                console.log('streamDestroyed: ' + event);
+                console.log(event.stream.streamManager);
+                if (!isRoomHost.isHost) {
+                    leaveSession();
+                }
                 deleteSubscriber(event.stream.streamManager);
             });
 
@@ -104,7 +119,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: '320x240', // The resolution of your video
+                            resolution: '480x520', // The resolution of your video
                             frameRate: 30, // The frame rate of your video
                             insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
@@ -161,7 +176,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     <div id="session" className='flex'>
                         {mainStreamManager !== undefined ? (
                             <div id="main-video" className="col-md-6">
-                                <OvVideo streamManager={mainStreamManager} />
+                                <OvVideo streamManager={mainStreamManager} useName={userName} />
                             </div>
                         ) : <div role="status">
                             <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
