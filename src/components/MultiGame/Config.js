@@ -7,6 +7,8 @@ export default class Main extends Phaser.Scene {
   swordAttackSpeed = 1000;
   swordAttackAngle = -45;
   swordAttackLaunched = false;
+  guildLine;
+  delayDone;
   constructor() {
     super();
   }
@@ -28,17 +30,25 @@ export default class Main extends Phaser.Scene {
       { frameWidth: 128, frameHeight: 128 },
       18
     );
+    //가이드라인 삽입
+    this.load.image('guildLine', 'assets/dot_line.png')
   }
 
   create() {
+
+
     // 캐릭터 설정
     this.playerLeft = this.add.sprite(300, 500, "knight").setScale(3);
     this.playerRight = this.physics.add
       .sprite(1500, 500, "knight")
       .setScale(3)
       .toggleFlipX();
-    this.playerRight.setSize(10, 10);
+    this.playerRight.setOffset(74,60).setBodySize(45,50,false);
     // this.playerRight.setGravity(0, -200);
+
+    // 가이드 선 추가
+    this.guildLine = this.add.image(this.playerLeft.x, this.playerLeft.y, 'guildLine').setOrigin(0, 0.5).setScale(0.3)
+
 
     this.anims.create({
       key: "attack", //액션이름
@@ -60,8 +70,8 @@ export default class Main extends Phaser.Scene {
     // 투사체 설정
     // 투사체를 생성하고 초기화합니다.
     this.swordAttack = this.physics.add
-      .sprite(500, 500, "swordAttack")
-      .setOrigin(0, 0);
+      .sprite(this.playerLeft.x, this.playerLeft.y, "swordAttack")
+      .setOrigin(0.5, 0.5);
     this.anims.create({
       key: "swordAttack", //액션이름
       frames: this.anims.generateFrameNumbers("swordAttack", {
@@ -88,11 +98,21 @@ export default class Main extends Phaser.Scene {
       null,
       this
     );
+
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.delayDone,
+      callbackScope: this,
+      loop: false
+    });
+
   }
 
   update() {
     // this.physics.add.collider(this.playerRight, this.swordAttack, this.playerRightHit, null, this);
     // this.playerRight.velocity = 0;
+    // 가이드 라인 리프레시
+    this.guildLine.angle = this.swordAttackAngle;
 
     if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
       this.swordAttackAngle -= 5;
@@ -166,4 +186,8 @@ export default class Main extends Phaser.Scene {
   // render() {
   //   this.debug.body(this.playerRight);
   // }
+  delayDone() {
+    this.playerRight.body.setSize(this.playerRight.width, this.playerRight.height, true);
+  }
 }
+
