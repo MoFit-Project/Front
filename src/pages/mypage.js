@@ -37,6 +37,7 @@ export default function MyPage() {
               id="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               value={email}
+              disabled
             />
           </div>
           <div className="mb-2">
@@ -72,14 +73,13 @@ export default function MyPage() {
           <div>
             <button
               type="submit"
-              className="bg-teal-500 text-white font-bold py-2 px-4 rounded-md"
+              className="bg-teal-500 text-white font-bold py-2 px-4 rounded-md hover:bg-teal-800"
             >
               확인
             </button>
           </div>
         </form>
       </div>
-      <Footer/>
     </>
   );
 }
