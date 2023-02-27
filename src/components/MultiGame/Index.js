@@ -18,12 +18,11 @@ export default function Index() {
       height: window.innerHeight,
       // width: window.innerWidth * window.devicePixelRatio,
       // height: window.innerHeight * window.devicePixelRatio,
-      backgroundColor: '#000000',
+      backgroundColor: '#FFFFFF',
       physics :{
         default :'arcade',
         arcade:{
           gravity:{y:200}
-
         }
       }
 
