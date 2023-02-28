@@ -13,8 +13,8 @@ export default function NavBar({ children }) {
               <span className="font-semibold text-xl tracking-tight cursor-pointer mb-1">MOFIT</span>
             </Link>
           </div>
-          <div className="w-full block flex-grow flex items-center w-auto">
-            <div className="text-sm flex-grow">
+          <div className="flex items-center w-auto">
+            <div className="text-md flex-grow">
               <Link href={'/mypage'} legacyBehavior>
                 <a className="block mt-0 inline-block text-teal-200 hover:text-white mr-4">
                   마이페이지
@@ -25,8 +25,6 @@ export default function NavBar({ children }) {
                   랭킹
                 </a>
               </Link>
-            </div>
-            <div className='flex justify-end'>
               <LogoutButton />
             </div>
           </div>

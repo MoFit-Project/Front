@@ -33,7 +33,7 @@ export default function MyPage() {
               아이디
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               value={Id}
