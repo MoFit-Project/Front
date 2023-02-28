@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
-
+import LoginButton from "../components/login/LoginButton";
 
 export default function Login() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -67,7 +67,6 @@ export default function Login() {
     return (
         <div className="flex w-screen h-screen justify-center items-center">
             <title>MOFIT 로그인</title>
-
             <div>
                 <Background />
             </div>
@@ -103,14 +102,15 @@ export default function Login() {
                         )}
                     </div>
 
-                    <div className="text-center">
+                    {/* <div className="text-center">
                         <button
                             className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
                         >
                             로그인
                         </button>
-                    </div>
+                    </div> */}
+                    <LoginButton />
 
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/signup"} legacyBehavior>

@@ -8,49 +8,42 @@ import { isRoomHostState } from "../../recoil/states";
 
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
+    // 1) OV 오브젝트 생성
     const [OV, setOV] = useState(null);
     const [mySessionId, setMySessionId] = useState(roomName);
     const [myUserName, setMyUserName] = useState(userName);
-
-    const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-    console.log(isRoomHost);
-
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
     const [publisher, setPublisher] = useState(undefined);
     const [subscribers, setSubscribers] = useState([]);
-    const router = useRouter();
 
+    const router = useRouter();
+    const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
 
 
     useEffect(() => {
         window.addEventListener('beforeunload', onbeforeunload);
+        joinSession();
         return () => {
             window.removeEventListener('beforeunload', onbeforeunload);
             leaveSession();
         };
     }, []);
 
-    useEffect(() => {
-        joinSession();
-    }, []);
-
-    useEffect(() => {
-        console.log(subscribers)
-    }, [subscribers, publisher]);
 
     const onbeforeunload = (event) => {
         leaveSession();
     };
 
     const deleteSubscriber = (streamManager) => {
-        let newSubscribers = subscribers;
-        let index = newSubscribers.indexOf(streamManager, 0);
-        if (index > -1) {
-            newSubscribers.splice(index, 1);
-            setSubscribers(newSubscribers)
-        }
+        let newSubscribers = [...subscribers];
+        setSubscribers(newSubscribers.filter((v) => v !== streamManager))
+        // let index = newSubscribers.indexOf(streamManager, 0);
+        // if (index > -1) {
+        //     newSubscribers.splice(index, 1);
+        //     setSubscribers(newSubscribers)
+        // }
     }
 
     const leaveSession = () => {
@@ -69,24 +62,21 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
     useEffect(() => {
         if (session !== undefined) {
-            var mySession = session;
+            let mySession = session;
 
             mySession.on('streamCreated', (event) => {
                 // Subscribe to the Stream to receive it. Second parameter is undefined
                 // so OpenVidu doesn't create an HTML video by its own
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
-                console.log('streamCreated: ' + newsubscriber);
+
                 // Update the state with the new subscribers
-                setSubscribers([...subscribers, newsubscriber]);
-                console.log(isRoomHost);
-                console.log(subscribers);
+                setSubscribers((curr) => [...curr, newsubscriber]);
             });
 
             // On every Stream destroyed...
             mySession.on('streamDestroyed', (event) => {
                 // Remove the stream from 'subscribers' array
-                console.log('streamDestroyed: ' + event);
-                console.log(event.stream.streamManager);
+
                 if (!isRoomHost.isHost) {
                     leaveSession();
                 }
@@ -149,12 +139,12 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
     }, [session]);
 
     const joinSession = async () => {
-        const newOV = new OpenVidu();
-        newOV.enableProdMode();
+        let newOV = new OpenVidu();
         setOV(newOV);
+        newOV.enableProdMode();
 
-        const newSession = newOV.initSession();
-        setSession(newSession);
+        // 2) session 초기화 -> useEffect 호출
+        setSession(newOV.initSession());
     }
 
     return (
@@ -176,7 +166,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     <div id="session" className='flex'>
                         {mainStreamManager !== undefined ? (
                             <div id="main-video" className="col-md-6">
-                                <OvVideo streamManager={mainStreamManager} useName={userName} />
+                                <OvVideo streamManager={mainStreamManager} userName={userName} />
                             </div>
                         ) : <div role="status">
                             <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,6 +175,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                             </svg>
                             <span className="sr-only">Loading...</span>
                         </div>}
+
                         <div id="sub-video" className="col-md-6">
                             {subscribers.map((sub, i) => (
                                 <div key={i} className="stream-container col-md-6 col-xs-6">
