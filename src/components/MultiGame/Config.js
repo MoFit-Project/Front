@@ -36,11 +36,22 @@ export default class Main extends Phaser.Scene {
   windBlowLeftToRight;
   windBlowRightToLeft;
 
-  windCreate = false;
+
   windSpeed = 0;
   windTimeAgain = -1;
   windGuide;
   windText;
+  damageEffectOnLeft;
+  damageEffectOnRight;
+
+  //items
+  itemCreate;
+  shield;
+  shieldAble = false;
+  power;
+  powerAble = false;
+  windItem;
+  windItemAble = false;
 
   constructor() {
     super();
@@ -99,6 +110,14 @@ export default class Main extends Phaser.Scene {
 
     // 바람 화살표 추가
     this.load.image('windGuide','../assets/arrow.png')
+
+    //데미지 이펙트 추가
+    this.load.spritesheet(
+        "damageEffect",
+        "../assets/damage.png",
+        { frameWidth: 458, frameHeight: 423 },
+        25
+    );
 
   }
 
@@ -299,6 +318,24 @@ export default class Main extends Phaser.Scene {
             { color: '#00acdc',fontSize : '48px'})
         .setOrigin(0.5,0.5);
 
+    //데미지 이펙트
+    this.damageEffectOnRight = this.add
+        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "damageEffect" )
+        .setScale(0.5)
+        .setOrigin(0.5, 0.5);
+    this.damageEffectOnRight.visible = false;
+    this.damageEffectOnLeft = this.add
+        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "damageEffect" )
+        .setScale(0.5)
+        .setOrigin(0.5, 0.5);
+    this.damageEffectOnLeft.visible = false;
+    this.anims.create({
+      key: "damageEffectAct", //액션이름
+      frames: this.anims.generateFrameNumbers("damageEffect", { start: 0, end: 24 }), //프레임 불러오기 (불러올 스프라이트, 프레임)[1,2,3,4]
+      frameRate: 30, // 초당 프레임 개수
+      repeat: 0, // 0 : 한번만 반복
+    });
+
 
 
   }
@@ -318,7 +355,7 @@ export default class Main extends Phaser.Scene {
     this.rightGuildLine.angle = this.rightThrowAngle;
     this.windTimeAgain -= 1
     console.log(this.windTimeAgain)
-    if (this.windTimeAgain < 0) {
+    if (this.windTimeAgain > 0) {
       console.log("work")
       this.windTimeAgain = (Math.floor(Math.random()*(4-1))+1)*600
       this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
@@ -455,6 +492,15 @@ export default class Main extends Phaser.Scene {
   // Right Hitted
   rightPlayerHitted() {
     this.rightPlayer.anims.play('hurt', true)
+    this.damageEffectOnRight.x = this.leftThrow.x;
+    this.damageEffectOnRight.y = this.leftThrow.y;
+    this.damageEffectOnRight.visible = true;
+    this.damageEffectOnRight.play('damageEffectAct')
+    // if(this.windBlowRightToLeft && this.windBlowLeftToRight.duration) {
+    this.damageEffectOnRight.on("animationcomplete", () => {
+      this.damageEffectOnRight.visible = false;
+    });
+
     this.leftThrow.setGravity(0);
     this.leftThrowLaunched = false;
     this.leftThrow.body.stop();
@@ -468,6 +514,14 @@ export default class Main extends Phaser.Scene {
   // left Hitted
   leftPlayerHitted() {
     this.leftPlayer.anims.play('hurt', true)
+    this.damageEffectOnLeft.x = this.rightThrow.x;
+    this.damageEffectOnLeft.y = this.rightThrow.y;
+    this.damageEffectOnLeft.visible = true;
+    this.damageEffectOnLeft.play('damageEffectAct')
+    // if(this.windBlowRightToLeft && this.windBlowLeftToRight.duration) {
+    this.damageEffectOnLeft.on("animationcomplete", () => {
+      this.damageEffectOnLeft.visible = false;
+    });
     this.rightThrow.setGravity(0);
     this.rightThrowLaunched = false;
     this.rightThrow.body.stop();
