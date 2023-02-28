@@ -16,12 +16,12 @@ export default function NavBar({ children }) {
           <div className="w-full block flex-grow flex items-center w-auto">
             <div className="text-sm flex-grow">
               <Link href={'/mypage'} legacyBehavior>
-                <a className="block mt-4 inline-block mt-0 text-teal-200 hover:text-white mr-4">
+                <a className="block mt-0 inline-block text-teal-200 hover:text-white mr-4">
                   마이페이지
                 </a>
               </Link>
               <Link href={'/ranking'} legacyBehavior>
-                <a className="block mt-4 inline-block mt-0 text-teal-200 hover:text-white mr-4">
+                <a className="block mt-0 inline-block text-teal-200 hover:text-white mr-4">
                   랭킹
                 </a>
               </Link>
