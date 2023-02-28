@@ -25,7 +25,6 @@ export default function Index() {
       // },
       scale: {
         mode: Phaser.Scale.RESIZE,
-        parent: 'multigame',
         autoCenter: Phaser.Scale.CENTER_BOTH
       },
       physics :{

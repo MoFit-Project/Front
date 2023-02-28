@@ -6,18 +6,25 @@ export default class Main extends Phaser.Scene {
   leftThrowAngle = -45;
   leftThrowLaunched = false;
   leftGuildLine;
+  leftAngleLine;
+
   leftDead;
   leftPlayerHealthBar;
   leftPlayerLife = 3;
+  leftPlayerAngleChange = 5;
 
   rightPlayer;
   rightThrow;
   rightThrowAngle = -135;
   rightThrowLaunched = false;
   rightGuildLine;
+  rightAngleLine;
+
   rightDead;
   rightPlayerHealthBar;
   rightPlayerLife = 3;
+  rightPlayerAngleChange = -5;
+
 
 
   attackSpeed = 1000;
@@ -26,6 +33,14 @@ export default class Main extends Phaser.Scene {
   bg;
   windowWidth = window.innerWidth;
   windowHeight = window.innerHeight;
+  windBlowLeftToRight;
+  windBlowRightToLeft;
+
+  windCreate = false;
+  windSpeed = 0;
+  windTimeAgain = -1;
+  windGuide;
+  windText;
 
   constructor() {
     super();
@@ -40,14 +55,14 @@ export default class Main extends Phaser.Scene {
     // 시트이름, 시트경로, {frameWidth: 각 프레임의 가로길이, frameHeight : 세로길이}, 프레임개수
     this.load.spritesheet(
       "knight",
-      "assets/knight.png",
+      "../assets/knight.png",
       { frameWidth: 128, frameHeight: 128 },
       33
     );
     //캐릭터 죽음
     this.load.spritesheet(
         "knightDead",
-        "assets/knight_dead.png",
+        "../assets/knight_dead.png",
         { frameWidth: 256, frameHeight: 256 },
         10
     );
@@ -55,23 +70,36 @@ export default class Main extends Phaser.Scene {
     // 투사체 추가
     this.load.spritesheet(
       "throwAttack",
-      "assets/sword_attack.png",
+      "../assets/sword_attack.png",
       { frameWidth: 128, frameHeight: 128 },
       18
     );
     //가이드라인 삽입
-    this.load.image('guildLine', 'assets/dot_line.png')
+    this.load.image('guildLine', '../assets/dot_line.png')
+    this.load.image('angleLine', '../assets/angleLine.png')
 
     //배경화면
-    this.load.image('backGround','assets/backgroundDungeon.png')
+    this.load.image('backGround','../assets/backgroundDungeon.png')
 
     // 체력 바
     this.load.spritesheet(
       "redHealthBar",
-      "assets/healthbar/Redbar/redHealthBar.png",
+      "../assets/healthbar/Redbar/redHealthBar.png",
       { frameWidth: 1406, frameHeight: 294 },
       18
     );
+
+    // 바람 추가
+    this.load.spritesheet(
+        "wind",
+        "../assets/wind.png",
+        { frameWidth: 512, frameHeight: 32 },
+        4
+    );
+
+    // 바람 화살표 추가
+    this.load.image('windGuide','../assets/arrow.png')
+
   }
 
 
@@ -154,9 +182,12 @@ export default class Main extends Phaser.Scene {
 
 
     // 가이드 선 Left
+    this.leftAngleLine = this.add.image(this.leftPlayer.x, this.leftPlayer.y, 'angleLine').setOrigin(0, 1).setScale(0.3)
     this.leftGuildLine = this.add.image(this.leftPlayer.x, this.leftPlayer.y, 'guildLine').setOrigin(0, 0.5).setScale(0.3)
-    // 가이드 선 Left
+    // 가이드 선 right
+    this.rightAngleLine = this.add.image(this.rightPlayer.x, this.rightPlayer.y, 'angleLine').setOrigin(1, 1).setScale(0.3).toggleFlipX();
     this.rightGuildLine = this.add.image(this.rightPlayer.x, this.rightPlayer.y, 'guildLine').setOrigin(0, 0.5).setScale(0.3)
+
 
 
     this.anims.create({
@@ -237,48 +268,102 @@ export default class Main extends Phaser.Scene {
       frameRate: 10,
       repeat: 0,
     });
+  //바람 만들기
+    this.windBlowLeftToRight = this.add
+        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "wind" )
+        .setScale(5)
+        .setOrigin(0.5, 0.5)
+    this.windBlowLeftToRight.visible = false;
+
+    this.windBlowRightToLeft = this.add
+        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "wind" )
+        .setScale(5)
+        .setOrigin(0.5, 0.5)
+        .toggleFlipX()
+    this.windBlowRightToLeft.visible = false;
+    this.anims.create({
+      key: "windBlow", //액션이름
+      frames: this.anims.generateFrameNumbers("wind", { start: 0, end: 3 }), //프레임 불러오기 (불러올 스프라이트, 프레임)[1,2,3,4]
+      frameRate: 10, // 초당 프레임 개수
+      repeat: 3, // 0 : 한번만 반복
+    });
+
+    //바람 화살표
+    this.windGuide = this.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'windGuide')
+        .setScale(0.5)
+        .setOrigin(0.5, 0.5);
+
+    this.windText = this.add
+        .text((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-200,
+            '',
+            { color: '#00acdc',fontSize : '48px'})
+        .setOrigin(0.5,0.5);
+
+
+
   }
 
 
 
 
 
+
+
   update() {
+
     // this.physics.add.collider(this.rightPlayer, this.leftThrow, this.rightPlayerHit, null, this);
     // this.rightPlayer.velocity = 0;
     // 가이드 라인 리프레시
     this.leftGuildLine.angle = this.leftThrowAngle;
     this.rightGuildLine.angle = this.rightThrowAngle;
+    this.windTimeAgain -= 1
+    console.log(this.windTimeAgain)
+    if (this.windTimeAgain < 0) {
+      console.log("work")
+      this.windTimeAgain = (Math.floor(Math.random()*(4-1))+1)*600
+      this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
+      while (this.windSpeed === 0) {
+        this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
+      }
+      console.log(this.windSpeed)
+      if(this.windSpeed > 0) {
+        this.windBlowLeftToRight.visible = true;
+        this.windBlowLeftToRight.anims.play('windBlow', true);
+        // if(this.windBlowLeftToRight && this.windBlowLeftToRight.duration) {
+        this.windBlowLeftToRight.on("animationcomplete", () => {
+          this.windBlowLeftToRight.visible = false;
+        });
 
-
+      } else{
+        this.windBlowRightToLeft.visible = true;
+        this.windBlowRightToLeft.anims.play('windBlow', true);
+        // if(this.windBlowRightToLeft && this.windBlowLeftToRight.duration) {
+        this.windBlowRightToLeft.on("animationcomplete", () => {
+        this.windBlowRightToLeft.visible = false;
+        });
+      }
+    }
+    if (this.windSpeed > 0) {
+      this.windGuide.angle = 0;
+    } else this.windGuide.angle = -180;
+    let windNotice = this.windSpeed
+    this.windText.text = `${Math.abs(windNotice)}m`
 
     // 각도 조절 Left
     if (this.cursors.up.isDown) {
       this.leftPlayer.anims.play("run", true);
-      this.leftThrowAngle -= 1;
-      if (this.leftThrowAngle < -90) {
-        this.leftThrowAngle = -90;
-      }
-    } else if (this.cursors.down.isDown) {
-      this.leftPlayer.anims.play("run", true);
-      this.leftThrowAngle += 1;
-      if (this.leftThrowAngle > 0) {
-        this.leftThrowAngle = 0;
+      this.leftThrowAngle -= this.leftPlayerAngleChange;
+      if (this.leftThrowAngle <= -90 || this.leftThrowAngle >= 0) {
+        this.leftPlayerAngleChange *= -1
       }
     }
 
     // 각도 조절 Right
     if (this.cursors.left.isDown) {
       this.rightPlayer.anims.play("run", true);
-      this.rightThrowAngle -= 1;
-      if (this.rightThrowAngle < -180) {
-        this.rightThrowAngle = -180;
-      }
-    } else if (this.cursors.right.isDown) {
-      this.rightPlayer.anims.play("run", true);
-      this.rightThrowAngle += 1;
-      if (this.rightThrowAngle > -90) {
-        this.rightThrowAngle = -90;
+      this.rightThrowAngle -= this.rightPlayerAngleChange;
+      if (this.rightThrowAngle <= -180 || this.rightThrowAngle >= -90) {
+        this.rightPlayerAngleChange *= -1
       }
     }
 
@@ -303,6 +388,7 @@ export default class Main extends Phaser.Scene {
         this.attackSpeed,
         this.leftThrow.body.velocity
       );
+      this.leftThrow.body.velocity.x += this.windSpeed
       this.leftThrow.setGravity(0, 830);
       // this.leftThrow.body.velocity.x += -200;
       console.log(this.leftThrowAngle, this.attackSpeed);
@@ -325,6 +411,7 @@ export default class Main extends Phaser.Scene {
         this.attackSpeed,
         this.rightThrow.body.velocity
       );
+      this.rightThrow.body.velocity.x += this.windSpeed
       this.rightThrow.setGravity(0, 830);
       // this.rightThrow.body.velocity.x += -200;
       console.log(this.rightThrowAngle, this.attackSpeed);
@@ -421,5 +508,6 @@ export default class Main extends Phaser.Scene {
       alert("Right Player Win !!!");
     }, 2000);
   }
+
 }
 
