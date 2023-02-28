@@ -8,7 +8,6 @@ import LayoutAuthenticated from "../../components/LayoutAuthticated";
 import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
-import bg from '../../../public/background-img.jpg'
 import RoomListComponent from '../../components/room/RoomListComponent'
 
 export default function RoomList() {
@@ -102,15 +101,17 @@ export default function RoomList() {
   };
 
   return (
-    <>
+    <div className="background-div " style={{
+    }}>
+      <>
       <LayoutAuthenticated>
         <title>MOFIT 멀티 게임</title>
         <Navbar>
-        <div className="flex-col items-center flex h-screen rounded-md">
+        <div className="flex-col items-center flex">
           <div className="mt-2 w-8/12 flex">
             <table className="w-full table-auto">
               <thead>
-                <tr className="bg-gray-800 text-white">
+                <tr className="text-white">
                   <th className="w-1/4 py-2 px-4">방 제목</th>
                   <th className="w-1/4 py-2 px-4">참여 인원</th>
                   <th className="w-1/4 py-2 px-4">액션</th>
@@ -125,10 +126,10 @@ export default function RoomList() {
                       <td className="py-2 px-4 text-center font-bold">
                         {room.roomId}
                       </td>
-                      <td className="py-2 px-4 text-center">{room.participant}</td>
+                      <td className="py-2 px-4 text-center font-bold">{room.participant}</td>
                       <td className="py-2 px-4">
                         <button
-                          className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block"
+                          className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block btn-1"
                           onClick={() => {
                             handleRoomEnter(room.roomId);
                           }}
@@ -142,7 +143,7 @@ export default function RoomList() {
             </table>    
             <div className="fixed right-56 top-3/4 mt-20">
               <button
-                className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl"
+                className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl btn-1"
                 onClick={handleOpenModal}
               >
                 <svg
@@ -168,6 +169,35 @@ export default function RoomList() {
         <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
       </LayoutAuthenticated>
     </>
+      <style jsx>{`
+        .background-div {
+          background-image: url('background-img.jpg');
+          background-size: cover;
+          background-position: center;
+          overflow: hidden;
+          z-inex: -1,
+        }
+
+        table {
+          border: 10px solid #0D4C92;
+          background: linear-gradient(to right, #0096FF, #00D7FF);
+        }
+        .btn-1 {
+          background: rgb(6,14,131);
+          background: linear-gradient(0deg, rgba(6,14,131,1) 0%, rgba(12,25,180,1) 100%);
+          border: none;
+        }
+        .btn-1:hover {
+           background: rgb(0,3,255);
+        background: linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%);
+        }
+        table tr {
+          border-bottom: 1px solid #e5e5e5;
+        }
+        
+
+      `}</style>
+    </div >
   );
 
 }
