@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 
 const DynamicComponentWithNoSSR = dynamic(
-    () => import('../components/SingleGame'),
+    () => import('../components/SingleGame/Index'),
     { ssr: false }
 )
 

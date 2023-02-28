@@ -2,12 +2,10 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 
-if (typeof window !== 'undefined') {
-    const DynamicComponentWithNoSSR = dynamic(
-      () => import('../components/MultiGame'),
-      { ssr: false }
-    )
-  }
+const DynamicComponentWithNoSSR = dynamic(
+    () => import('../components/MultiGame/Index'),
+    { ssr: false }
+)
 
 const Home = () => {
     const [loading, setLoading] = useState(false);
