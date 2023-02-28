@@ -8,7 +8,6 @@ import LayoutAuthenticated from "../../components/LayoutAuthticated";
 import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
-import RoomListComponent from '../../components/room/RoomListComponent'
 
 export default function RoomList() {
 
@@ -22,7 +21,6 @@ export default function RoomList() {
   useEffect(() => {
     fetchRooms();
     return setRoomList([]);
-
   }, []);
 
   const enterRoom = async (customSessionId) => {
@@ -40,9 +38,13 @@ export default function RoomList() {
       const { response } = error;
       if (response) {
         switch (response.status) {
+          case 401:
+            refreshToken();
+            break;
           case 400:
-            alert("존재하지 않는 방입니다.")
+            alert("존재하지 않는 방입니다.");            
             router.reload();
+            break;
           default:
             console.log("Unexpected Error");
         }
