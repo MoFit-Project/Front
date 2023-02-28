@@ -3,11 +3,6 @@ import Navbar from "../components/Navbar"
 import axios from "axios";
 import LayoutAuthenticated from "../components/LayoutAuthticated";
 
-const sampleData = [
-  { rank: 1, Id: "John", score: 300 },
-  { rank: 2, Id: "George", score: 100 }
-];
-
 export default function Ranking() {
   const [data, setData] = useState([]);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
