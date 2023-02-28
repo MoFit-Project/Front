@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRecoilState } from 'recoil';
+import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../recoil/states";
 import { refreshToken } from "public/refreshToken";
-
 
 function CreateRoomModal({ isOpen, onClose }) {
   const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
@@ -26,18 +25,16 @@ function CreateRoomModal({ isOpen, onClose }) {
   };
 
   const createRoom = async (customSessionId) => {
-    setIsRoomHost({ roomName: customSessionId, isHost: true })
-    const assessToken = Cookies.get("token")
+    setIsRoomHost({ roomName: customSessionId, isHost: true });
+    const assessToken = Cookies.get("token");
     try {
-      await axios.get
-        (
-          API_URL + `/create/${customSessionId}`,
-          { headers: { Authorization: `Bearer ${assessToken}` } }
-        );
+      const response = await axios.get(API_URL + `/create/${customSessionId}`, {
+        headers: { Authorization: `Bearer ${assessToken}` },
+      });
 
-      router.push(`/room/${customSessionId}`);
+      router.push(`/room/${response.data}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       const { response } = error;
       if (response) {
         switch (response.status) {
@@ -52,7 +49,7 @@ function CreateRoomModal({ isOpen, onClose }) {
         }
       }
     }
-  }
+  };
 
   const handleChangeRoomName = (event) => {
     setRoomName(event.target.value);
@@ -76,7 +73,9 @@ function CreateRoomModal({ isOpen, onClose }) {
               value={roomName}
               onChange={handleChangeRoomName}
             />
-            {isRoomNameEmpty && <div style={{ color: 'red' }}>방이름을 입력해 주세요</div>}
+            {isRoomNameEmpty && (
+              <div style={{ color: "red" }}>방이름을 입력해 주세요</div>
+            )}
             <div className="flex">
               <button
                 className="bg-green-500 text-white font-bold py-2 px-4 rounded-md block mr-3 btn-1"
@@ -92,17 +91,17 @@ function CreateRoomModal({ isOpen, onClose }) {
               </button>
             </div>
           </form>
-        </div >
+        </div>
         <style jsx>{`
-        .background-div {
-          background-image: url('background-img.jpg');
-          background-size: cover;
-          background-position: center;
-          overflow: hidden;
-          z-inex: -1,
-        }
+          .background-div {
+            background-image: url("background-img.jpg");
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            z-inex: -1;
+          }
         `}</style>
-      </div >
+      </div>
     )
   );
 }
