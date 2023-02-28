@@ -6,7 +6,7 @@ export default class Main extends Phaser.Scene {
   leftThrowAngle = -45;
   leftThrowLaunched = false;
   leftGuildLine;
-  ledftDead;
+  leftDead;
   leftPlayerHealthBar;
   leftPlayerLife = 3;
 
@@ -69,7 +69,7 @@ export default class Main extends Phaser.Scene {
     this.load.spritesheet(
       "redHealthBar",
       "assets/healthbar/Redbar/redHealthBar.png",
-      { frameWidth: 512, frameHeight: 128 },
+      { frameWidth: 1406, frameHeight: 294 },
       18
     );
   }
@@ -205,22 +205,38 @@ export default class Main extends Phaser.Scene {
 
     // 캐릭터 health bar 설정 Left
     this.leftPlayerHealthBar = this.physics.add
-      .sprite(this.leftPlayer.x, this.leftPlayer.y - 300, "redHealthBar")
+      .sprite(this.leftPlayer.x + 100, this.leftPlayer.y - 300, "redHealthBar")
+      .setScale(0.5)
       .setOrigin(0.5, 0.5);
     // this.leftPlayerHealthBar.setSize(10, 10);
     // 캐릭터 health bar 설정 Right
     this.rightPlayerHealthBar = this.physics.add
-      .sprite(this.rightPlayer.x, this.rightPlayer.y - 300, "redHealthBar")
+      .sprite(this.rightPlayer.x-100, this.rightPlayer.y - 300, "redHealthBar")
+      .setScale(0.5)
       .setOrigin(0.5, 0.5);
     // this.rightPlayerHealthBar.setSize(10, 10);
     // 체력바 감소 애니메이션
+    
     this.anims.create({
-      key: "redHealthBar",
-      frames: this.anims.generateFrameNumbers("redHealthBar", { start: 8, end: 0 }),
+      key: "redHealthBar2",
+      frames: this.anims.generateFrameNumbers("redHealthBar", { start: 8, end: 7 }),
       frameRate: 10,
       repeat: 0,
     });
-    // this.leftPlayerHealthBar.play("redHealthBar");
+
+    this.anims.create({
+      key: "redHealthBar1",
+      frames: this.anims.generateFrameNumbers("redHealthBar", { start: 6, end: 4 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "redHealthBar0",
+      frames: this.anims.generateFrameNumbers("redHealthBar", { start: 3, end: 1 }),
+      frameRate: 10,
+      repeat: 0,
+    });
   }
 
 
@@ -378,13 +394,17 @@ export default class Main extends Phaser.Scene {
     // this.leftPlayerHealthBar.anims.stop('redHealthBar', true);
 
     if (this.leftPlayerLife == 2) {
-      this.leftPlayerHealthBar.anims.play('redHealthBar', true, 0, 2);
+      this.leftPlayerHealthBar.anims.play('redHealthBar2', true);
+      console.log(this.leftPlayerLife);
     }
     else if (this.leftPlayerLife == 1) {
-      this.leftPlayerHealthBar.anims.play('redHealthBar', true, 2, 5);
+      this.leftPlayerHealthBar.anims.play('redHealthBar1', true);
+      console.log(this.leftPlayerLife);
     }
     else if (this.leftPlayerLife == 0) {
-      this.leftPlayerHealthBar.anims.play('redHealthBar', true, 5, 8);
+      this.leftPlayerHealthBar.anims.play('redHealthBar0', true);
+      this.
+      console.log(this.leftPlayerLife);
       this.rightPlayerWin();
     }
   }
