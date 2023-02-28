@@ -1,14 +1,53 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRecoilState } from 'recoil';
+import { isRoomHostState } from "../recoil/states";
+
 
 function CreateRoomModal({ isOpen, onClose }) {
+  const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
   const [roomName, setRoomName] = useState("");
   const router = useRouter();
+  const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    setRoomName("");
-    router.push(`/room/${roomName}`);
+    if (!roomName) {
+      setIsRoomNameEmpty(true);
+    } else {
+      createRoom(roomName);
+      setRoomName("");
+      setIsRoomNameEmpty(false);
+    }
   };
+
+  const createRoom = async (customSessionId) => {
+    setIsRoomHost({ roomName: customSessionId, isHost: true })
+    const assessToken = Cookies.get("token")
+    try {
+      await axios.get
+        (
+          API_URL + `/create/${customSessionId}`,
+          { headers: { Authorization: `Bearer ${assessToken}` } }
+        );
+
+      router.push(`/room/${customSessionId}`);
+    } catch (error) {
+      console.log(error)
+      const { response } = error;
+      if (response) {
+        switch (response.status) {
+          case 302:
+            alert("이미 존재하는 방입니다.");
+          default:
+            console.log("Unexpected Error");
+        }
+      }
+    }
+  }
 
   const handleChangeRoomName = (event) => {
     setRoomName(event.target.value);
@@ -32,6 +71,7 @@ function CreateRoomModal({ isOpen, onClose }) {
               value={roomName}
               onChange={handleChangeRoomName}
             />
+            {isRoomNameEmpty && <div style={{ color: 'red' }}>방이름을 입력해 주세요</div>}
             <div className="flex">
               <button
                 className="bg-green-500 text-white font-bold py-2 px-4 rounded-md block mr-3"
@@ -47,8 +87,8 @@ function CreateRoomModal({ isOpen, onClose }) {
               </button>
             </div>
           </form>
-        </div>
-      </div>
+        </div >
+      </div >
     )
   );
 }

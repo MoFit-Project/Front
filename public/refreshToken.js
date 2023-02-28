@@ -1,49 +1,30 @@
-import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import axios from "axios";
 
-export function refreshToken() {
-  const refreshToken = Cookies.get("refresh");
-  if (!refreshToken) {
-    // 로그인 페이지로 리다이렉트
-    window.location.href = "/login";
-    return;
-  }
-  fetchAccessToken();
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const fetchAccessToken = async () => {
-  const API_URL = process.env.API_URL;
+export const refreshToken = async () => {
+
   try {
+    const refreshToken = Cookies.get("refresh");
+    const accessToken = Cookies.get("token");
+    if (!refreshToken) window.location.href = "/login";
+
     const response = await axios.post(API_URL + "/refresh", {
+      access_token: accessToken,
       refresh_token: refreshToken,
     });
 
-    const accessToken = response.data.access_token;
-    Cookies.set("token", accessToken);
-    console.log("Access Token is Refreshed");
+    const newAccessToken = response.data.access_token;
+    Cookies.set("token", newAccessToken);
+    console.log("Token is refreshed!");
+    window.location.reload();
 
-    // 토큰이 갱신되면 페이지를 새로고침하여 새로운 토큰으로 데이터를 가져옵니다.
-    router.reload();
   } catch (error) {
     console.error(error);
-
-    const { response } = error;
-
-    if (response) {
-      switch (response.status) {
-        case 401:
-          // refresh 토큰이 만료되었을 때 로그인 페이지로 리다이렉트
-          Cookies.remove("token");
-          Cookies.remove("refresh");
-          router.push("/login");
-          break;
-        default:
-          console.log("Unexpected Error");
-      }
-    } else {
-      console.log("Network Error");
-    }
+    Cookies.remove("token");
+    Cookies.remove("refresh");
+    console.log("Token is removed!");
+    window.location.href = "/login";
   }
 };
-
