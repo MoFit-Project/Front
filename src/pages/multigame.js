@@ -15,7 +15,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div>
+        <div id="multigame">
             <Head>
                 <title>Phaser Starter</title>
                 <link rel="icon" href="/favicon.ico" />

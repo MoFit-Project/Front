@@ -204,13 +204,13 @@ export default class Main extends Phaser.Scene {
 
 
     // 캐릭터 health bar 설정 Left
-    this.leftPlayerHealthBar = this.physics.add
+    this.leftPlayerHealthBar = this.add
       .sprite(this.leftPlayer.x + 100, this.leftPlayer.y - 300, "redHealthBar")
       .setScale(0.5)
       .setOrigin(0.5, 0.5);
     // this.leftPlayerHealthBar.setSize(10, 10);
     // 캐릭터 health bar 설정 Right
-    this.rightPlayerHealthBar = this.physics.add
+    this.rightPlayerHealthBar = this.add
       .sprite(this.rightPlayer.x-100, this.rightPlayer.y - 300, "redHealthBar")
       .setScale(0.5)
       .setOrigin(0.5, 0.5);
@@ -403,7 +403,6 @@ export default class Main extends Phaser.Scene {
     }
     else if (this.leftPlayerLife == 0) {
       this.leftPlayerHealthBar.anims.play('redHealthBar0', true);
-      this.
       console.log(this.leftPlayerLife);
       this.rightPlayerWin();
     }
