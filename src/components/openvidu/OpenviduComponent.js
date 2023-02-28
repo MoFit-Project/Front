@@ -73,6 +73,10 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 setSubscribers((curr) => [...curr, newsubscriber]);
             });
 
+            mySession.on('connectionCreated', (event) => {
+                console.log(event.connection);
+            })
+
             // On every Stream destroyed...
             mySession.on('streamDestroyed', (event) => {
                 // Remove the stream from 'subscribers' array
@@ -84,7 +88,12 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
             });
 
             // On every asynchronous exception...
-            mySession.on('signal:game_start', (event) => {
+            mySession.on('signal:attack_1', (event) => {
+                console.log(event.data); // Message
+                //console.log(event.from); // Connection object of the sender
+                console.log(event.type); // The type of message
+            });
+            mySession.on('signal:attack_2', (event) => {
                 console.log(event.data); // Message
                 //console.log(event.from); // Connection object of the sender
                 console.log(event.type); // The type of message
@@ -94,6 +103,8 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
             mySession.on('exception', (exception) => {
                 console.warn(exception);
             });
+
+
 
             getToken(mySessionId, jwtToken).then((token) => {
                 // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
@@ -147,6 +158,40 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         setSession(newOV.initSession());
     }
 
+    function sendSignalAttack1() {
+        if (session) {
+            session.signal({
+                data: '도윤아 안녕?',  // Any string (optional)
+                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: 'attack_1'             // The type of message (optional)
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+    }
+
+    function sendSignalAttack2() {
+        if (session) {
+            session.signal({
+                data: '주홍아 안녕?',  // Any string (optional)
+                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: 'attack_2'             // The type of message (optional)
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+    }
+
     return (
 
         <div className='h-screen'>
@@ -159,6 +204,15 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     onClick={leaveSession}
                 >
                     방 나가기
+                </button>
+            </div>
+            <div>
+                <button onClick={() => { sendSignalAttack1() }}>
+                    공격 1
+                </button>
+
+                <button onClick={() => { sendSignalAttack2() }}>
+                    공격 2
                 </button>
             </div>
             <div className="flex justify-center">
