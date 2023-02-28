@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
-      <change afterPath="$PROJECT_DIR$/public/assets/angleLine.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/arrow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/wind.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/damage.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/items/noWind.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/items/powerUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/items/sheild.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +52,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public/assets",
+    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public/assets/items",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -68,6 +68,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/assets/items" />
       <recent name="$PROJECT_DIR$/public/assets" />
       <recent name="$PROJECT_DIR$/src/components/multigame" />
       <recent name="$PROJECT_DIR$/src/public/background" />
@@ -93,7 +94,7 @@
       <workItem from="1677347373528" duration="3556000" />
       <workItem from="1677393833193" duration="6898000" />
       <workItem from="1677564465706" duration="1767000" />
-      <workItem from="1677566629772" duration="16648000" />
+      <workItem from="1677566629772" duration="18702000" />
     </task>
     <task id="LOCAL-00001" summary="feat : JWT 쿠기 유/무로 페이지 접근제어 추가">
       <created>1677227365915</created>
