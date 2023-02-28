@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../recoil/states";
+import { refreshToken } from "public/refreshToken";
 
 
 function CreateRoomModal({ isOpen, onClose }) {
@@ -40,8 +41,12 @@ function CreateRoomModal({ isOpen, onClose }) {
       const { response } = error;
       if (response) {
         switch (response.status) {
+          case 401:
+            refreshToken();
+            break;
           case 302:
             alert("이미 존재하는 방입니다.");
+            break;
           default:
             console.log("Unexpected Error");
         }
