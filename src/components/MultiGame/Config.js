@@ -7,6 +7,8 @@ export default class Main extends Phaser.Scene {
   leftThrowLaunched = false;
   leftGuildLine;
   ledftDead;
+  leftPlayerHealthBar;
+  leftPlayerLife = 3;
 
   rightPlayer;
   rightThrow;
@@ -14,6 +16,8 @@ export default class Main extends Phaser.Scene {
   rightThrowLaunched = false;
   rightGuildLine;
   rightDead;
+  rightPlayerHealthBar;
+  rightPlayerLife = 3;
 
 
   attackSpeed = 1000;
@@ -60,6 +64,14 @@ export default class Main extends Phaser.Scene {
 
     //배경화면
     this.load.image('backGround','assets/backgroundDungeon.png')
+
+    // 체력 바
+    this.load.spritesheet(
+      "redHealthBar",
+      "assets/healthbar/Redbar/redHealthBar.png",
+      { frameWidth: 512, frameHeight: 128 },
+      18
+    );
   }
 
 
@@ -177,7 +189,7 @@ export default class Main extends Phaser.Scene {
       frameRate: 10,
       repeat: 0,
     });
-// 애니메이션 Left
+    // 애니메이션 Left
     this.leftPlayer.on("animationcomplete", () => {
       this.leftPlayer.anims.play("walk", true);
     });
@@ -189,6 +201,26 @@ export default class Main extends Phaser.Scene {
     this.rightPlayer.play("walk");
     // 콘솔키 설정
     this.cursors = this.input.keyboard.createCursorKeys();
+
+
+    // 캐릭터 health bar 설정 Left
+    this.leftPlayerHealthBar = this.physics.add
+      .sprite(this.leftPlayer.x, this.leftPlayer.y - 300, "redHealthBar")
+      .setOrigin(0.5, 0.5);
+    // this.leftPlayerHealthBar.setSize(10, 10);
+    // 캐릭터 health bar 설정 Right
+    this.rightPlayerHealthBar = this.physics.add
+      .sprite(this.rightPlayer.x, this.rightPlayer.y - 300, "redHealthBar")
+      .setOrigin(0.5, 0.5);
+    // this.rightPlayerHealthBar.setSize(10, 10);
+    // 체력바 감소 애니메이션
+    this.anims.create({
+      key: "redHealthBar",
+      frames: this.anims.generateFrameNumbers("redHealthBar", { start: 8, end: 0 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+    // this.leftPlayerHealthBar.play("redHealthBar");
   }
 
 
@@ -339,7 +371,36 @@ export default class Main extends Phaser.Scene {
     this.rightThrow.x = this.rightPlayer.x;
     this.rightThrow.y = this.rightPlayer.y;
     this.rightThrow.visible = false;
+
+    // Left Player Life Count
+    this.leftPlayerLife -= 1;
+    // this.leftPlayerHealthBar.anims.play('redHealthBar', true);
+    // this.leftPlayerHealthBar.anims.stop('redHealthBar', true);
+
+    if (this.leftPlayerLife == 2) {
+      this.leftPlayerHealthBar.anims.play('redHealthBar', true, 0, 2);
+    }
+    else if (this.leftPlayerLife == 1) {
+      this.leftPlayerHealthBar.anims.play('redHealthBar', true, 2, 5);
+    }
+    else if (this.leftPlayerLife == 0) {
+      this.leftPlayerHealthBar.anims.play('redHealthBar', true, 5, 8);
+      this.rightPlayerWin();
+    }
   }
 
+  // Left Player 승리 시 호출
+  leftPlayerWin() {
+    setTimeout(function() {
+      alert("Left Player Win !!!");
+    }, 2000);
+  }
+
+  // Right Player 승리 시 호출
+  rightPlayerWin() {
+    setTimeout(function() {
+      alert("Right Player Win !!!");
+    }, 2000);
+  }
 }
 
