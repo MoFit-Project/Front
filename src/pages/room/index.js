@@ -8,9 +8,8 @@ import LayoutAuthenticated from "../../components/LayoutAuthticated";
 import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
-
-
-
+import bg from '../../../public/background-img.jpg'
+import RoomListComponent from '../../components/room/RoomListComponent'
 
 export default function RoomList() {
 
@@ -103,73 +102,62 @@ export default function RoomList() {
   };
 
   return (
-    <>
-      <LayoutAuthenticated>
+    <div className="background-div " style={{
+      // backgroundImage: `url(${bg.src})`,
+
+    }}>
+      <LayoutAuthenticated >
         <title>MOFIT 멀티 게임</title>
-        <Navbar>
-
-          <div className="flex-col items-center flex h-screen rounded-md">
-            <div className="mt-2 w-8/12 flex">
-              <table className="w-full table-auto">
-                <thead>
-                  <tr className="bg-gray-800 text-white">
-                    <th className="w-1/4 py-2 px-4">방 제목</th>
-                    <th className="w-1/4 py-2 px-4">참여 인원</th>
-                    <th className="w-1/4 py-2 px-4">액션</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {roomList?.map((room) => (
-                    <tr
-                      key={room.roomId}
-                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+        <Navbar >
+          <div className="flex justify-center items-center">
+            <div className="border bg-slate-300 ">
+              <div className="border p-1">
+                <div className="grid grid-cols-2 gap-1">
+                  <RoomListComponent />
+                  <RoomListComponent />
+                  <RoomListComponent />
+                  <RoomListComponent />
+                  <RoomListComponent />
+                  <div className="fixed right-80 top-3/4 mt-20">
+                    <button
+                      className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl"
+                      onClick={handleOpenModal}
                     >
-
-                      <td className="py-2 px-4 text-center font-bold">
-                        {room.roomId}
-                      </td>
-                      <td className="py-2 px-4 text-center">{room.participant}</td>
-                      <td className="py-2 px-4">
-                        <button
-                          className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block"
-                          onClick={() => {
-                            handleRoomEnter(room.roomId);
-                          }}
-                        >
-                          참여하기
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="fixed right-80 top-3/4 mt-20">
-                <button
-                  className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl"
-                  onClick={handleOpenModal}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-10 w-10"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </Navbar>
         <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
-      </LayoutAuthenticated>
-    </>
+      </LayoutAuthenticated >
+      <style jsx>{`
+        .background-div {
+          background-image: url('background-img.jpg');
+          background-size: 'cover',
+          background-position: 'center',
+          overflow: 'hidden',
+          opacity: '0.5',
+          z-inex: '-1',
+        }
+
+`}</style>
+    </div >
   );
 
 }
