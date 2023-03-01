@@ -40,6 +40,9 @@ export default function Login() {
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
             // 로그인에 성공하면 메인화면으로 이동
+
+            localStorage.setItem("username", username);
+
             router.push("/");
         } catch (error) {
             console.error(error);

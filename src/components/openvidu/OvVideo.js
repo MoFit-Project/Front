@@ -27,7 +27,7 @@ export default function OvVideo({ streamManager, userName }) {
   }, []);
   useEffect(() => {
     if (detector && videoRef.current) {
-      detectSquat();
+      //detectSquat();
     }
   }, [detector]);
 
