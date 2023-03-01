@@ -1,9 +1,9 @@
 import Background from "../components/Background";
 import LayoutAuthenticated from "../components/LayoutAuthticated";
 import Link from "next/link";
-import Head from "next/head";
 
 export default function Home() {
+
     return (
         <LayoutAuthenticated>
             <title>

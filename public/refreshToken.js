@@ -14,7 +14,7 @@ export const refreshToken = async () => {
       access_token: accessToken,
       refresh_token: refreshToken,
     });
-
+    
     const newAccessToken = response.data.access_token;
     Cookies.set("token", newAccessToken);
     console.log("Token is refreshed!");

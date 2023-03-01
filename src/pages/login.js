@@ -7,12 +7,12 @@ import Background from "../components/Background";
 import LoginButton from "../components/login/LoginButton";
 
 export default function Login() {
+
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginFail, setIsLoginFail] = useState(false);
     const router = useRouter();
-    //const [detector, setPoseDetector] = useRecoilState(poseDetector);
 
     const checkIfLoggedIn = () => {
         const token = Cookies.get("token");
@@ -22,27 +22,25 @@ export default function Login() {
     };
 
     useEffect(() => {
-        //setPoseDetector(createPoseDetector());
         checkIfLoggedIn();
     }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        // https://mofit.bobfriend.site:8080/mofit/login
         try {
             const response = await axios.post(API_URL + "/login", {
                 account: username,
                 password: password,
             });
 
-            // 서버에서 받은 토큰을 쿠키에 저장
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
-            // 로그인에 성공하면 메인화면으로 이동
+
+            setIsLoginFail(false);
+            window.localStorage.setItem('username', username);
             router.push("/");
+
         } catch (error) {
-            console.error(error);
             const { response } = error;
             if (response) {
                 switch (response.status) {
@@ -52,7 +50,7 @@ export default function Login() {
                         break;
                     case 403:
                         // 이전페이지로 리다이렉트
-                        window.alert("접근 권한이 없습니다.");
+                        router.back();
                         break;
                     case 500:
                         window.alert("서버 오류가 발생했습니다.");
@@ -101,17 +99,7 @@ export default function Login() {
                             <p style={{ color: "red" }}>아이디와 비밀번호를 확인해주세요.</p>
                         )}
                     </div>
-
-                    {/* <div className="text-center">
-                        <button
-                            className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit"
-                        >
-                            로그인
-                        </button>
-                    </div> */}
                     <LoginButton />
-
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/signup"} legacyBehavior>
                             <a className="inline-block align-baseline font-bold text-md text-black-500">
@@ -121,6 +109,6 @@ export default function Login() {
                     </div>
                 </form>
             </div>
-        </div>   
+        </div>
     );
 }

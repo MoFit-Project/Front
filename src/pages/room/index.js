@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
@@ -17,12 +17,14 @@ export default function RoomList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
+
   useEffect(() => {
     fetchRooms();
     return setRoomList([]);
   }, []);
 
   const enterRoom = async (customSessionId) => {
+
     setIsRoomHost({ roomName: customSessionId, isHost: false });
     const assessToken = Cookies.get("token");
     try {
@@ -31,6 +33,7 @@ export default function RoomList() {
       });
 
       router.push(`/room/${response.data}`);
+
     } catch (error) {
       const { response } = error;
       if (response) {
@@ -58,6 +61,7 @@ export default function RoomList() {
         },
       });
       setRoomList([...roomList, ...response.data]);
+
     } catch (error) {
       console.log(error);
       const { response } = error;
@@ -95,7 +99,7 @@ export default function RoomList() {
   };
 
   return (
-    <div className="background-div " style={{}}>
+    <div className="background-div">
       <>
         <LayoutAuthenticated>
           <title>MOFIT 멀티 게임</title>
