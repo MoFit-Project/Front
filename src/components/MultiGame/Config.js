@@ -126,10 +126,13 @@ export default class Main extends Phaser.Scene {
         this.load.image("shieldItem", "../assets/items/shieldIcon.png");
         this.load.image("windDisableItem", "../assets/items/windDisable.png");
 
-        // 아이템 사용
-        this.load.image("shield", "../assets/items/shield.png");
-        this.load.image("windDisable", "../assets/items/windDisableUse.png");
-    }
+    // 아이템 사용
+    this.load.image('shield','../assets/items/shield.png')
+    this.load.image('windDisable','../assets/items/windDisableUse.png')
+
+
+
+  }
 
     create() {
         //배경 삽입
@@ -391,27 +394,23 @@ export default class Main extends Phaser.Scene {
             repeat: 0, // 0 : 한번만 반복
         });
 
-        // 아이템 아이콘
-        this.shieldItem = this.physics.add
-            .image(
-                (this.leftPlayer.x + this.rightPlayer.x) / 2,
-                this.rightPlayer.y - 300,
-                "shieldItem"
-            )
-            .setScale(1)
-            .setOrigin(0.5, 0.5);
-        this.shieldItem.visible = false;
+    // 아이템 아이콘
+    this.shieldItem = this.physics.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'shieldItem')
+        .setScale(1)
+        .setOrigin(0.5, 0.5);
+    this.shieldItem.visible = false;
 
-        this.windDisableItem = this.physics.add
-            .image(
-                (this.leftPlayer.x + this.rightPlayer.x) / 2,
-                this.rightPlayer.y - 300,
-                "windDisableItem"
-            )
-            .setScale(1)
-            .setOrigin(0.5, 0.5);
-        this.windDisableItem.visible = false;
+    this.windDisableItem = this.physics.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'windDisableItem')
+        .setScale(1)
+        .setOrigin(0.5, 0.5);
+    this.windDisableItem.visible = false;
 
+    //아이템 습득 시
+    this.leftPlayerShield = this.add.image(this.leftPlayer.x, this.rightPlayer.y,'shield')
+        .setScale(5)
+        .setOrigin(0.5, 0.5);
+    this.leftPlayerShield.alpha = 0.3;
+    this.leftPlayerShield.visible = false;
         //아이템 습득 시
         this.leftPlayerShield = this.add
             .image(this.leftPlayer.x, this.rightPlayer.y, "shield")
