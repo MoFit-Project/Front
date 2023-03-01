@@ -24,6 +24,7 @@ export default function GameRoom() {
     useEffect(() => {
         // if (!token) router.push("/login");
         username = window.localStorage.getItem('username');
+        console.log(isRoomHost);
         setLoading(true)
     }, [])
 
