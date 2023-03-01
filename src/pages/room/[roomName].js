@@ -13,28 +13,26 @@ const DynamicComponentWithNoSSR = dynamic(
 
 export default function GameRoom() {
     const [loading, setLoading] = useState(false);
-    
-    const token = Cookies.get("token");
-    // let base64Payload = token.split('.')[1];
-    // let payload = Buffer.from(base64Payload, 'base64');
-    // let result = JSON.parse(payload.toString());
-
     const router = useRouter();
+    const token = Cookies.get("token");
+    const roomName = router.query.roomName;
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-    console.log(isRoomHost);
+    let username
+
 
 
     useEffect(() => {
         // if (!token) router.push("/login");
+        username = window.localStorage.getItem('username');
         setLoading(true)
     }, [])
 
-    const roomName = router.query.roomName;
     //const userName = result.sub;
 
     return (
         <>
             <title>MOFIT 게임룸</title>
+
             <OpenViduComponent roomName={roomName} userName={'juhong'} jwtToken={token} />
             <div key={Math.random()} id="game"></div>
             {loading ? <DynamicComponentWithNoSSR /> : null}
