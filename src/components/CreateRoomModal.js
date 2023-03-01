@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../recoil/states";
+import { motion } from "framer-motion";
 import { refreshToken } from "public/refreshToken";
 
 function CreateRoomModal({ isOpen, onClose }) {
@@ -57,8 +58,14 @@ function CreateRoomModal({ isOpen, onClose }) {
 
   return (
     isOpen && (
-      <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-10 flex items-center justify-center">
-        <div className="bg-white p-5 rounded-lg">
+      <motion.div
+      className="fixed top-0 left-0 w-full h-full  bg-opacity-50 z-10 flex items-center justify-center"
+      initial={{ x: "-100%" }}
+      animate={{ x: 0 }}
+      transition={{ duration: 1.5 }}
+      >
+      <div className="fixed top-0 left-0 w-full h-full z-10 flex items-center justify-center">
+        <div className="bg-modal p-5 rounded-lg border-8 border-indigo-500">
           <h2 className="text-xl font-bold mb-5">방 생성하기</h2>
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <label className="mb-2 font-bold" htmlFor="roomName">
@@ -69,7 +76,7 @@ function CreateRoomModal({ isOpen, onClose }) {
               type="text"
               id="roomName"
               name="roomName"
-              placeholder="방 제목을 입력하세요"
+              placeholder=""
               value={roomName}
               onChange={handleChangeRoomName}
             />
@@ -78,17 +85,15 @@ function CreateRoomModal({ isOpen, onClose }) {
             )}
             <div className="flex">
               <button
-                className="bg-green-500 text-white font-bold py-2 px-4 rounded-md block mr-3 btn-1"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3"
                 type="submit"
               >
                 방 만들기
               </button>
               <button
-                className="bg-red-500 text-white font-bold py-1 px-8 rounded-md block btn-5"
-                onClick={() => {
-                  onClose();
-                  setIsRoomNameEmpty(false);
-                }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
+                onClick={onClose}
+
               >
                 닫기
               </button>
@@ -103,8 +108,13 @@ function CreateRoomModal({ isOpen, onClose }) {
             overflow: hidden;
             z-inex: -1;
           }
+          .bg-modal {
+            background-image: linear-gradient(to right, #E1EEDD, #BFDCE5);
+          }
+          
         `}</style>
-      </div>
+      </div >
+      </motion.div>
     )
   );
 }
