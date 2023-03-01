@@ -95,7 +95,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
             let mySession = session;
 
 
-            window.addEventListener('keydown', sendSignalThrow);
+            // window.addEventListener('keydown', sendSignalThrow);
 
             mySession.on('streamCreated', (event) => {
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
