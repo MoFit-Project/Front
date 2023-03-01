@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../recoil/states";
+import { motion } from "framer-motion";
 
 
 function CreateRoomModal({ isOpen, onClose }) {
@@ -55,8 +56,14 @@ function CreateRoomModal({ isOpen, onClose }) {
 
   return (
     isOpen && (
-      <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-10 flex items-center justify-center">
-        <div className="bg-white p-5 rounded-lg">
+      <motion.div
+      className="fixed top-0 left-0 w-full h-full  bg-opacity-50 z-10 flex items-center justify-center"
+      initial={{ x: "-100%" }}
+      animate={{ x: 0 }}
+      transition={{ duration: 1.5 }}
+      >
+      <div className="fixed top-0 left-0 w-full h-full z-10 flex items-center justify-center">
+        <div className="bg-gray-200 p-5 rounded-lg border-double border-4 border-blue-600">
           <h2 className="text-xl font-bold mb-5">방 생성하기</h2>
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <label className="mb-2 font-bold" htmlFor="roomName">
@@ -98,6 +105,7 @@ function CreateRoomModal({ isOpen, onClose }) {
         }
         `}</style>
       </div >
+      </motion.div>
     )
   );
 }

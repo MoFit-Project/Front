@@ -4,10 +4,7 @@ export default function LoginButton() {
 
     return (
 
-        <motion.div whileHover={{
-            scale: 1.1,
-            transition: { duration: 1 },
-        }} className="text-center">
+        <div className="text-center">
             < button
                 className=" w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
@@ -36,6 +33,6 @@ export default function LoginButton() {
                         font-size: 18px;
                     }
                 `}</style>
-        </motion.div >
+        </div >
     )
 }
