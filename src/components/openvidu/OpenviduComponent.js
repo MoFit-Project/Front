@@ -12,6 +12,40 @@ export let isLeftPlayerMoveGuildLine = false;
 export let isRightPlayerThrow = false;
 export let isRightPlayerMoveGuildLine = false;
 
+export function sendSignalThrow(session) {
+    console.log(session);
+    if (session) {
+        session.signal({
+            data: `${localStorage.getItem('username')}`,  // Any string (optional)
+            to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: 'throw'             // The type of message (optional)
+        })
+            .then(() => {
+                console.log('Message successfully sent');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+}
+
+export function sendSignalJumpingJacks(session) {
+    if (session) {
+        session.signal({
+            data: `${localStorage.getItem('username')}`,  // Any string (optional)
+            to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: 'jumpingJacks'             // The type of message (optional)
+        })
+            .then(() => {
+                console.log('Message successfully sent');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+}
+
+
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
     // 1) OV 오브젝트 생성
@@ -159,38 +193,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         setSession(newOV.initSession());
     }
 
-    function sendSignalThrow() {
-        console.log(session);
-        if (session) {
-            session.signal({
-                data: `${localStorage.getItem('username')}`,  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'throw'             // The type of message (optional)
-            })
-                .then(() => {
-                    console.log('Message successfully sent');
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-    }
-
-    function sendSignalJumpingJacks() {
-        if (session) {
-            session.signal({
-                data: `${localStorage.getItem('username')}`,  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'jumpingJacks'             // The type of message (optional)
-            })
-                .then(() => {
-                    console.log('Message successfully sent');
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-    }
+    
 
     return (
 
@@ -219,7 +222,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     <div id="session" className='flex'>
                         {publisher !== undefined ? (
                             <div id="main-video" className="col-md-6">
-                                <OvVideo streamManager={publisher} userName={userName} />
+                                <OvVideo streamManager={publisher} userName={userName} session={session}/>
                             </div>
                         ) : <div role="status">
                             <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
