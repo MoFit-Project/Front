@@ -805,4 +805,7 @@ export default class Main extends Phaser.Scene {
         this.isGame = false;
         this.winner = "Right";
     }
+
+
+
 }

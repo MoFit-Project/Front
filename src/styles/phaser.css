@@ -1,0 +1,19 @@
+html,
+body,
+#parent {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #111;
+    color: #eee;
+    font: caption;
+}
+
+#version {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
