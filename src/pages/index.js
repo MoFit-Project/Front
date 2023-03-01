@@ -36,13 +36,12 @@ export default function Home() {
                   .btn-1 {
                       background: rgb(6,14,131);
                       background: linear-gradient(0deg, rgba(6,14,131,1) 0%, rgba(12,25,180,1) 100%);
-                      border-bottom:6px solid rgb(1, 2, 15);
+                      border-bottom:7px solid rgb(1, 2, 15);
                     }
 
                     .btn-1:active {
-                        transform: translateY(3px);
+                        transform: translateY(4px);
                         border-bottom:2px solid rgb(14, 19, 83);
-
                     }
                     .btn-1:hover {
                         background: rgb(0,3,255);

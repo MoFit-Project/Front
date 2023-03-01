@@ -21,6 +21,7 @@ export default function RoomList() {
   useEffect(() => {
     fetchRooms();
     return setRoomList([]);
+
   }, []);
 
   const enterRoom = async (customSessionId) => {
@@ -106,7 +107,7 @@ export default function RoomList() {
           <Navbar>
             <div className="flex-col items-center flex">
               <div className="mt-2 w-8/12 flex">
-                <table className="w-full table-auto">
+                <table className="w-full">
                   <thead>
                     <tr className="text-white">
                       <th className="w-1/4 py-2 px-4">방 제목</th>
@@ -169,11 +170,11 @@ export default function RoomList() {
       </>
       <style jsx>{`
         .background-div {
-          background-image: url("background-img.jpg");
+          background-image: url('background-img.jpg');
           background-size: cover;
           background-position: center;
           overflow: hidden;
-          z-inex: -1;
+          z-inex: -1,
         }
 
         table {
@@ -202,6 +203,6 @@ export default function RoomList() {
         }
        
       `}</style>
-    </div>
+    </div >
   );
 }

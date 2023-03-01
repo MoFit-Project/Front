@@ -33,14 +33,11 @@ export default function GameRoom() {
         <>
             <title>MOFIT 게임룸</title>
 
-            <OpenViduComponent roomName={roomName} userName={username} jwtToken={token} />
-            <div key={Math.random()} id="game"></div>
-            {loading ? <DynamicComponentWithNoSSR /> : null}
-
-            <style jsx>
-                
-
-            </style>
+            <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}>
+                <div key={Math.random()} id="game"></div>
+                {loading ? <DynamicComponentWithNoSSR /> : null}
+            </OpenViduComponent>
         </>
+
     );
 }
