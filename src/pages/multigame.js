@@ -24,7 +24,7 @@ const Home = () => {
             </Head>
 
             <div key={Math.random()} id="game"></div>
-            {loading ? <DynamicComponentWithNoSSR style = "height:100%"/> : null}
+            {loading ? <DynamicComponentWithNoSSR/> : null}
 
         </div>
 

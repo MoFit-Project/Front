@@ -18,22 +18,26 @@ export default function Index() {
     }
 
     const config = {
-      type: Phaser.AUTO,
-      width: window.innerWidth,
-      height: window.innerHeight,
+      // type: Phaser.Scale.FIT,
+
       // width: window.innerWidth * window.devicePixelRatio,
       // height: window.innerHeight * window.devicePixelRatio,
-      backgroundColor: '#FFFFFF',
-      // scale: {
-      //   mode: Phaser.Scale.Fit
-      // },
+      // backgroundColor: '#FFFFFF',
+      scale: {
+        mode: Phaser.Scale.CENTER_BOTH,
+        autoCenter:Phaser.Scale.CENTER_BOTH,
+        parent:"game-container",
+        width: 1920,
+        height: 1080,
+        zoom:Phaser.Scale.MAX_ZOOM
+      },
       physics :{
         default :'arcade',
         arcade:{
           debug : true,
           // gravity:{y:200}
         }
-      }
+      },
     };
 
     // const game = new Phaser.Game(config);
@@ -41,6 +45,7 @@ export default function Index() {
 
     gameRef.current.scene.add('main', Main);
     gameRef.current.scene.start('main');
+    gameRef.current.scale.setMaxZoom();
   };
 
   return null;

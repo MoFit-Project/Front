@@ -137,7 +137,7 @@ export default class Main extends Phaser.Scene {
     create() {
         //배경 삽입
         this.bg = this.add.image(0, 0, "backGround").setOrigin(0, 0);
-        this.bg.setDisplaySize(this.windowWidth, this.windowHeight);
+        this.bg.setDisplaySize(1920,1080);
 
         // 캐릭터 설정
         // 캐릭터 설정 Left
