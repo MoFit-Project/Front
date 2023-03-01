@@ -42,11 +42,6 @@ export default function SignupForm() {
       </div>
       <div className="max-w-md mx-auto w-full">
         <Link href="/login">
-          <img
-            className="mx-auto h-12 w-auto"
-            src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
-            alt="Your Company"
-          ></img>
           <h1 className="text-7xl font-bold text-center text-blue-800">
             Mofit
           </h1>

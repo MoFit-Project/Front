@@ -70,11 +70,6 @@ export default function Login() {
                 <Background />
             </div>
             <div className="max-w-md mt-10 w-full">
-                <img
-                    className="mx-auto h-12 w-auto"
-                    src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
-                    alt="Your Company"
-                ></img>
                 <h1 className="text-7xl font-bold text-center text-blue-800">Mofit</h1>
                 <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                     <div className="mb-3">
