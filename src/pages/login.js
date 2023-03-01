@@ -75,7 +75,7 @@ export default function Login() {
                     src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
                     alt="Your Company"
                 ></img>
-                <h1 className="text-4xl font-bold text-center text-green-800">Mofit</h1>
+                <h1 className="text-7xl font-bold text-center text-blue-800">Mofit</h1>
                 <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <input
@@ -103,7 +103,7 @@ export default function Login() {
                     <LoginButton />
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/signup"} legacyBehavior>
-                            <a className="inline-block align-baseline font-bold text-md text-black-500">
+                            <a className="inline-block align-baseline font-bold text-lg text-black-500">
                                 회원가입
                             </a>
                         </Link>

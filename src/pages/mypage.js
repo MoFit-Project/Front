@@ -15,7 +15,6 @@ export default function MyPage() {
   useEffect(() => {
     // if (!token) router.push("/login");
     let username = window.localStorage.getItem('username');
-    console.log(username)
     setUsername(username)
     }, [])
 
@@ -29,17 +28,15 @@ export default function MyPage() {
     const assessToken = Cookies.get("token");
 
     try {
-      console.log("@@@@@@@@@@@@@@@@@@@@@")
+      
       const response = await axios.post(API_URL + `/user/${username}`,
       { password: password },
       {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
-      console.log(response)
-      console.log("@@@@@@@@@@@@@@@@@@@@@")
+      
       window.alert("비밀번호 변경에 성공했습니다")
       router.push("/room")
-
 
       } catch (error) {
         const { response } = error;
