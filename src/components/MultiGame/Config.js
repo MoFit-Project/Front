@@ -430,11 +430,7 @@ export default class Main extends Phaser.Scene {
     this.leftGuildLine.angle = this.leftThrowAngle;
     this.rightGuildLine.angle = this.rightThrowAngle;
     this.windTimeAgain -= 1
-<<<<<<< HEAD
-    //console.log(this.windTimeAgain)
-=======
     this.itemCreate -= 1
->>>>>>> 198271c52a8ba40bd22c567f1924908226c20dc4
     if (this.windTimeAgain > 0) {
       console.log("work")
       this.windTimeAgain = (Math.floor(Math.random() * (4 - 1)) + 1) * 600
