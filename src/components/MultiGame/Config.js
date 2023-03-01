@@ -55,7 +55,6 @@ export default class Main extends Phaser.Scene {
   shieldItem;
   windDisableItem;
 
-
   constructor() {
     super();
   }
@@ -362,7 +361,7 @@ export default class Main extends Phaser.Scene {
     this.windDisableItem = this.physics.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'windDisableItem')
         .setScale(1)
         .setOrigin(0.5, 0.5);
-    this.windDisableItem.visible = true;
+    this.windDisableItem.visible = false;
 
     //아이템 습득 시
     this.leftPlayerShield = this.add.image(this.leftPlayer.x, this.rightPlayer.y,'shield')
@@ -385,7 +384,7 @@ export default class Main extends Phaser.Scene {
     this.rightPlayerWindDisable = this.add.image(this.rightPlayer.x, this.leftPlayer.y-100,'windDisable')
         .setScale(0.3)
         .setOrigin(0.5, 0.5);
-    this.rightPlayerWindDisable.visible = true;
+    this.rightPlayerWindDisable.visible = false;
 
     // 아이템 습득
     this.physics.add.overlap(
@@ -431,8 +430,40 @@ export default class Main extends Phaser.Scene {
     this.rightGuildLine.angle = this.rightThrowAngle;
     this.windTimeAgain -= 1
     this.itemCreate -= 1
+
+    //아이템 생성
+    if (this.itemCreate < 0) {
+
+      this.itemCreate = (Math.floor(Math.random()*(4-1))+1)*60
+      if (!this.shieldItem.visible && !this.windDisableItem.visible) {
+        const randomItem = Math.floor(Math.floor(Math.random() * (3 - 1)) + 1)
+        if (randomItem === 1) {
+          this.shieldItem.x = (this.leftPlayer.x + this.rightPlayer.x) / 2;
+          this.shieldItem.y = this.rightPlayer.y - 300;
+          this.shieldItem.visible = true;
+
+        } else {
+          this.windDisableItem.x = (this.leftPlayer.x + this.rightPlayer.x) / 2;
+          this.windDisableItem.y = this.rightPlayer.y - 300;
+          this.windDisableItem.visible = true;
+
+        }
+      }
+    }
+    //아이템 삭제
+    if (this.windDisableItem.y > 1000){
+      this.windDisableItem.visible = false;
+    }else{
+      this.windDisableItem.y += 1
+    }
+    if (this.shieldItem.y > 1000){
+      this.shieldItem.visible = false;
+    }else {
+      this.shieldItem.y += 1
+    }
+    //바람 생성
     if (this.windTimeAgain > 0) {
-      console.log("work")
+
       this.windTimeAgain = (Math.floor(Math.random()*(4-1))+1)*600
       this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
       while (this.windSpeed === 0) {
@@ -501,7 +532,9 @@ export default class Main extends Phaser.Scene {
         this.attackSpeed,
         this.leftThrow.body.velocity
       );
-      this.leftThrow.body.velocity.x += this.windSpeed
+      if (this.leftPlayerWindDisable.visible === false) {
+        this.leftThrow.body.velocity.x += this.windSpeed
+      }
       this.leftThrow.setGravity(0, 830);
       // this.leftThrow.body.velocity.x += -200;
       // console.log(this.leftThrowAngle, this.attackSpeed);
@@ -524,7 +557,8 @@ export default class Main extends Phaser.Scene {
         this.attackSpeed,
         this.rightThrow.body.velocity
       );
-      this.rightThrow.body.velocity.x += this.windSpeed
+      if (this.rightPlayerWindDisable.visible === false){
+      this.rightThrow.body.velocity.x += this.windSpeed}
       this.rightThrow.setGravity(0, 830);
       // this.rightThrow.body.velocity.x += -200;
       console.log(this.rightThrowAngle, this.attackSpeed);
@@ -651,6 +685,7 @@ export default class Main extends Phaser.Scene {
       this.rightPlayerShield.visible = true;
     }
 
+
   }
   leftPlayerGetShieldItem (){
     // 오른 플레이어 쉴드 아이템 습득
@@ -659,12 +694,14 @@ export default class Main extends Phaser.Scene {
       this.leftPlayerShield.visible = true;
     }
 
+
   }
   leftPlayerGetWindDisableItem(){
     if (this.windDisableItem.visible === true) {
       this.windDisableItem.visible = false;
       this.leftPlayerWindDisable.visible = true;
     }
+
   }
   rightPlayerGetWindDisableItem(){
     if (this.windDisableItem.visible === true) {
