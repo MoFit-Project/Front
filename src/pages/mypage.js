@@ -1,20 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar"
 import LayoutAuthenticated from "../components/LayoutAuthticated";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 
 export default function MyPage() {
-  const [Id, setId] = useState("John");
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    // if (!token) router.push("/login");
+    let username = window.localStorage.getItem('username');
+    console.log(username)
+    setUsername(username)
+    }, [])
 
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ Id, password });
+    const assessToken = Cookies.get("token");
+
+    try {
+      console.log("@@@@@@@@@@@@@@@@@@@@@")
+      const response = await axios.post(API_URL + `/user/${username}`,
+      { password: password },
+      {
+        headers: { Authorization: `Bearer ${assessToken}` },
+      });
+      console.log(response)
+      console.log("@@@@@@@@@@@@@@@@@@@@@")
+      window.alert("비밀번호 변경에 성공했습니다")
+      router.push("/room")
+
+
+      } catch (error) {
+        const { response } = error;
+        if (response) {
+            switch (response.status) {
+                case 400:
+                    window.alert(response.data)
+                    break;
+                case 501:
+                    window.alert(response.data)
+                    break;
+                default:
+                    console.log("Unexpected Error");
+            }
+        }
+    }
   };
 
   return (
@@ -36,7 +77,7 @@ export default function MyPage() {
               type="text"
               id="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={Id}
+              value={username}
               disabled
             />
           </div>
