@@ -1,11 +1,15 @@
 import Main from './Config';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'phaser';
 
 export default function Index() {
-
+  const gameRef = useRef(null);
   useEffect(() => {
     loadGame();
+    return (() => {
+      if (gameRef.current)
+        gameRef.current.destroy();
+    })
   }, []);
 
   const loadGame = async () => {
@@ -23,20 +27,21 @@ export default function Index() {
       // scale: {
       //   mode: Phaser.Scale.Fit
       // },
-      physics: {
-        default: 'arcade',
-        arcade: {
-          debug: true,
+      physics :{
+        default :'arcade',
+        arcade:{
+          debug : true,
           // gravity:{y:200}
         }
       }
     };
 
-    const game = new Phaser.Game(config);
+    // const game = new Phaser.Game(config);
+    gameRef.current = new Phaser.Game(config);
 
-    game.scene.add('main', Main);
-    game.scene.start('main');
+    gameRef.current.scene.add('main', Main);
+    gameRef.current.scene.start('main');
   };
 
-  return;
+  return null;
 }
