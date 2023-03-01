@@ -28,7 +28,7 @@ export default function OvVideo({ streamManager, userName, session, children }) 
   }, [streamManager]);
 
   useEffect(() => {
-    //if (streamManager) initDetector();
+    if (streamManager) initDetector();
 
     return () => {
       console.log(requestAnimeRef.current);
