@@ -5,8 +5,11 @@ import { getToken } from '../../../public/createToken.js';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
-import { leftPlayerThrow, rightPlayerThrow } from "../../recoil/PlayerThrow";
-import Main from '../../components/MultiGame/Config';
+
+export let isLeftPlayerThrow = false;
+export let isLeftPlayerMoveGuildLine = false;
+export let isRightPlayerThrow = false;
+export let isRightPlayerMoveGuildLine = false;
 
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
@@ -22,9 +25,6 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
     const router = useRouter();
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
-
-    const [isleftPlayerThrow, setLeftPlayerThrow] = useRecoilState(leftPlayerThrow);
-    const [isrightPlayerThrow, setRightPlayerThrow] = useRecoilState(rightPlayerThrow);
 
     useEffect(() => {
         window.addEventListener('beforeunload', onbeforeunload);
@@ -69,7 +69,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
             let mySession = session;
 
             
-            window.addEventListener('keydown', sendSignalAttack);
+            window.addEventListener('keydown', sendSignalThrow);
 
             mySession.on('streamCreated', (event) => {
                 // Subscribe to the Stream to receive it. Second parameter is undefined
@@ -97,25 +97,34 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
             // On every asynchronous exception...
             mySession.on('signal:throw', (event) => {
                 if (event.data === localStorage.getItem('username')) {
-                    console.log('내 캐릭터가 공격');
-                    setLeftPlayerThrow(true);
+                    console.log('my character attack throw !!!');
+                    isLeftPlayerThrow = true;
                     setTimeout(function() {
-                        setLeftPlayerThrow(false);
-                    }, 1000);
-                    // document.dispatchEvent(new KeyboardEvent('keydown', {key: shift}));
+                        isLeftPlayerThrow = false;
+                    }, 100);
                 } else {
-                    console.log('내 캐릭터가 맞았습니다');
-                    setRightPlayerThrow(true);
+                    console.log('enemy character attack throw !!!');
+                    isRightPlayerThrow = true;
                     setTimeout(function() {
-                        setRightPlayerThrow(false);
-                    }, 1000);
+                        isRightPlayerThrow = false;
+                    }, 100);
                 }
             });
 
-            mySession.on('signal:attack_2', (event) => {
-                console.log(event.data); // Message
-                //console.log(event.from); // Connection object of the sender
-                console.log(event.type); // The type of message
+            mySession.on('signal:jumpingJacks', (event) => {
+                if (event.data === localStorage.getItem('username')) {
+                    console.log('my character jumping jacks !!!');
+                    isLeftPlayerMoveGuildLine = true;
+                    setTimeout(function() {
+                        isLeftPlayerMoveGuildLine = false;
+                    }, 100);
+                } else {
+                    console.log('enemy character attack jumping jacks !!!');
+                    isRightPlayerMoveGuildLine = true;
+                    setTimeout(function() {
+                        isRightPlayerMoveGuildLine = false;
+                    }, 100);
+                }
             });
 
             // On every asynchronous exception...
@@ -178,7 +187,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         setSession(newOV.initSession());
     }
 
-    function sendSignalAttack() {
+    function sendSignalThrow() {
         console.log(session);
         if (session) {
             session.signal({
@@ -193,15 +202,14 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     console.error(error);
                 });
         }
-
     }
 
-    function sendSignalAttack2() {
+    function sendSignalJumpingJacks() {
         if (session) {
             session.signal({
-                data: 'player2',  // Any string (optional)
+                data: `${localStorage.getItem('username')}`,  // Any string (optional)
                 to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'attack'             // The type of message (optional)
+                type: 'jumpingJacks'             // The type of message (optional)
             })
                 .then(() => {
                     console.log('Message successfully sent');
@@ -210,7 +218,6 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     console.error(error);
                 });
         }
-
     }
 
     return (
@@ -228,11 +235,11 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 </button>
             </div>
             <div>
-                <button onClick={() => { sendSignalAttack() }}>
+                <button onClick={() => { sendSignalThrow() }}>
                     공격 1
                 </button>
 
-                <button onClick={() => { sendSignalAttack2() }}>
+                <button onClick={() => { sendSignalJumpingJacks() }}>
                     공격 2
                 </button>
             </div>

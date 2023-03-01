@@ -1,15 +1,10 @@
 import Main from './Config';
 import { useEffect } from 'react';
 import 'phaser';
-import { useRecoilState } from "recoil";
-import { leftPlayerThrow, rightPlayerThrow } from "../../recoil/PlayerThrow";
 
 export default function Index() {
-  const [isleftPlayerThrow, setLeftPlayerThrow] = useRecoilState(leftPlayerThrow);
-  const [isrightPlayerThrow, setRightPlayerThrow] = useRecoilState(rightPlayerThrow);
   useEffect(() => {
     loadGame();
-    console.log(isleftPlayerThrow);
   }, []);
 
   const loadGame = async () => {

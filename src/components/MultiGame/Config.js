@@ -1,7 +1,6 @@
 import "phaser";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { leftPlayerThrow, rightPlayerThrow } from "../../recoil/PlayerThrow";
+import { isLeftPlayerThrow, isLeftPlayerMoveGuildLine, isRightPlayerThrow, isRightPlayerMoveGuildLine } from "../openvidu/OpenviduComponent";
+
 
 export default class Main extends Phaser.Scene {
   leftPlayer;
@@ -32,10 +31,9 @@ export default class Main extends Phaser.Scene {
   windowHeight = window.innerHeight;
 
   constructor(props) {
-    // super({key: 'Main'});
     super();
   }
-
+  
 
 
 
@@ -262,7 +260,7 @@ export default class Main extends Phaser.Scene {
 
 
     // 각도 조절 Left
-    if (this.cursors.up.isDown) {
+    if (this.cursors.up.isDown || isLeftPlayerMoveGuildLine == true) {
       this.leftPlayer.anims.play("run", true);
       this.leftThrowAngle -= 1;
       if (this.leftThrowAngle < -90) {
@@ -277,7 +275,7 @@ export default class Main extends Phaser.Scene {
     }
 
     // 각도 조절 Right
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || isRightPlayerMoveGuildLine == true) {
       this.rightPlayer.anims.play("run", true);
       this.rightThrowAngle -= 1;
       if (this.rightThrowAngle < -180) {
@@ -297,7 +295,7 @@ export default class Main extends Phaser.Scene {
     // 스페이스바가 눌린 경우 투사체를 발사합니다.
     // 투사체 발사, 공격모션 Left
     if (
-      Phaser.Input.Keyboard.JustDown(this.cursors.space) &&
+      (Phaser.Input.Keyboard.JustDown(this.cursors.space) || isLeftPlayerThrow == true) &&
       !this.leftThrowLaunched
     ) {
       this.leftPlayer.anims.play("attackAct", true);
@@ -317,28 +315,9 @@ export default class Main extends Phaser.Scene {
       // console.log(this.leftThrowAngle, this.attackSpeed);
     }
 
-    // console.log(this.isleftPlayerThrow);
-    // this.isleftPlayerThrow++;
-    if (this.isleftPlayerThrow == 100) {
-      this.leftPlayer.anims.play("attackAct", true);
-
-      this.leftThrowLaunched = true;
-
-      // 투사체를 보이게 하고 초기 속도와 각도를 설정합니다.
-      this.leftThrow.visible = true;
-      this.leftThrow.anims.play("throwAct", true);
-      this.physics.velocityFromAngle(
-        this.leftThrowAngle,
-        this.attackSpeed,
-        this.leftThrow.body.velocity
-      );
-      this.leftThrow.setGravity(0, 830);
-      this.isleftPlayerThrow = 0;
-    }
-
     // 투사체 발사, 공격모션 right
     if (
-      Phaser.Input.Keyboard.JustDown(this.cursors.shift) &&
+      (Phaser.Input.Keyboard.JustDown(this.cursors.space) || isRightPlayerThrow == true) &&
       !this.rightThrowLaunched
     ) {
       this.rightPlayer.anims.play("attackAct", true);
@@ -357,7 +336,6 @@ export default class Main extends Phaser.Scene {
       // this.rightThrow.body.velocity.x += -200;
       console.log(this.rightThrowAngle, this.attackSpeed);
     }
-
 
 
     // 화면 밖으로 나가면 투사체 초기화 Left
