@@ -12,6 +12,7 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 export default function GameRoom() {
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const token = Cookies.get("token");
     const roomName = router.query.roomName;
@@ -23,6 +24,7 @@ export default function GameRoom() {
     useEffect(() => {
         // if (!token) router.push("/login");
         username = window.localStorage.getItem('username');
+        setLoading(true)
     }, [])
 
     //const userName = result.sub;
@@ -31,8 +33,8 @@ export default function GameRoom() {
         <>
             <title>MOFIT 게임룸</title>
             <OpenViduComponent roomName={roomName} userName={username} jwtToken={token} />
-            {/* <div key={Math.random()} id="game"></div>
-            {loading ? <DynamicComponentWithNoSSR /> : null} */}
+            <div key={Math.random()} id="game"></div>
+            {loading ? <DynamicComponentWithNoSSR /> : null}
         </>
     );
 }

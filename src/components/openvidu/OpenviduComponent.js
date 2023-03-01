@@ -7,6 +7,11 @@ import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
 import SubVideo from './SubVideo';
 
+export let isLeftPlayerThrow = false;
+export let isLeftPlayerMoveGuildLine = false;
+export let isRightPlayerThrow = false;
+export let isRightPlayerMoveGuildLine = false;
+
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
     // 1) OV 오브젝트 생성
@@ -55,6 +60,9 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         if (session !== undefined) {
             let mySession = session;
 
+
+            window.addEventListener('keydown', sendSignalThrow);
+
             mySession.on('streamCreated', (event) => {
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
                 setSubscribers((curr) => [...curr, newsubscriber]);
@@ -69,6 +77,39 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 //     leaveSession();
                 // }
                 deleteSubscriber(event.stream.streamManager);
+            });
+
+            // On every asynchronous exception...
+            mySession.on('signal:throw', (event) => {
+                if (event.data === localStorage.getItem('username')) {
+                    console.log('my character attack throw !!!');
+                    isLeftPlayerThrow = true;
+                    setTimeout(function () {
+                        isLeftPlayerThrow = false;
+                    }, 100);
+                } else {
+                    console.log('enemy character attack throw !!!');
+                    isRightPlayerThrow = true;
+                    setTimeout(function () {
+                        isRightPlayerThrow = false;
+                    }, 100);
+                }
+            });
+
+            mySession.on('signal:jumpingJacks', (event) => {
+                if (event.data === localStorage.getItem('username')) {
+                    console.log('my character jumping jacks !!!');
+                    isLeftPlayerMoveGuildLine = true;
+                    setTimeout(function () {
+                        isLeftPlayerMoveGuildLine = false;
+                    }, 100);
+                } else {
+                    console.log('enemy character attack jumping jacks !!!');
+                    isRightPlayerMoveGuildLine = true;
+                    setTimeout(function () {
+                        isRightPlayerMoveGuildLine = false;
+                    }, 100);
+                }
             });
 
             // On every asynchronous exception...
@@ -118,6 +159,39 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         setSession(newOV.initSession());
     }
 
+    function sendSignalThrow() {
+        console.log(session);
+        if (session) {
+            session.signal({
+                data: `${localStorage.getItem('username')}`,  // Any string (optional)
+                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: 'throw'             // The type of message (optional)
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+
+    function sendSignalJumpingJacks() {
+        if (session) {
+            session.signal({
+                data: `${localStorage.getItem('username')}`,  // Any string (optional)
+                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: 'jumpingJacks'             // The type of message (optional)
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+
     return (
 
         <div className='h-screen'>
@@ -131,7 +205,15 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                     방 나가기
                 </button>
             </div>
+            <div>
+                <button onClick={() => { sendSignalThrow() }}>
+                    공격 1
+                </button>
 
+                <button onClick={() => { sendSignalJumpingJacks() }}>
+                    공격 2
+                </button>
+            </div>
             <div className="flex justify-center">
                 {session !== undefined ? (
                     <div id="session" className='flex'>
