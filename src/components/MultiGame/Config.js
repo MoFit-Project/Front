@@ -1,5 +1,8 @@
 import "phaser";
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { leftPlayerThrow, rightPlayerThrow } from "../../recoil/PlayerThrow";
+
 export default class Main extends Phaser.Scene {
   leftPlayer;
   leftThrow;
@@ -9,6 +12,7 @@ export default class Main extends Phaser.Scene {
   leftDead;
   leftPlayerHealthBar;
   leftPlayerLife = 3;
+  // isleftPlayerThrow = 0;
 
   rightPlayer;
   rightThrow;
@@ -27,7 +31,8 @@ export default class Main extends Phaser.Scene {
   windowWidth = window.innerWidth;
   windowHeight = window.innerHeight;
 
-  constructor() {
+  constructor(props) {
+    // super({key: 'Main'});
     super();
   }
 
@@ -40,14 +45,14 @@ export default class Main extends Phaser.Scene {
     // 시트이름, 시트경로, {frameWidth: 각 프레임의 가로길이, frameHeight : 세로길이}, 프레임개수
     this.load.spritesheet(
       "knight",
-      "assets/knight.png",
+      "../assets/knight.png",
       { frameWidth: 128, frameHeight: 128 },
       33
     );
     //캐릭터 죽음
     this.load.spritesheet(
         "knightDead",
-        "assets/knight_dead.png",
+        "../assets/knight_dead.png",
         { frameWidth: 256, frameHeight: 256 },
         10
     );
@@ -55,20 +60,20 @@ export default class Main extends Phaser.Scene {
     // 투사체 추가
     this.load.spritesheet(
       "throwAttack",
-      "assets/sword_attack.png",
+      "../assets/sword_attack.png",
       { frameWidth: 128, frameHeight: 128 },
       18
     );
     //가이드라인 삽입
-    this.load.image('guildLine', 'assets/dot_line.png')
+    this.load.image('guildLine', '../assets/dot_line.png')
 
     //배경화면
-    this.load.image('backGround','assets/backgroundDungeon.png')
+    this.load.image('backGround','../assets/backgroundDungeon.png')
 
     // 체력 바
     this.load.spritesheet(
       "redHealthBar",
-      "assets/healthbar/Redbar/redHealthBar.png",
+      "../assets/healthbar/Redbar/redHealthBar.png",
       { frameWidth: 1406, frameHeight: 294 },
       18
     );
@@ -193,12 +198,16 @@ export default class Main extends Phaser.Scene {
     this.leftPlayer.on("animationcomplete", () => {
       this.leftPlayer.anims.play("walk", true);
     });
-    this.leftPlayer.play("walk");
+    if (this.leftPlayer && this.leftPlayer.duration) {
+      this.leftPlayer.play("walk");
+    }
     // 애니메이션 Right
     this.rightPlayer.on("animationcomplete", () => {
       this.rightPlayer.anims.play("walk", true);
     });
-    this.rightPlayer.play("walk");
+    if (this.rightPlayer && this.rightPlayer.duration) {
+      this.rightPlayer.play("walk");
+    }
     // 콘솔키 설정
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -305,7 +314,26 @@ export default class Main extends Phaser.Scene {
       );
       this.leftThrow.setGravity(0, 830);
       // this.leftThrow.body.velocity.x += -200;
-      console.log(this.leftThrowAngle, this.attackSpeed);
+      // console.log(this.leftThrowAngle, this.attackSpeed);
+    }
+
+    // console.log(this.isleftPlayerThrow);
+    // this.isleftPlayerThrow++;
+    if (this.isleftPlayerThrow == 100) {
+      this.leftPlayer.anims.play("attackAct", true);
+
+      this.leftThrowLaunched = true;
+
+      // 투사체를 보이게 하고 초기 속도와 각도를 설정합니다.
+      this.leftThrow.visible = true;
+      this.leftThrow.anims.play("throwAct", true);
+      this.physics.velocityFromAngle(
+        this.leftThrowAngle,
+        this.attackSpeed,
+        this.leftThrow.body.velocity
+      );
+      this.leftThrow.setGravity(0, 830);
+      this.isleftPlayerThrow = 0;
     }
 
     // 투사체 발사, 공격모션 right
@@ -375,8 +403,21 @@ export default class Main extends Phaser.Scene {
     this.leftThrow.y = this.leftPlayer.y;
     this.leftThrow.visible = false;
 
-    // console.log("rightPlayer Hit");
-    // alert("Player 2 Hit !");
+    this.rightPlayerLife -= 1;
+
+    if (this.rightPlayerLife == 2) {
+      this.rightPlayerHealthBar.anims.play('redHealthBar2', true);
+      console.log("Right Player : " + this.rightPlayerLife);
+    }
+    else if (this.rightPlayerLife == 1) {
+      this.rightPlayerHealthBar.anims.play('redHealthBar1', true);
+      console.log(this.rightPlayerLife);
+    }
+    else if (this.rightPlayerLife == 0) {
+      this.rightPlayerHealthBar.anims.play('redHealthBar0', true);
+      console.log(this.rightPlayerLife);
+      this.leftPlayerWin();
+    }
   }
   // left Hitted
   leftPlayerHitted() {
@@ -390,8 +431,6 @@ export default class Main extends Phaser.Scene {
 
     // Left Player Life Count
     this.leftPlayerLife -= 1;
-    // this.leftPlayerHealthBar.anims.play('redHealthBar', true);
-    // this.leftPlayerHealthBar.anims.stop('redHealthBar', true);
 
     if (this.leftPlayerLife == 2) {
       this.leftPlayerHealthBar.anims.play('redHealthBar2', true);
@@ -403,7 +442,6 @@ export default class Main extends Phaser.Scene {
     }
     else if (this.leftPlayerLife == 0) {
       this.leftPlayerHealthBar.anims.play('redHealthBar0', true);
-      this.
       console.log(this.leftPlayerLife);
       this.rightPlayerWin();
     }
@@ -413,14 +451,14 @@ export default class Main extends Phaser.Scene {
   leftPlayerWin() {
     setTimeout(function() {
       alert("Left Player Win !!!");
-    }, 2000);
+    }, 1000);
   }
 
   // Right Player 승리 시 호출
   rightPlayerWin() {
     setTimeout(function() {
       alert("Right Player Win !!!");
-    }, 2000);
+    }, 1000);
   }
 }
 

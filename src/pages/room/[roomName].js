@@ -36,8 +36,8 @@ export default function GameRoom() {
         <>
             <title>MOFIT 게임룸</title>
             <OpenViduComponent roomName={roomName} userName={'juhong'} jwtToken={token} />
-            {/* <div key={Math.random()} id="game"></div>
-            {loading ? <DynamicComponentWithNoSSR /> : null} */}
+            <div key={Math.random()} id="game"></div>
+            {loading ? <DynamicComponentWithNoSSR /> : null}
         </>
     );
 }
