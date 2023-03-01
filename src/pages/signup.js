@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
 import Link from "next/link";
+import SignupButton from "../components/login/SignupButton";
 
 export default function SignupForm() {
   const [id, setId] = useState("");
@@ -73,12 +74,7 @@ export default function SignupForm() {
           </div>
 
           <div className="text-center">
-            <button
-              type="submit"
-              className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              가입하기
-            </button>
+            <SignupButton />
           </div>
         </form>
       </div>

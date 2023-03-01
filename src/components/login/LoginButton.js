@@ -17,19 +17,11 @@ export default function LoginButton() {
                         transform: translateY(3px);
                         border-bottom:2px solid #0081C9;
                     }
-                    .room-tag {
-                        background-color: #86E5FF;
-                        transition:all 0.1s;
-                        border-bottom:5px solid #0081C9;
-                    }
-
-                    .room-elem {
-                        box-shadow: 1px 2px;
-                    }
+                    
                     button{
                         background-color: #0014FF;
                         transition:all 0.1s;
-                        border-bottom:5px solid #000000;
+                        border-bottom:5px solid #050141;
                         font-size: 18px;
                     }
                 `}</style>

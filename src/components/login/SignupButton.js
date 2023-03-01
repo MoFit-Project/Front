@@ -12,21 +12,13 @@ export default function SignupButton() {
             <style jsx>{`
                     button:active {
                         transform: translateY(3px);
-                        border-bottom:2px solid #0081C9;
+                        border-bottom:2px solid #f00303;
                     }
-                    .room-tag {
-                        background-color: #86E5FF;
-                        transition:all 0.1s;
-                        border-bottom:5px solid #0081C9;
-                    }
-
-                    .room-elem {
-                        box-shadow: 1px 2px;
-                    }
+                    
                     button{
-                        background-color: #ff0000;
+                        background-color: #f00303;
                         transition:all 0.1s;
-                        border-bottom:5px solid #000000;
+                        border-bottom:5px solid #5c0606;
                         font-size: 18px;
                     }
                 `}</style>
