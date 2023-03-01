@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../recoil/states";
+import { refreshToken } from "public/refreshToken";
 
 
 function CreateRoomModal({ isOpen, onClose }) {
@@ -40,8 +41,12 @@ function CreateRoomModal({ isOpen, onClose }) {
       const { response } = error;
       if (response) {
         switch (response.status) {
+          case 401:
+            refreshToken();
+            break;
           case 302:
             alert("이미 존재하는 방입니다.");
+            break;
           default:
             console.log("Unexpected Error");
         }
@@ -74,13 +79,13 @@ function CreateRoomModal({ isOpen, onClose }) {
             {isRoomNameEmpty && <div style={{ color: 'red' }}>방이름을 입력해 주세요</div>}
             <div className="flex">
               <button
-                className="bg-green-500 text-white font-bold py-2 px-4 rounded-md block mr-3"
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded-md block mr-3 btn-1"
                 type="submit"
               >
                 방 만들기
               </button>
               <button
-                className="bg-red-500 text-white font-bold py-1 px-7 rounded-md block"
+                className="bg-red-500 text-white font-bold py-1 px-8 rounded-md block btn-5"
                 onClick={onClose}
               >
                 닫기
@@ -88,6 +93,15 @@ function CreateRoomModal({ isOpen, onClose }) {
             </div>
           </form>
         </div >
+        <style jsx>{`
+        .background-div {
+          background-image: url('background-img.jpg');
+          background-size: cover;
+          background-position: center;
+          overflow: hidden;
+          z-inex: -1,
+        }
+        `}</style>
       </div >
     )
   );

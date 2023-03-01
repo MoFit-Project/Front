@@ -16,17 +16,12 @@ export default function Index() {
       type: Phaser.AUTO,
       width: window.innerWidth,
       height: window.innerHeight,
+      // width: window.innerWidth * window.devicePixelRatio,
+      // height: window.innerHeight * window.devicePixelRatio,
       backgroundColor: '#FFFFFF',
       // scale: {
-      //   mode: Phaser.Scale.Fit,
-      //   autoCenter: Phaser.Scale.CENTER_BOTH,
-      //   width: 1920,
-      //   height: 1080
+      //   mode: Phaser.Scale.Fit
       // },
-      scale: {
-        mode: Phaser.Scale.RESIZE,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-      },
       physics :{
         default :'arcade',
         arcade:{
@@ -34,7 +29,6 @@ export default function Index() {
           // gravity:{y:200}
         }
       }
-
     };
 
     const game = new Phaser.Game(config);

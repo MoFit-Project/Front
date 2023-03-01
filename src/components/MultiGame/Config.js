@@ -1,5 +1,7 @@
 import "phaser";
-import { useEffect } from "react";
+import { isLeftPlayerThrow, isLeftPlayerMoveGuildLine, isRightPlayerThrow, isRightPlayerMoveGuildLine } from "../openvidu/OpenviduComponent";
+
+
 export default class Main extends Phaser.Scene {
   leftPlayer;
   leftThrow;
@@ -208,7 +210,6 @@ export default class Main extends Phaser.Scene {
     this.rightGuildLine = this.add.image(this.rightPlayer.x, this.rightPlayer.y, 'guildLine').setOrigin(0, 0.5).setScale(0.3)
 
 
-
     this.anims.create({
       key: "attackAct", //액션이름
       frames: this.anims.generateFrameNumbers("knight", { start: 5, end: 11 }), //프레임 불러오기 (불러올 스프라이트, 프레임)[1,2,3,4]
@@ -243,12 +244,16 @@ export default class Main extends Phaser.Scene {
     this.leftPlayer.on("animationcomplete", () => {
       this.leftPlayer.anims.play("walk", true);
     });
-    this.leftPlayer.play("walk");
+    if (this.leftPlayer && this.leftPlayer.duration) {
+      this.leftPlayer.play("walk", true);
+    }
     // 애니메이션 Right
     this.rightPlayer.on("animationcomplete", () => {
       this.rightPlayer.anims.play("walk", true);
     });
-    this.rightPlayer.play("walk");
+    if (this.rightPlayer && this.rightPlayer.duration) {
+      this.rightPlayer.play("walk", true);
+    }
     // 콘솔키 설정
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -344,10 +349,7 @@ export default class Main extends Phaser.Scene {
 
 
 
-
-
   update() {
-
     // this.physics.add.collider(this.rightPlayer, this.leftThrow, this.rightPlayerHit, null, this);
     // this.rightPlayer.velocity = 0;
     // 가이드 라인 리프레시
@@ -387,7 +389,7 @@ export default class Main extends Phaser.Scene {
     this.windText.text = `${Math.abs(windNotice)}m`
 
     // 각도 조절 Left
-    if (this.cursors.up.isDown) {
+    if (this.cursors.up.isDown || isLeftPlayerMoveGuildLine == true) {
       this.leftPlayer.anims.play("run", true);
       this.leftThrowAngle -= this.leftPlayerAngleChange;
       if (this.leftThrowAngle <= -90 || this.leftThrowAngle >= 0) {
@@ -396,7 +398,7 @@ export default class Main extends Phaser.Scene {
     }
 
     // 각도 조절 Right
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || isRightPlayerMoveGuildLine == true) {
       this.rightPlayer.anims.play("run", true);
       this.rightThrowAngle -= this.rightPlayerAngleChange;
       if (this.rightThrowAngle <= -180 || this.rightThrowAngle >= -90) {
@@ -410,7 +412,7 @@ export default class Main extends Phaser.Scene {
     // 스페이스바가 눌린 경우 투사체를 발사합니다.
     // 투사체 발사, 공격모션 Left
     if (
-      Phaser.Input.Keyboard.JustDown(this.cursors.space) &&
+      (Phaser.Input.Keyboard.JustDown(this.cursors.space) || isLeftPlayerThrow == true) &&
       !this.leftThrowLaunched
     ) {
       this.leftPlayer.anims.play("attackAct", true);
@@ -428,12 +430,12 @@ export default class Main extends Phaser.Scene {
       this.leftThrow.body.velocity.x += this.windSpeed
       this.leftThrow.setGravity(0, 830);
       // this.leftThrow.body.velocity.x += -200;
-      console.log(this.leftThrowAngle, this.attackSpeed);
+      // console.log(this.leftThrowAngle, this.attackSpeed);
     }
 
     // 투사체 발사, 공격모션 right
     if (
-      Phaser.Input.Keyboard.JustDown(this.cursors.shift) &&
+      (Phaser.Input.Keyboard.JustDown(this.cursors.shift) || isRightPlayerThrow == true) &&
       !this.rightThrowLaunched
     ) {
       this.rightPlayer.anims.play("attackAct", true);
@@ -453,7 +455,6 @@ export default class Main extends Phaser.Scene {
       // this.rightThrow.body.velocity.x += -200;
       console.log(this.rightThrowAngle, this.attackSpeed);
     }
-
 
 
     // 화면 밖으로 나가면 투사체 초기화 Left
@@ -508,8 +509,21 @@ export default class Main extends Phaser.Scene {
     this.leftThrow.y = this.leftPlayer.y;
     this.leftThrow.visible = false;
 
-    // console.log("rightPlayer Hit");
-    // alert("Player 2 Hit !");
+    this.rightPlayerLife -= 1;
+
+    if (this.rightPlayerLife == 2) {
+      this.rightPlayerHealthBar.anims.play('redHealthBar2', true);
+      console.log("Right Player : " + this.rightPlayerLife);
+    }
+    else if (this.rightPlayerLife == 1) {
+      this.rightPlayerHealthBar.anims.play('redHealthBar1', true);
+      console.log(this.rightPlayerLife);
+    }
+    else if (this.rightPlayerLife == 0) {
+      this.rightPlayerHealthBar.anims.play('redHealthBar0', true);
+      console.log(this.rightPlayerLife);
+      this.leftPlayerWin();
+    }
   }
   // left Hitted
   leftPlayerHitted() {
@@ -531,8 +545,6 @@ export default class Main extends Phaser.Scene {
 
     // Left Player Life Count
     this.leftPlayerLife -= 1;
-    // this.leftPlayerHealthBar.anims.play('redHealthBar', true);
-    // this.leftPlayerHealthBar.anims.stop('redHealthBar', true);
 
     if (this.leftPlayerLife == 2) {
       this.leftPlayerHealthBar.anims.play('redHealthBar2', true);
@@ -553,15 +565,14 @@ export default class Main extends Phaser.Scene {
   leftPlayerWin() {
     setTimeout(function() {
       alert("Left Player Win !!!");
-    }, 2000);
+    }, 1000);
   }
 
   // Right Player 승리 시 호출
   rightPlayerWin() {
     setTimeout(function() {
       alert("Right Player Win !!!");
-    }, 2000);
+    }, 1000);
   }
-
 }
 
