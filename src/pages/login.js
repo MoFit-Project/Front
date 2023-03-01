@@ -27,6 +27,8 @@ export default function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        router.push("/");
+
         try {
             const response = await axios.post(API_URL + "/login", {
                 account: username,
@@ -38,7 +40,6 @@ export default function Login() {
 
             setIsLoginFail(false);
             window.localStorage.setItem('username', username);
-            router.push("/");
 
         } catch (error) {
             const { response } = error;

@@ -199,7 +199,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
 
     return (
 
-        <div>
+        <div className='w-screen'>
             <div className='flex justify-center' style={{ border: 'solid black' }}>
                 <h1 id="session-title">{roomName}</h1>
                 <button
@@ -210,23 +210,28 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
                     방 나가기
                 </button>
             </div>
-            <div className="flex justify-center" style={{
-                position: 'relative'
-            }}>
-                <div>
+            <div className="flex justify-center" >
+                <div style={{
+                    position: 'relative'
+                }}>
                     {session !== undefined ? (
-                        <div id="session" className='flex' style={{
-                            position: 'absolute',
-                            top: '0px',
-                            left: '0px'
-                        }}>
-                            {publisher !== undefined ? (
-                                <div id="main-video" className="col-md-6">
-                                    <OvVideo streamManager={publisher} userName={userName} session={session} />
-                                </div>
-                            ) : <Loading />}
-
-                            <div id="sub-video" className="col-md-6">
+                        <div id="session">
+                            <div style={{
+                                position: 'absolute',
+                                top: '0px',
+                                left: '0px'
+                            }}>
+                                {publisher !== undefined ? (
+                                    <div id="main-video" className="col-md-6">
+                                        <OvVideo streamManager={publisher} userName={userName} session={session} />
+                                    </div>
+                                ) : <Loading />}
+                            </div>
+                            <div id="sub-video" style={{
+                                position: 'absolute',
+                                top: '0px',
+                                right: '0px'
+                            }}>
                                 {subscribers.map((sub, i) => (
                                     <div key={i} className="stream-container col-md-6 col-xs-6">
                                         <SubVideo streamManager={sub} />
@@ -235,7 +240,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
                             </div>
                         </div>
                     ) : null}
-                    <div>
+                    <div className='w-screen'>
                         {children}
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import 'phaser';
 
 export default function Index() {
+
   useEffect(() => {
     loadGame();
   }, []);
@@ -22,10 +23,10 @@ export default function Index() {
       // scale: {
       //   mode: Phaser.Scale.Fit
       // },
-      physics :{
-        default :'arcade',
-        arcade:{
-          debug : true,
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: true,
           // gravity:{y:200}
         }
       }
@@ -37,5 +38,5 @@ export default function Index() {
     game.scene.start('main');
   };
 
-  return null;
+  return;
 }
