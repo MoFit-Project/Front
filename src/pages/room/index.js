@@ -21,11 +21,9 @@ export default function RoomList() {
   useEffect(() => {
     fetchRooms();
     return setRoomList([]);
-
   }, []);
 
   const enterRoom = async (customSessionId) => {
-
     setIsRoomHost({ roomName: customSessionId, isHost: false });
     const assessToken = Cookies.get("token");
     try {
@@ -34,20 +32,23 @@ export default function RoomList() {
       });
 
       router.push(`/room/${response.data}`);
-
     } catch (error) {
       const { response } = error;
       if (response) {
         switch (response.status) {
+          case 400:
+            alert(response.data);
+            break;
           case 401:
             refreshToken();
             break;
-          case 400:
-            alert("존재하지 않는 방입니다.");
+          case 404:
+            alert("방을 찾을 수 없습니다");
             router.reload();
             break;
           default:
-            console.log("Unexpected Error");
+            alert("오류 발생");
+            router.reload();
         }
       }
     }
@@ -62,7 +63,6 @@ export default function RoomList() {
         },
       });
       setRoomList([...roomList, ...response.data]);
-
     } catch (error) {
       console.log(error);
       const { response } = error;
@@ -170,11 +170,11 @@ export default function RoomList() {
       </>
       <style jsx>{`
         .background-div {
-          background-image: url('background-img.jpg');
+          background-image: url("background-img.jpg");
           background-size: cover;
           background-position: center;
           overflow: hidden;
-          z-inex: -1,
+          z-inex: -1;
         }
 
         table {
@@ -202,6 +202,6 @@ export default function RoomList() {
           border-bottom: 1px solid #e5e5e5;
         }
       `}</style>
-    </div >
+    </div>
   );
 }

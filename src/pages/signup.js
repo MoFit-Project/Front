@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
 import Link from "next/link";
+import SignupButton from "../components/login/SignupButton";
 
 export default function SignupForm() {
   const [id, setId] = useState("");
@@ -71,17 +72,28 @@ export default function SignupForm() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline btn-1"
+              className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               가입하기
             </button>
           </div>
         </form>
       </div>
+      <style jsx>
+        {`
+        .btn-1 {
+            background: rgb(6,14,131);
+            background: linear-gradient(0deg, rgba(6,14,131,1) 0%, rgba(12,25,180,1) 100%);
+            border: none;
+        }
+        .btn-1:hover {
+            background: rgb(0,3,255);
+            background: linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%);
+          }
+        `}</style>
       <style jsx>
         {`
         .btn-1 {
