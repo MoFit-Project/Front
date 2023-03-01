@@ -20,6 +20,7 @@ export default function OvVideo({ streamManager, userName, }) {
 	//console.log(isRoomHost);
 	useEffect(() => {
 		if (streamManager && !!videoRef.current) {
+			console.log(streamManage);
 			streamManager.addVideoElement(videoRef.current);
 		}
 	}, [streamManager]);
