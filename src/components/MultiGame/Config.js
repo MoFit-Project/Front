@@ -47,13 +47,14 @@ export default class Main extends Phaser.Scene {
   damageEffectOnRight;
 
   //items
-  itemCreate;
-  shield;
-  shieldAble = false;
-  power;
-  powerAble = false;
-  windItem;
-  windItemAble = false;
+  itemCreate = -1;
+  leftPlayerShield;
+  rightPlayerShield;
+  leftPlayerWindDisable;
+  rightPlayerWindDisable;
+  shieldItem;
+  windDisableItem;
+
 
   constructor() {
     super();
@@ -120,6 +121,16 @@ export default class Main extends Phaser.Scene {
         { frameWidth: 458, frameHeight: 423 },
         25
     );
+
+    // 아이템 아이콘
+    this.load.image('shieldItem','../assets/items/shieldIcon.png')
+    this.load.image('windDisableItem','../assets/items/windDisable.png')
+
+    // 아이템 사용
+    this.load.image('shield','../assets/items/shield.png')
+    this.load.image('windDisable','../assets/items/windDisableUse.png')
+
+
 
   }
 
@@ -342,6 +353,69 @@ export default class Main extends Phaser.Scene {
     });
 
 
+    // 아이템 아이콘
+    this.shieldItem = this.physics.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'shieldItem')
+        .setScale(1)
+        .setOrigin(0.5, 0.5);
+    this.shieldItem.visible = false;
+
+    this.windDisableItem = this.physics.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'windDisableItem')
+        .setScale(1)
+        .setOrigin(0.5, 0.5);
+    this.windDisableItem.visible = true;
+
+    //아이템 습득 시
+    this.leftPlayerShield = this.add.image(this.leftPlayer.x, this.rightPlayer.y,'shield')
+        .setScale(5)
+        .setOrigin(0.5, 0.5);
+    this.leftPlayerShield.alpha = 0.3;
+    this.leftPlayerShield.visible = false;
+
+    this.rightPlayerShield = this.add.image(this.rightPlayer.x, this.rightPlayer.y,'shield')
+        .setScale(5)
+        .setOrigin(0.5, 0.5);
+    this.rightPlayerShield.alpha = 0.3;
+    this.rightPlayerShield.visible = false;
+
+    this.leftPlayerWindDisable = this.add.image(this.leftPlayer.x, this.leftPlayer.y-100,'windDisable')
+        .setScale(0.3)
+        .setOrigin(0.5, 0.5);
+    this.leftPlayerWindDisable.visible = false;
+
+    this.rightPlayerWindDisable = this.add.image(this.rightPlayer.x, this.leftPlayer.y-100,'windDisable')
+        .setScale(0.3)
+        .setOrigin(0.5, 0.5);
+    this.rightPlayerWindDisable.visible = true;
+
+    // 아이템 습득
+    this.physics.add.overlap(
+        this.rightThrow,
+        this.shieldItem,
+        this.rightPlayerGetShieldItem,
+        null,
+        this
+    );
+    this.physics.add.overlap(
+        this.leftThrow,
+        this.shieldItem,
+        this.leftPlayerGetShieldItem,
+        null,
+        this
+    );
+    this.physics.add.overlap(
+        this.rightThrow,
+        this.windDisableItem,
+        this.rightPlayerGetWindDisableItem,
+        null,
+        this
+    );
+    this.physics.add.overlap(
+        this.leftThrow,
+        this.windDisableItem,
+        this.leftPlayerGetWindDisableItem,
+        null,
+        this
+    );
 
   }
 
@@ -356,7 +430,7 @@ export default class Main extends Phaser.Scene {
     this.leftGuildLine.angle = this.leftThrowAngle;
     this.rightGuildLine.angle = this.rightThrowAngle;
     this.windTimeAgain -= 1
-    console.log(this.windTimeAgain)
+    this.itemCreate -= 1
     if (this.windTimeAgain > 0) {
       console.log("work")
       this.windTimeAgain = (Math.floor(Math.random()*(4-1))+1)*600
@@ -389,7 +463,7 @@ export default class Main extends Phaser.Scene {
     this.windText.text = `${Math.abs(windNotice)}m`
 
     // 각도 조절 Left
-    if (this.cursors.up.isDown || isLeftPlayerMoveGuildLine == true) {
+    if (this.cursors.up.isDown || isLeftPlayerMoveGuildLine === true) {
       this.leftPlayer.anims.play("run", true);
       this.leftThrowAngle -= this.leftPlayerAngleChange;
       if (this.leftThrowAngle <= -90 || this.leftThrowAngle >= 0) {
@@ -398,7 +472,7 @@ export default class Main extends Phaser.Scene {
     }
 
     // 각도 조절 Right
-    if (this.cursors.left.isDown || isRightPlayerMoveGuildLine == true) {
+    if (this.cursors.left.isDown || isRightPlayerMoveGuildLine === true) {
       this.rightPlayer.anims.play("run", true);
       this.rightThrowAngle -= this.rightPlayerAngleChange;
       if (this.rightThrowAngle <= -180 || this.rightThrowAngle >= -90) {
@@ -412,7 +486,7 @@ export default class Main extends Phaser.Scene {
     // 스페이스바가 눌린 경우 투사체를 발사합니다.
     // 투사체 발사, 공격모션 Left
     if (
-      (Phaser.Input.Keyboard.JustDown(this.cursors.space) || isLeftPlayerThrow == true) &&
+      (Phaser.Input.Keyboard.JustDown(this.cursors.space) || isLeftPlayerThrow === true) &&
       !this.leftThrowLaunched
     ) {
       this.leftPlayer.anims.play("attackAct", true);
@@ -435,7 +509,7 @@ export default class Main extends Phaser.Scene {
 
     // 투사체 발사, 공격모션 right
     if (
-      (Phaser.Input.Keyboard.JustDown(this.cursors.shift) || isRightPlayerThrow == true) &&
+      (Phaser.Input.Keyboard.JustDown(this.cursors.shift) || isRightPlayerThrow === true) &&
       !this.rightThrowLaunched
     ) {
       this.rightPlayer.anims.play("attackAct", true);
@@ -492,7 +566,7 @@ export default class Main extends Phaser.Scene {
 
   // Right Hitted
   rightPlayerHitted() {
-    this.rightPlayer.anims.play('hurt', true)
+
     this.damageEffectOnRight.x = this.leftThrow.x;
     this.damageEffectOnRight.y = this.leftThrow.y;
     this.damageEffectOnRight.visible = true;
@@ -508,18 +582,23 @@ export default class Main extends Phaser.Scene {
     this.leftThrow.x = this.leftPlayer.x;
     this.leftThrow.y = this.leftPlayer.y;
     this.leftThrow.visible = false;
+    if (this.rightPlayerShield.visible === true){
+      this.rightPlayerShield.visible = false;
+    } else{
+      this.rightPlayerLife -= 1;
+      this.rightPlayer.anims.play('hurt', true)
+    }
 
-    this.rightPlayerLife -= 1;
 
-    if (this.rightPlayerLife == 2) {
+    if (this.rightPlayerLife === 2) {
       this.rightPlayerHealthBar.anims.play('redHealthBar2', true);
       console.log("Right Player : " + this.rightPlayerLife);
     }
-    else if (this.rightPlayerLife == 1) {
+    else if (this.rightPlayerLife === 1) {
       this.rightPlayerHealthBar.anims.play('redHealthBar1', true);
       console.log(this.rightPlayerLife);
     }
-    else if (this.rightPlayerLife == 0) {
+    else if (this.rightPlayerLife <= 0) {
       this.rightPlayerHealthBar.anims.play('redHealthBar0', true);
       console.log(this.rightPlayerLife);
       this.leftPlayerWin();
@@ -527,7 +606,6 @@ export default class Main extends Phaser.Scene {
   }
   // left Hitted
   leftPlayerHitted() {
-    this.leftPlayer.anims.play('hurt', true)
     this.damageEffectOnLeft.x = this.rightThrow.x;
     this.damageEffectOnLeft.y = this.rightThrow.y;
     this.damageEffectOnLeft.visible = true;
@@ -544,20 +622,54 @@ export default class Main extends Phaser.Scene {
     this.rightThrow.visible = false;
 
     // Left Player Life Count
-    this.leftPlayerLife -= 1;
+    if(this.leftPlayerShield.visible === true){
+      this.leftPlayerShield.visible = false;
+    } else {
+      this.leftPlayerLife -= 1;
+      this.leftPlayer.anims.play('hurt', true)
+    }
 
-    if (this.leftPlayerLife == 2) {
+    if (this.leftPlayerLife === 2) {
       this.leftPlayerHealthBar.anims.play('redHealthBar2', true);
       console.log(this.leftPlayerLife);
     }
-    else if (this.leftPlayerLife == 1) {
+    else if (this.leftPlayerLife === 1) {
       this.leftPlayerHealthBar.anims.play('redHealthBar1', true);
       console.log(this.leftPlayerLife);
     }
-    else if (this.leftPlayerLife == 0) {
+    else if (this.leftPlayerLife <= 0) {
       this.leftPlayerHealthBar.anims.play('redHealthBar0', true);
       console.log(this.leftPlayerLife);
       this.rightPlayerWin();
+    }
+  }
+  // 아이템 함수들
+  rightPlayerGetShieldItem (){
+    // 오른 플레이어 쉴드 아이템 습득
+    if (this.shieldItem.visible === true) {
+      this.shieldItem.visible = false;
+      this.rightPlayerShield.visible = true;
+    }
+
+  }
+  leftPlayerGetShieldItem (){
+    // 오른 플레이어 쉴드 아이템 습득
+    if (this.shieldItem.visible === true) {
+      this.shieldItem.visible = false;
+      this.leftPlayerShield.visible = true;
+    }
+
+  }
+  leftPlayerGetWindDisableItem(){
+    if (this.windDisableItem.visible === true) {
+      this.windDisableItem.visible = false;
+      this.leftPlayerWindDisable.visible = true;
+    }
+  }
+  rightPlayerGetWindDisableItem(){
+    if (this.windDisableItem.visible === true) {
+      this.windDisableItem.visible = false;
+      this.rightPlayerWindDisable.visible = true;
     }
   }
 
