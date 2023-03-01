@@ -74,10 +74,10 @@ export default class Main extends Phaser.Scene {
     );
     //캐릭터 죽음
     this.load.spritesheet(
-        "knightDead",
-        "../assets/knight_dead.png",
-        { frameWidth: 256, frameHeight: 256 },
-        10
+      "knightDead",
+      "../assets/knight_dead.png",
+      { frameWidth: 256, frameHeight: 256 },
+      10
     );
 
     // 투사체 추가
@@ -92,7 +92,7 @@ export default class Main extends Phaser.Scene {
     this.load.image('angleLine', '../assets/angleLine.png')
 
     //배경화면
-    this.load.image('backGround','../assets/backgroundDungeon.png')
+    this.load.image('backGround', '../assets/backgroundDungeon.png')
 
     // 체력 바
     this.load.spritesheet(
@@ -104,21 +104,21 @@ export default class Main extends Phaser.Scene {
 
     // 바람 추가
     this.load.spritesheet(
-        "wind",
-        "../assets/wind.png",
-        { frameWidth: 512, frameHeight: 32 },
-        4
+      "wind",
+      "../assets/wind.png",
+      { frameWidth: 512, frameHeight: 32 },
+      4
     );
 
     // 바람 화살표 추가
-    this.load.image('windGuide','../assets/arrow.png')
+    this.load.image('windGuide', '../assets/arrow.png')
 
     //데미지 이펙트 추가
     this.load.spritesheet(
-        "damageEffect",
-        "../assets/damage.png",
-        { frameWidth: 458, frameHeight: 423 },
-        25
+      "damageEffect",
+      "../assets/damage.png",
+      { frameWidth: 458, frameHeight: 423 },
+      25
     );
 
   }
@@ -132,19 +132,19 @@ export default class Main extends Phaser.Scene {
 
   create() {
     //배경 삽입
-    this.bg = this.add.image(0,0,'backGround').setOrigin(0,0)
+    this.bg = this.add.image(0, 0, 'backGround').setOrigin(0, 0)
     this.bg.setDisplaySize(this.windowWidth, this.windowHeight);
 
     // 캐릭터 설정
     // 캐릭터 설정 Left
     this.leftPlayer = this.physics.add
-      .sprite(300, 500, "knight",16)
+      .sprite(300, 500, "knight", 16)
       .setScale(3);
     this.leftPlayer.setOffset(14, 60).setBodySize(45, 50, false);
 
     // 캐릭터 설정 Right
     this.rightPlayer = this.physics.add
-      .sprite(1500, 500, "knight",16)
+      .sprite(1500, 500, "knight", 16)
       .setScale(3)
       .toggleFlipX();
     this.rightPlayer.setOffset(69, 60).setBodySize(45, 50, false);
@@ -266,12 +266,12 @@ export default class Main extends Phaser.Scene {
     // this.leftPlayerHealthBar.setSize(10, 10);
     // 캐릭터 health bar 설정 Right
     this.rightPlayerHealthBar = this.add
-      .sprite(this.rightPlayer.x-100, this.rightPlayer.y - 300, "redHealthBar")
+      .sprite(this.rightPlayer.x - 100, this.rightPlayer.y - 300, "redHealthBar")
       .setScale(0.5)
       .setOrigin(0.5, 0.5);
     // this.rightPlayerHealthBar.setSize(10, 10);
     // 체력바 감소 애니메이션
-    
+
     this.anims.create({
       key: "redHealthBar2",
       frames: this.anims.generateFrameNumbers("redHealthBar", { start: 8, end: 7 }),
@@ -292,18 +292,18 @@ export default class Main extends Phaser.Scene {
       frameRate: 10,
       repeat: 0,
     });
-  //바람 만들기
+    //바람 만들기
     this.windBlowLeftToRight = this.add
-        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "wind" )
-        .setScale(5)
-        .setOrigin(0.5, 0.5)
+      .sprite((this.leftPlayer.x + this.rightPlayer.x) / 2, this.rightPlayer.y, "wind")
+      .setScale(5)
+      .setOrigin(0.5, 0.5)
     this.windBlowLeftToRight.visible = false;
 
     this.windBlowRightToLeft = this.add
-        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "wind" )
-        .setScale(5)
-        .setOrigin(0.5, 0.5)
-        .toggleFlipX()
+      .sprite((this.leftPlayer.x + this.rightPlayer.x) / 2, this.rightPlayer.y, "wind")
+      .setScale(5)
+      .setOrigin(0.5, 0.5)
+      .toggleFlipX()
     this.windBlowRightToLeft.visible = false;
     this.anims.create({
       key: "windBlow", //액션이름
@@ -313,26 +313,26 @@ export default class Main extends Phaser.Scene {
     });
 
     //바람 화살표
-    this.windGuide = this.add.image((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-300,'windGuide')
-        .setScale(0.5)
-        .setOrigin(0.5, 0.5);
+    this.windGuide = this.add.image((this.leftPlayer.x + this.rightPlayer.x) / 2, this.rightPlayer.y - 300, 'windGuide')
+      .setScale(0.5)
+      .setOrigin(0.5, 0.5);
 
     this.windText = this.add
-        .text((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y-200,
-            '',
-            { color: '#00acdc',fontSize : '48px'})
-        .setOrigin(0.5,0.5);
+      .text((this.leftPlayer.x + this.rightPlayer.x) / 2, this.rightPlayer.y - 200,
+        '',
+        { color: '#00acdc', fontSize: '48px' })
+      .setOrigin(0.5, 0.5);
 
     //데미지 이펙트
     this.damageEffectOnRight = this.add
-        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "damageEffect" )
-        .setScale(0.5)
-        .setOrigin(0.5, 0.5);
+      .sprite((this.leftPlayer.x + this.rightPlayer.x) / 2, this.rightPlayer.y, "damageEffect")
+      .setScale(0.5)
+      .setOrigin(0.5, 0.5);
     this.damageEffectOnRight.visible = false;
     this.damageEffectOnLeft = this.add
-        .sprite((this.leftPlayer.x +this.rightPlayer.x)/2, this.rightPlayer.y, "damageEffect" )
-        .setScale(0.5)
-        .setOrigin(0.5, 0.5);
+      .sprite((this.leftPlayer.x + this.rightPlayer.x) / 2, this.rightPlayer.y, "damageEffect")
+      .setScale(0.5)
+      .setOrigin(0.5, 0.5);
     this.damageEffectOnLeft.visible = false;
     this.anims.create({
       key: "damageEffectAct", //액션이름
@@ -356,16 +356,16 @@ export default class Main extends Phaser.Scene {
     this.leftGuildLine.angle = this.leftThrowAngle;
     this.rightGuildLine.angle = this.rightThrowAngle;
     this.windTimeAgain -= 1
-    console.log(this.windTimeAgain)
+    //console.log(this.windTimeAgain)
     if (this.windTimeAgain > 0) {
       console.log("work")
-      this.windTimeAgain = (Math.floor(Math.random()*(4-1))+1)*600
+      this.windTimeAgain = (Math.floor(Math.random() * (4 - 1)) + 1) * 600
       this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
       while (this.windSpeed === 0) {
         this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
       }
       console.log(this.windSpeed)
-      if(this.windSpeed > 0) {
+      if (this.windSpeed > 0) {
         this.windBlowLeftToRight.visible = true;
         this.windBlowLeftToRight.anims.play('windBlow', true);
         // if(this.windBlowLeftToRight && this.windBlowLeftToRight.duration) {
@@ -373,12 +373,12 @@ export default class Main extends Phaser.Scene {
           this.windBlowLeftToRight.visible = false;
         });
 
-      } else{
+      } else {
         this.windBlowRightToLeft.visible = true;
         this.windBlowRightToLeft.anims.play('windBlow', true);
         // if(this.windBlowRightToLeft && this.windBlowLeftToRight.duration) {
         this.windBlowRightToLeft.on("animationcomplete", () => {
-        this.windBlowRightToLeft.visible = false;
+          this.windBlowRightToLeft.visible = false;
         });
       }
     }
@@ -563,14 +563,14 @@ export default class Main extends Phaser.Scene {
 
   // Left Player 승리 시 호출
   leftPlayerWin() {
-    setTimeout(function() {
+    setTimeout(function () {
       alert("Left Player Win !!!");
     }, 1000);
   }
 
   // Right Player 승리 시 호출
   rightPlayerWin() {
-    setTimeout(function() {
+    setTimeout(function () {
       alert("Right Player Win !!!");
     }, 1000);
   }
