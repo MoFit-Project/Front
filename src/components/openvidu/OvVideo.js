@@ -14,7 +14,7 @@ import {
   sendSignalJumpingJacks,
 } from "../openvidu/OpenviduComponent";
 
-export default function OvVideo({ streamManager, userName, session }) {
+export default function OvVideo({ streamManager, userName, session, children }) {
   const videoRef = useRef(null);
   const detectorRef = useRef(null);
   const requestAnimeRef = useRef(null);
@@ -28,7 +28,7 @@ export default function OvVideo({ streamManager, userName, session }) {
   }, [streamManager]);
 
   useEffect(() => {
-    if (streamManager) initDetector();
+    //if (streamManager) initDetector();
 
     return () => {
       console.log(requestAnimeRef.current);
@@ -109,9 +109,9 @@ export default function OvVideo({ streamManager, userName, session }) {
               leftKnee &&
               rightKnee &&
               leftHip.score >= 0.7,
-            rightHip.score >= 0.7,
-            leftKnee >= 0.7,
-            rightKnee.score >= 0.7)
+              rightHip.score >= 0.7,
+              leftKnee >= 0.7,
+              rightKnee.score >= 0.7)
           ) {
             const leftHipAngle = leftCalculateAngle(
               leftHip,
