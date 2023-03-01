@@ -98,33 +98,33 @@ export default function SingleWebcam() {
                     // const leftElbow = pose[0].keypoints.find((k) => k.name === 'left_elbow');
                     // const leftShoulder = pose[0].keypoints.find((k) => k.name === 'left_shoulder');
                     // const leftWrist = pose[0].keypoints.find((k) => k.name === 'left_wrist');
-                    
+
                     // 점핑 잭
                     if (
-                            pose[0].keypoints[11] && pose[0].keypoints[5] && pose[0].keypoints[7] &&
-                            pose[0].keypoints[12]&& pose[0].keypoints[6]&& pose[0].keypoints[8] &&
-                            pose[0].keypoints[6]&& pose[0].keypoints[12]&& pose[0].keypoints[14]&&
-                            pose[0].keypoints[5]&& pose[0].keypoints[11]&& pose[0].keypoints[13]
-                        ) {
-                            const leftShoulderAngle = calculateAngle(pose[0].keypoints[7], pose[0].keypoints[5], pose[0].keypoints[11]);
-                            const rightShoulderAngle = calculateAngle(pose[0].keypoints[12], pose[0].keypoints[6], pose[0].keypoints[8]);
-                            const leftHipAngle = calculateAngle(pose[0].keypoints[6], pose[0].keypoints[12], pose[0].keypoints[14]);
-                            const rightHipAngle = calculateAngle(pose[0].keypoints[13], pose[0].keypoints[11], pose[0].keypoints[5]);
-                            // console.log("leftS"+leftShoulderAngle)
-                            // console.log("rightS"+rightShoulderAngle)
-                            // console.log("leftH"+leftHipAngle)
-                            // console.log("rightH"+rightHipAngle)
+                        pose[0].keypoints[11] && pose[0].keypoints[5] && pose[0].keypoints[7] &&
+                        pose[0].keypoints[12] && pose[0].keypoints[6] && pose[0].keypoints[8] &&
+                        pose[0].keypoints[6] && pose[0].keypoints[12] && pose[0].keypoints[14] &&
+                        pose[0].keypoints[5] && pose[0].keypoints[11] && pose[0].keypoints[13]
+                    ) {
+                        const leftShoulderAngle = calculateAngle(pose[0].keypoints[7], pose[0].keypoints[5], pose[0].keypoints[11]);
+                        const rightShoulderAngle = calculateAngle(pose[0].keypoints[12], pose[0].keypoints[6], pose[0].keypoints[8]);
+                        const leftHipAngle = calculateAngle(pose[0].keypoints[6], pose[0].keypoints[12], pose[0].keypoints[14]);
+                        const rightHipAngle = calculateAngle(pose[0].keypoints[13], pose[0].keypoints[11], pose[0].keypoints[5]);
+                        // console.log("leftS"+leftShoulderAngle)
+                        // console.log("rightS"+rightShoulderAngle)
+                        // console.log("leftH"+leftHipAngle)
+                        // console.log("rightH"+rightHipAngle)
 
-                            // Classify "jumping jack" movement based on angles
-                            if (jumpingJack ===false && leftShoulderAngle > 90 && rightShoulderAngle > 90 && leftHipAngle > 195 && rightHipAngle > 195) {
-                                jumpingJack = true
-                                // console.log('Jumping Jacks detected!');
-                                // console.log(jumpingJack);
-                                
-                            } else if (leftShoulderAngle < 30 && rightShoulderAngle < 30 && leftHipAngle < 195 && rightHipAngle < 195 && jumpingJack ) {
-                                // console.log('Stand detected!');
-                                jumpingJack = false
-                            }
+                        // Classify "jumping jack" movement based on angles
+                        if (jumpingJack === false && leftShoulderAngle > 90 && rightShoulderAngle > 90 && leftHipAngle > 195 && rightHipAngle > 195) {
+                            jumpingJack = true
+                            // console.log('Jumping Jacks detected!');
+                            // console.log(jumpingJack);
+
+                        } else if (leftShoulderAngle < 30 && rightShoulderAngle < 30 && leftHipAngle < 195 && rightHipAngle < 195 && jumpingJack) {
+                            // console.log('Stand detected!');
+                            jumpingJack = false
+                        }
                     }
 
 
@@ -146,7 +146,7 @@ export default function SingleWebcam() {
                         if (leftHipFoot > 200 && rightHipFoot < 190 && run) {
                             console.log("제자리뛰기 왼다리");
                             run = false;
-                        } else if (rightHipFoot > 200 && leftHipFoot < 190&& !run) {
+                        } else if (rightHipFoot > 200 && leftHipFoot < 190 && !run) {
                             console.log("제자리뛰기 오른다리");
                             run = true;
                         }

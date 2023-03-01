@@ -9,12 +9,16 @@ import {
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
 import * as tf from "@tensorflow/tfjs-core";
+import {
+  sendSignalThrow,
+  sendSignalJumpingJacks,
+} from "../openvidu/OpenviduComponent";
 
-export default function OvVideo({ streamManager, userName }) {
+export default function OvVideo({ streamManager, userName, session }) {
   const videoRef = useRef(null);
-  const [detector, setDetector] = useState(null);
-
-  //const [detector, setDetector] = useState(null);
+  const detectorRef = useRef(null);
+  const requestAnimeRef = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   //const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
   //console.log(isRoomHost);
   useEffect(() => {
@@ -22,34 +26,55 @@ export default function OvVideo({ streamManager, userName }) {
       streamManager.addVideoElement(videoRef.current);
     }
   }, [streamManager]);
+
   useEffect(() => {
-    initDetector();
+    if (streamManager) initDetector();
+
+    return () => {
+      console.log(requestAnimeRef.current);
+      console.log(detectorRef.current);
+      if (requestAnimeRef.current && detectorRef.current) {
+        console.log(requestAnimeRef.current);
+        console.log(detectorRef.current);
+
+        cancelAnimationFrame(requestAnimeRef.current);
+        detectorRef.current.dispose();
+        setIsLoaded(false);
+      }
+    };
   }, []);
+
   useEffect(() => {
-    if (detector && videoRef.current) {
-      detectSquat();
+    if (isLoaded) {
+      if (detectorRef.current && videoRef.current) {
+        console.log("detectSquat");
+        detectSquat();
+      }
     }
-  }, [detector]);
+  }, [isLoaded]);
 
   async function initDetector() {
     //await tf.setBackend('webgl');
-    const newDetector = await poseDetection.createDetector(
-      poseDetection.SupportedModels.MoveNet,
-      { modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING }
-    );
-    setDetector(newDetector);
+    await poseDetection
+      .createDetector(poseDetection.SupportedModels.MoveNet, {
+        modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
+      })
+      .then((newDetector) => {
+        detectorRef.current = newDetector;
+        setIsLoaded(true);
+      });
   }
   let jumpingJack = false;
   let run = false;
   async function detectSquat() {
-    if (detector) {
+    if (detectorRef.current) {
       try {
         let video = videoRef.current;
         const { videoWidth, videoHeight } = video;
         video.width = videoWidth;
         video.height = videoHeight;
 
-        const pose = await detector.estimatePoses(video);
+        const pose = await detectorRef.current.estimatePoses(video);
         if (pose && pose.length > 0) {
           const leftHip = pose[0].keypoints.find((k) => k.name === "left_hip");
           const rightHip = pose[0].keypoints.find(
@@ -104,6 +129,7 @@ export default function OvVideo({ streamManager, userName }) {
             // Detect squat by checking if the average knee angle is below 90 degrees.
             if (leftHipAngle < 120 && rightHipAngle < 120) {
               console.log("squat");
+              if (session) sendSignalThrow(session);
             }
           }
 
@@ -156,7 +182,8 @@ export default function OvVideo({ streamManager, userName }) {
               rightHipAngle > 195
             ) {
               jumpingJack = true;
-              console.log('Jumping Jacks detected!');
+              console.log("Jumping Jacks detected!");
+              if (session) sendSignalJumpingJacks(session);
               // console.log(jumpingJack);
             } else if (
               leftShoulderAngle < 30 &&
@@ -165,53 +192,53 @@ export default function OvVideo({ streamManager, userName }) {
               rightHipAngle < 195 &&
               jumpingJack
             ) {
-              console.log('Stand detected!');
+              console.log("Stand detected!");
               jumpingJack = false;
             }
           }
 
           // 제자리 달리기 테스트
-        //   if (
-        //     pose[0].keypoints[12] &&
-        //     pose[0].keypoints[14] &&
-        //     pose[0].keypoints[16] &&
-        //     pose[0].keypoints[11] &&
-        //     pose[0].keypoints[13] &&
-        //     pose[0].keypoints[15]
-        //   ) {
-        //     // const leftShoulderKnee = calculateAngle(pose[0].keypoints[6], pose[0].keypoints[12], pose[0].keypoints[14]);
-        //     // const rightShoulderKnee = calculateAngle(pose[0].keypoints[12], pose[0].keypoints[6], pose[0].keypoints[8]);
-        //     const leftHipFoot = calculateAngle(
-        //       pose[0].keypoints[11],
-        //       pose[0].keypoints[13],
-        //       pose[0].keypoints[15]
-        //     );
-        //     const rightHipFoot = calculateAngle(
-        //       pose[0].keypoints[16],
-        //       pose[0].keypoints[14],
-        //       pose[0].keypoints[12]
-        //     );
-        //     // console.log(rightHipFoot);
-        //     // console.log("rightS"+rightShoulderAngle)
-        //     // console.log("leftH"+leftHipAngle)
-        //     // console.log("rightH"+rightHipAngle)
+          //   if (
+          //     pose[0].keypoints[12] &&
+          //     pose[0].keypoints[14] &&
+          //     pose[0].keypoints[16] &&
+          //     pose[0].keypoints[11] &&
+          //     pose[0].keypoints[13] &&
+          //     pose[0].keypoints[15]
+          //   ) {
+          //     // const leftShoulderKnee = calculateAngle(pose[0].keypoints[6], pose[0].keypoints[12], pose[0].keypoints[14]);
+          //     // const rightShoulderKnee = calculateAngle(pose[0].keypoints[12], pose[0].keypoints[6], pose[0].keypoints[8]);
+          //     const leftHipFoot = calculateAngle(
+          //       pose[0].keypoints[11],
+          //       pose[0].keypoints[13],
+          //       pose[0].keypoints[15]
+          //     );
+          //     const rightHipFoot = calculateAngle(
+          //       pose[0].keypoints[16],
+          //       pose[0].keypoints[14],
+          //       pose[0].keypoints[12]
+          //     );
+          //     // console.log(rightHipFoot);
+          //     // console.log("rightS"+rightShoulderAngle)
+          //     // console.log("leftH"+leftHipAngle)
+          //     // console.log("rightH"+rightHipAngle)
 
-        //     // Classify "jumping jack" movement based on angles
-        //     if (leftHipFoot > 200 && rightHipFoot < 190 && run) {
-        //       console.log("제자리뛰기 왼다리");
-        //       run = false;
-        //     } else if (rightHipFoot > 200 && leftHipFoot < 190 && !run) {
-        //       console.log("제자리뛰기 오른다리");
-        //       run = true;
-        //     }
-        //   }
+          //     // Classify "jumping jack" movement based on angles
+          //     if (leftHipFoot > 200 && rightHipFoot < 190 && run) {
+          //       console.log("제자리뛰기 왼다리");
+          //       run = false;
+          //     } else if (rightHipFoot > 200 && leftHipFoot < 190 && !run) {
+          //       console.log("제자리뛰기 오른다리");
+          //       run = true;
+          //     }
+          //   }
         }
       } catch (e) {
-        detector.dispose();
+        detectorRef.current.dispose();
         console.log(e);
       }
     }
-    requestAnimationFrame(detectSquat);
+    requestAnimeRef.current = requestAnimationFrame(detectSquat);
   }
 
   return <video autoPlay={true} ref={videoRef} />;

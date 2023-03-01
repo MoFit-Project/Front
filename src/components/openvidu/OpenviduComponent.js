@@ -5,15 +5,52 @@ import { getToken } from '../../../public/createToken.js';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
+import SubVideo from './SubVideo';
+
+export let isLeftPlayerThrow = false;
+export let isLeftPlayerMoveGuildLine = false;
+export let isRightPlayerThrow = false;
+export let isRightPlayerMoveGuildLine = false;
+
+export function sendSignalThrow(session) {
+    console.log(session);
+    if (session) {
+        session.signal({
+            data: `${localStorage.getItem('username')}`,  // Any string (optional)
+            to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: 'throw'             // The type of message (optional)
+        })
+            .then(() => {
+                console.log('Message successfully sent');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+}
+
+export function sendSignalJumpingJacks(session) {
+    if (session) {
+        session.signal({
+            data: `${localStorage.getItem('username')}`,  // Any string (optional)
+            to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: 'jumpingJacks'             // The type of message (optional)
+        })
+            .then(() => {
+                console.log('Message successfully sent');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+}
+
 
 export default function OpenViduComponent({ roomName, userName, jwtToken }) {
 
     // 1) OV 오브젝트 생성
     const [OV, setOV] = useState(null);
-    const [mySessionId, setMySessionId] = useState(roomName);
-    const [myUserName, setMyUserName] = useState(userName);
     const [session, setSession] = useState(undefined);
-    const [mainStreamManager, setMainStreamManager] = useState(undefined);
     const [publisher, setPublisher] = useState(undefined);
     const [subscribers, setSubscribers] = useState([]);
 
@@ -21,12 +58,9 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
 
-
     useEffect(() => {
-        window.addEventListener('beforeunload', onbeforeunload);
         joinSession();
         return () => {
-            window.removeEventListener('beforeunload', onbeforeunload);
             leaveSession();
         };
     }, []);
@@ -39,15 +73,11 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
     const deleteSubscriber = (streamManager) => {
         let newSubscribers = [...subscribers];
         setSubscribers(newSubscribers.filter((v) => v !== streamManager))
-        // let index = newSubscribers.indexOf(streamManager, 0);
-        // if (index > -1) {
-        //     newSubscribers.splice(index, 1);
-        //     setSubscribers(newSubscribers)
-        // }
     }
 
     const leaveSession = () => {
         const mySession = session;
+
         if (mySession) {
             mySession.disconnect();
         }
@@ -55,21 +85,20 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         setOV(null);
         setSession(undefined);
         setSubscribers([]);
-        setMainStreamManager(undefined);
         setPublisher(undefined);
         router.push(`/room`);
     }
 
+    // 세션이 생성 됐을 때,
     useEffect(() => {
         if (session !== undefined) {
             let mySession = session;
 
-            mySession.on('streamCreated', (event) => {
-                // Subscribe to the Stream to receive it. Second parameter is undefined
-                // so OpenVidu doesn't create an HTML video by its own
-                var newsubscriber = mySession.subscribe(event.stream, undefined);
 
-                // Update the state with the new subscribers
+            window.addEventListener('keydown', sendSignalThrow);
+
+            mySession.on('streamCreated', (event) => {
+                var newsubscriber = mySession.subscribe(event.stream, undefined);
                 setSubscribers((curr) => [...curr, newsubscriber]);
             });
 
@@ -77,26 +106,44 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 console.log(event.connection);
             })
 
-            // On every Stream destroyed...
             mySession.on('streamDestroyed', (event) => {
-                // Remove the stream from 'subscribers' array
-
-                if (!isRoomHost.isHost) {
-                    leaveSession();
-                }
+                // if (!isRoomHost.isHost) {
+                //     leaveSession();
+                // }
                 deleteSubscriber(event.stream.streamManager);
             });
 
             // On every asynchronous exception...
-            mySession.on('signal:attack_1', (event) => {
-                console.log(event.data); // Message
-                //console.log(event.from); // Connection object of the sender
-                console.log(event.type); // The type of message
+            mySession.on('signal:throw', (event) => {
+                if (event.data === localStorage.getItem('username')) {
+                    console.log('my character attack throw !!!');
+                    isLeftPlayerThrow = true;
+                    setTimeout(function () {
+                        isLeftPlayerThrow = false;
+                    }, 100);
+                } else {
+                    console.log('enemy character attack throw !!!');
+                    isRightPlayerThrow = true;
+                    setTimeout(function () {
+                        isRightPlayerThrow = false;
+                    }, 100);
+                }
             });
-            mySession.on('signal:attack_2', (event) => {
-                console.log(event.data); // Message
-                //console.log(event.from); // Connection object of the sender
-                console.log(event.type); // The type of message
+
+            mySession.on('signal:jumpingJacks', (event) => {
+                if (event.data === localStorage.getItem('username')) {
+                    console.log('my character jumping jacks !!!');
+                    isLeftPlayerMoveGuildLine = true;
+                    setTimeout(function () {
+                        isLeftPlayerMoveGuildLine = false;
+                    }, 100);
+                } else {
+                    console.log('enemy character attack jumping jacks !!!');
+                    isRightPlayerMoveGuildLine = true;
+                    setTimeout(function () {
+                        isRightPlayerMoveGuildLine = false;
+                    }, 100);
+                }
             });
 
             // On every asynchronous exception...
@@ -104,17 +151,10 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 console.warn(exception);
             });
 
-
-
-            getToken(mySessionId, jwtToken).then((token) => {
-                // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-                // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-                mySession.connect(token, { clientData: myUserName })
+            getToken(roomName, jwtToken).then((token) => {
+                mySession.connect(token, { clientData: userName })
                     .then(async () => {
-                        // --- 5) Get your own camera stream ---
 
-                        // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-                        // element: we will manage it on our own) and with the desired properties
                         let publisher = await OV.initPublisherAsync(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
@@ -126,19 +166,14 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                             mirror: false, // Whether to mirror your local video or not
                         });
 
-                        // --- 6) Publish your stream ---
-
                         mySession.publish(publisher);
 
-                        // Obtain the current video device in use
                         var devices = await OV.getDevices();
                         var videoDevices = devices.filter(device => device.kind === 'videoinput');
                         var currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
                         var currentVideoDevice = videoDevices.find(device => device.deviceId === currentVideoDeviceId);
 
-                        // Set the main video in the page to display our webcam and store our Publisher
                         currentVideoDeviceRef.current = currentVideoDevice;
-                        setMainStreamManager(publisher);
                         setPublisher(publisher);
                     })
                     .catch((error) => {
@@ -158,44 +193,11 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
         setSession(newOV.initSession());
     }
 
-    function sendSignalAttack1() {
-        if (session) {
-            session.signal({
-                data: '도윤아 안녕?',  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'attack_1'             // The type of message (optional)
-            })
-                .then(() => {
-                    console.log('Message successfully sent');
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-
-    }
-
-    function sendSignalAttack2() {
-        if (session) {
-            session.signal({
-                data: '주홍아 안녕?',  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'attack_2'             // The type of message (optional)
-            })
-                .then(() => {
-                    console.log('Message successfully sent');
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-
-    }
+    
 
     return (
 
         <div className='h-screen'>
-
             <div className='flex justify-center' style={{ border: 'solid black' }}>
                 <h1 id="session-title">{roomName}</h1>
                 <button
@@ -207,20 +209,20 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                 </button>
             </div>
             <div>
-                <button onClick={() => { sendSignalAttack1() }}>
+                <button onClick={() => { sendSignalThrow() }}>
                     공격 1
                 </button>
 
-                <button onClick={() => { sendSignalAttack2() }}>
+                <button onClick={() => { sendSignalJumpingJacks() }}>
                     공격 2
                 </button>
             </div>
             <div className="flex justify-center">
                 {session !== undefined ? (
                     <div id="session" className='flex'>
-                        {mainStreamManager !== undefined ? (
+                        {publisher !== undefined ? (
                             <div id="main-video" className="col-md-6">
-                                <OvVideo streamManager={mainStreamManager} userName={userName} />
+                                <OvVideo streamManager={publisher} userName={userName} session={session}/>
                             </div>
                         ) : <div role="status">
                             <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -233,7 +235,7 @@ export default function OpenViduComponent({ roomName, userName, jwtToken }) {
                         <div id="sub-video" className="col-md-6">
                             {subscribers.map((sub, i) => (
                                 <div key={i} className="stream-container col-md-6 col-xs-6">
-                                    <OvVideo streamManager={sub} />
+                                    <SubVideo streamManager={sub} />
                                 </div>
                             ))}
                         </div>

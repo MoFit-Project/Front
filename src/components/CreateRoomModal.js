@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -93,6 +93,7 @@ function CreateRoomModal({ isOpen, onClose }) {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
                 onClick={onClose}
+
               >
                 닫기
               </button>
