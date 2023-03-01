@@ -35,9 +35,9 @@ export default function Login() {
 
             Cookies.set("token", response.data.token.access_token);
             Cookies.set("refresh", response.data.token.refresh_token);
-
             setIsLoginFail(false);
             window.localStorage.setItem('username', username);
+
             router.push("/");
 
         } catch (error) {
