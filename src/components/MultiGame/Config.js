@@ -434,7 +434,9 @@ export default class Main extends Phaser.Scene {
     //아이템 생성
     if (this.itemCreate < 0) {
 
-      this.itemCreate = (Math.floor(Math.random()*(4-1))+1)*60
+      this.itemCreate = (Math.floor(Math.random()*(4-1))+1)*600
+      this.rightPlayerWindDisable.visible = false;
+      this.leftPlayerWindDisable.visible =false;
       if (!this.shieldItem.visible && !this.windDisableItem.visible) {
         const randomItem = Math.floor(Math.floor(Math.random() * (3 - 1)) + 1)
         if (randomItem === 1) {
@@ -462,7 +464,7 @@ export default class Main extends Phaser.Scene {
       this.shieldItem.y += 1
     }
     //바람 생성
-    if (this.windTimeAgain > 0) {
+    if (this.windTimeAgain < 0) {
 
       this.windTimeAgain = (Math.floor(Math.random()*(4-1))+1)*600
       this.windSpeed = Math.floor((Math.floor(Math.random() * (6 - 1)) + 1) * (Math.random() - 0.5) * 200)
