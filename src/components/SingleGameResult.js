@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Result(props) {
-  const [names] = useState(["Alice", "John"]);
-  const [scores] = useState([100, 200]);
+  const [names] = useState(props.names);
+  const [results] = useState(props.results);
 
-  
   const handleClick = async () => {
     try {
       const response = await axios.post('/mofit/result', {
@@ -28,8 +27,12 @@ export default function Result(props) {
           <div className="flex justify-between items-center mb-4" key={index}>
             <span className="text-gray-700">ID:</span>
             <span className="text-gray-900 font-bold">{name}</span>
-            <span className="text-gray-700">SCORE:</span>
-            <span className="text-gray-900 font-bold">{scores[index]}</span>
+            <span className="text-gray-700">Result:</span>
+            <span className="text-gray-900 font-bold">{results[index]}</span>
+            {/* <span className={`text-gray-900 font-bold ${results[index] ? "text-green-500" : "text-red-500"}`}>
+              {results[index] ? "Win" : "Lose"}
+            </span> */}
+            
           </div>
         ))}
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded btn-1" onClick={handleClick}>

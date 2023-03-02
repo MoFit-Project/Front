@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import { OpenVidu } from 'openvidu-browser';
-import OvVideo from './OvVideo';
-import { getToken } from '../../../public/createToken.js';
-import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useState, useEffect, useRef } from "react";
+import { OpenVidu } from "openvidu-browser";
+import OvVideo from "./OvVideo";
+import { getToken } from "../../../public/createToken.js";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
-import SubVideo from './SubVideo';
-import Loading from '../Loading';
+import SubVideo from "./SubVideo";
+import Loading from "../Loading";
 
 
 export let isLeftPlayerThrow = false;
@@ -17,15 +17,16 @@ export let isRightPlayerMoveGuildLine = false;
 export function sendSignalThrow(session) {
     console.log(session);
     if (session) {
-        session.signal({
-            data: `${localStorage.getItem('username')}`,  // Any string (optional)
-            to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-            type: 'throw'             // The type of message (optional)
-        })
-            .then(() => {
-                console.log('Message successfully sent');
+        session
+            .signal({
+                data: `${localStorage.getItem("username")}`, // Any string (optional)
+                to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: "throw", // The type of message (optional)
             })
-            .catch(error => {
+            .then(() => {
+                console.log("Message successfully sent");
+            })
+            .catch((error) => {
                 console.error(error);
             });
     }
@@ -33,23 +34,27 @@ export function sendSignalThrow(session) {
 
 export function sendSignalJumpingJacks(session) {
     if (session) {
-        session.signal({
-            data: `${localStorage.getItem('username')}`,  // Any string (optional)
-            to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-            type: 'jumpingJacks'             // The type of message (optional)
-        })
-            .then(() => {
-                console.log('Message successfully sent');
+        session
+            .signal({
+                data: `${localStorage.getItem("username")}`, // Any string (optional)
+                to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: "jumpingJacks", // The type of message (optional)
             })
-            .catch(error => {
+            .then(() => {
+                console.log("Message successfully sent");
+            })
+            .catch((error) => {
                 console.error(error);
             });
     }
 }
 
-
-export default function OpenViduComponent({ roomName, userName, jwtToken, children }) {
-
+export default function OpenViduComponent({
+    roomName,
+    userName,
+    jwtToken,
+    children,
+}) {
     // 1) OV 오브젝트 생성
     const [OV, setOV] = useState(null);
     const [session, setSession] = useState(undefined);
@@ -67,15 +72,13 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
         };
     }, []);
 
-
     const onbeforeunload = (event) => {
         leaveSession();
     };
 
     const deleteSubscriber = (streamManager) => {
-        let newSubscribers = [...subscribers];
-        setSubscribers(newSubscribers.filter((v) => v !== streamManager))
-    }
+        setSubscribers((current) => current.filter((v) => v !== streamManager));
+    };
 
     const leaveSession = () => {
         const mySession = session;
@@ -89,26 +92,25 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
         setSubscribers([]);
         setPublisher(undefined);
         router.push(`/room`);
-    }
+    };
 
     // 세션이 생성 됐을 때,
     useEffect(() => {
         if (session !== undefined) {
             let mySession = session;
 
-
             // window.addEventListener('keydown', sendSignalThrow);
 
-            mySession.on('streamCreated', (event) => {
+            mySession.on("streamCreated", (event) => {
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
                 setSubscribers((curr) => [...curr, newsubscriber]);
             });
 
-            mySession.on('connectionCreated', (event) => {
+            mySession.on("connectionCreated", (event) => {
                 console.log(event.connection);
-            })
+            });
 
-            mySession.on('streamDestroyed', (event) => {
+            mySession.on("streamDestroyed", (event) => {
                 // if (!isRoomHost.isHost) {
                 //     leaveSession();
                 // }
@@ -116,15 +118,15 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
             });
 
             // On every asynchronous exception...
-            mySession.on('signal:throw', (event) => {
-                if (event.data === localStorage.getItem('username')) {
-                    console.log('my character attack throw !!!');
+            mySession.on("signal:throw", (event) => {
+                if (event.data === localStorage.getItem("username")) {
+                    console.log("my character attack throw !!!");
                     isLeftPlayerThrow = true;
                     setTimeout(function () {
                         isLeftPlayerThrow = false;
                     }, 100);
                 } else {
-                    console.log('enemy character attack throw !!!');
+                    console.log("enemy character attack throw !!!");
                     isRightPlayerThrow = true;
                     setTimeout(function () {
                         isRightPlayerThrow = false;
@@ -132,15 +134,15 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
                 }
             });
 
-            mySession.on('signal:jumpingJacks', (event) => {
-                if (event.data === localStorage.getItem('username')) {
-                    console.log('my character jumping jacks !!!');
+            mySession.on("signal:jumpingJacks", (event) => {
+                if (event.data === localStorage.getItem("username")) {
+                    console.log("my character jumping jacks !!!");
                     isLeftPlayerMoveGuildLine = true;
                     setTimeout(function () {
                         isLeftPlayerMoveGuildLine = false;
                     }, 100);
                 } else {
-                    console.log('enemy character attack jumping jacks !!!');
+                    console.log("enemy character attack jumping jacks !!!");
                     isRightPlayerMoveGuildLine = true;
                     setTimeout(function () {
                         isRightPlayerMoveGuildLine = false;
@@ -149,40 +151,50 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
             });
 
             // On every asynchronous exception...
-            mySession.on('exception', (exception) => {
+            mySession.on("exception", (exception) => {
                 console.warn(exception);
             });
 
             getToken(roomName, jwtToken).then((token) => {
-                mySession.connect(token, { clientData: userName })
+                mySession
+                    .connect(token, { clientData: userName })
                     .then(async () => {
-
                         let publisher = await OV.initPublisherAsync(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: '320x480', // The resolution of your video
+                            resolution: "320x480", // The resolution of your video
                             frameRate: 30, // The frame rate of your video
-                            insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+                            insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
                         });
 
                         mySession.publish(publisher);
 
                         var devices = await OV.getDevices();
-                        var videoDevices = devices.filter(device => device.kind === 'videoinput');
-                        var currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
-                        var currentVideoDevice = videoDevices.find(device => device.deviceId === currentVideoDeviceId);
+                        var videoDevices = devices.filter(
+                            (device) => device.kind === "videoinput"
+                        );
+                        var currentVideoDeviceId = publisher.stream
+                            .getMediaStream()
+                            .getVideoTracks()[0]
+                            .getSettings().deviceId;
+                        var currentVideoDevice = videoDevices.find(
+                            (device) => device.deviceId === currentVideoDeviceId
+                        );
 
                         currentVideoDeviceRef.current = currentVideoDevice;
                         setPublisher(publisher);
                     })
                     .catch((error) => {
-                        console.log('There was an error connecting to the session:', error.code, error.message);
+                        console.log(
+                            "There was an error connecting to the session:",
+                            error.code,
+                            error.message
+                        );
                     });
             });
-
         }
     }, [session]);
 
@@ -193,58 +205,49 @@ export default function OpenViduComponent({ roomName, userName, jwtToken, childr
 
         // 2) session 초기화 -> useEffect 호출
         setSession(newOV.initSession());
-    }
-
-
+    };
 
     return (
-
-        <div className='w-screen'>
-            <div className='flex justify-center' style={{ border: 'solid black' }}>
+        <div className="w-screen">
+            <div className="flex justify-center" style={{ border: "solid black" }}>
                 <h1 id="session-title">{roomName}</h1>
-                <button
-                    className=""
-                    id="buttonLeaveSession"
-                    onClick={leaveSession}
-                >
+                <button className="" id="buttonLeaveSession" onClick={leaveSession}>
                     방 나가기
                 </button>
             </div>
-            <div className="flex justify-center" >
-                <div style={{
+            {session && publisher !== undefined ? (
+                <div id="session" style={{
                     position: 'relative'
                 }}>
-                    {session !== undefined ? (
-                        <div id="session">
-                            <div style={{
-                                position: 'absolute',
-                                top: '0px',
-                                left: '0px'
-                            }}>
-                                {publisher !== undefined ? (
-                                    <div id="main-video" className="col-md-6">
-                                        <OvVideo streamManager={publisher} userName={userName} session={session} />
-                                    </div>
-                                ) : <Loading />}
-                            </div>
-                            <div id="sub-video" style={{
-                                position: 'absolute',
-                                top: '0px',
-                                right: '0px'
-                            }}>
-                                {subscribers.map((sub, i) => (
-                                    <div key={i} className="stream-container col-md-6 col-xs-6">
-                                        <SubVideo streamManager={sub} />
-                                    </div>
-                                ))}
-                            </div>
+                    {publisher !== undefined ? (
+                        <div id="main-video" style={{
+                            position: 'absolute',
+                            top: '0px',
+                            left: '0px'
+                        }}>
+                            <OvVideo
+                                streamManager={publisher}
+                                userName={userName}
+                                session={session}
+                            />
                         </div>
-                    ) : null}
-                    <div className='w-screen'>
+                    ) : (
+                        <Loading />
+                    )}
+                    <div id="game_div">
                         {children}
                     </div>
+                    {subscribers.map((sub, i) => (
+                        <div key={i} style={{
+                            position: 'absolute',
+                            top: '0px',
+                            right: '0px',
+                        }}>
+                            <SubVideo streamManager={sub} />
+                        </div>
+                    ))}
                 </div>
-            </div>
+            ) : null}
         </div >
     );
-} 
+}

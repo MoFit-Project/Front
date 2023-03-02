@@ -1,11 +1,15 @@
 import Main from './Config';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'phaser';
 
 export default function Index() {
-
+  const gameRef = useRef(null);
   useEffect(() => {
     loadGame();
+    return (() => {
+      if (gameRef.current)
+        gameRef.current.destroy();
+    })
   }, []);
 
   const loadGame = async () => {
@@ -14,15 +18,19 @@ export default function Index() {
     }
 
     const config = {
-      type: Phaser.AUTO,
-      width: window.innerWidth,
-      height: window.innerHeight,
+      // type: Phaser.Scale.FIT,
+
       // width: window.innerWidth * window.devicePixelRatio,
       // height: window.innerHeight * window.devicePixelRatio,
-      backgroundColor: '#FFFFFF',
-      // scale: {
-      //   mode: Phaser.Scale.Fit
-      // },
+      // backgroundColor: '#FFFFFF',
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        parent: "game-container",
+        width: 1600,
+        height: 1200,
+        zoom: Phaser.Scale.MAX_ZOOM
+      },
       physics: {
         default: 'arcade',
         arcade: {
@@ -32,11 +40,13 @@ export default function Index() {
       }
     };
 
-    const game = new Phaser.Game(config);
+    // const game = new Phaser.Game(config);
+    gameRef.current = new Phaser.Game(config);
 
-    game.scene.add('main', Main);
-    game.scene.start('main');
+    gameRef.current.scene.add('main', Main);
+    gameRef.current.scene.start('main');
+    gameRef.current.scale.setMaxZoom();
   };
 
-  return;
+  return null;
 }
