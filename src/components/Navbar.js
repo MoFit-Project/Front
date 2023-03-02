@@ -5,7 +5,6 @@ import LogoutButton from "./LogoutButton";
 export default function NavBar({ children }) {
   return (
     <>
-
       <nav className='bg-blue-700 p-2'>
         <div className="flex items-center justify-between mx-auto w-8/12">
           <div className="flex items-center flex-shrink-0 text-white ml-4">

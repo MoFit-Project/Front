@@ -42,12 +42,7 @@ export default function SignupForm() {
       </div>
       <div className="max-w-md mx-auto w-full">
         <Link href="/login">
-          <img
-            className="mx-auto h-12 w-auto"
-            src="https://cdn-icons-png.flaticon.com/512/7420/7420915.png"
-            alt="Your Company"
-          ></img>
-          <h1 className="text-4xl font-bold text-center text-green-800">
+          <h1 className="text-7xl font-bold text-center text-blue-800">
             Mofit
           </h1>
         </Link>
@@ -75,7 +70,7 @@ export default function SignupForm() {
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="w-full bg-blue-800 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               가입하기
             </button>

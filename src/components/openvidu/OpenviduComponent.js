@@ -7,12 +7,17 @@ import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import SubVideo from "./SubVideo";
 import Loading from "../Loading";
+import dynamic from 'next/dynamic'
 
 
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
 export let isRightPlayerThrow = false;
 export let isRightPlayerMoveGuildLine = false;
+const DynamicComponentWithNoSSR = dynamic(
+    () => import('../MultiGame/Index'),
+    { ssr: false }
+)
 
 export function sendSignalThrow(session) {
     console.log(session);
@@ -55,6 +60,28 @@ export default function OpenViduComponent({
     jwtToken,
     children,
 }) {
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+    }, []);
+    const [height, setHeight] = useState(0);
+
+    useEffect(() => {
+        function handleResize() {
+            setHeight(window.innerHeight);
+        }
+
+        handleResize(); // 초기화
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+
+
+
     // 1) OV 오브젝트 생성
     const [OV, setOV] = useState(null);
     const [session, setSession] = useState(undefined);
@@ -164,7 +191,7 @@ export default function OpenViduComponent({
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "320x480", // The resolution of your video
+                            resolution: "580x800", // The resolution of your video
                             frameRate: 30, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
@@ -215,39 +242,39 @@ export default function OpenViduComponent({
                     방 나가기
                 </button>
             </div>
-            {session && publisher !== undefined ? (
-                <div id="session" style={{
-                    position: 'relative'
-                }}>
-                    {publisher !== undefined ? (
-                        <div id="main-video" style={{
-                            position: 'absolute',
-                            top: '0px',
-                            left: '0px'
-                        }}>
-                            <OvVideo
-                                streamManager={publisher}
-                                userName={userName}
-                                session={session}
-                            />
+
+            <div style={{ display: 'flex' }}>
+                <div style={{ flex: 1 }}>
+                    {session && publisher !== undefined ? (
+                        <div id="session" style={{ position: 'relative' }}>
+                            {publisher !== undefined ? (
+                                <div id="main-video" style={{ top: '0px', left: '0px' }}>
+                                    <OvVideo
+                                        streamManager={publisher}
+                                        userName={userName}
+                                        session={session}
+                                    />
+                                </div>
+                            ) : (
+                                <Loading />
+                            )}
                         </div>
-                    ) : (
-                        <Loading />
-                    )}
-                    <div id="game_div">
-                        {children}
-                    </div>
+                    ) : null}
+                </div>
+
+                <div id="game-container" style={{ flex: 3, display: 'flex', justifyContent: 'center' }}>
+                    {loading ? <DynamicComponentWithNoSSR /> : null}
+                </div>
+
+                <div style={{ flex: 1 }}>
                     {subscribers.map((sub, i) => (
-                        <div key={i} style={{
-                            position: 'absolute',
-                            top: '0px',
-                            right: '0px',
-                        }}>
+                        <div key={i} style={{ top: '0px', right: '0px' }}>
                             <SubVideo streamManager={sub} />
                         </div>
                     ))}
                 </div>
-            ) : null}
-        </div >
+            </div>
+        </div>
+
     );
 }
