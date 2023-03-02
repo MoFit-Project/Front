@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Background from "../components/Background";
 import LoginButton from "../components/login/LoginButton";
+import SignupButton from "../components/login/SignupButton";
 
 export default function Login() {
 
@@ -16,9 +17,6 @@ export default function Login() {
 
     const checkIfLoggedIn = () => {
         const token = Cookies.get("token");
-        if (token) {
-            router.push("/");
-        }
     };
 
     useEffect(() => {
@@ -27,7 +25,7 @@ export default function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        router.push("/");
+        // router.push("/");
 
         try {
             const response = await axios.post(API_URL + "/login", {
@@ -40,6 +38,8 @@ export default function Login() {
 
             setIsLoginFail(false);
             window.localStorage.setItem('username', username);
+
+            await router.push("/");
 
         } catch (error) {
             const { response } = error;
@@ -61,6 +61,8 @@ export default function Login() {
                 }
             }
         }
+        // event.preventDefault();
+        // router.push("/");
     };
 
     return (
@@ -96,6 +98,7 @@ export default function Login() {
                         )}
                     </div>
                     <LoginButton />
+                    {/* <SignupButton /> */}
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/signup"} legacyBehavior>
                             <a className="inline-block align-baseline font-bold text-lg text-black-500">
