@@ -10,6 +10,7 @@ import SubVideo from "./SubVideo";
 import Loading from "../Loading";
 import dynamic from "next/dynamic";
 import axios from "axios";
+import Cookies from "js-cookie";
 // import { currSessionId } from "../CreateRoomModal";
 import { enterRoomSessionId } from "@/pages/room";
 
@@ -134,23 +135,22 @@ export default function OpenViduComponent({
       switch (response.data) {
         case "deleteRoom":
           // message : 방 다 나가
-          alert(response.data);
+          allLeaveSession();
+
           break;
         default:
           alert(response.data);
           if (mySession) {
             mySession.disconnect();
+            setOV(null);
+            setSession(undefined);
+            setSubscribers([]);
+            setPublisher(undefined);
+            router.push(`/room`);
           }
           // disconnect Session
           break;
       }
-      if (mySession) {
-        mySession.disconnect();
-      }
-      setOV(null);
-      setSession(undefined);
-      setSubscribers([]);
-      setPublisher(undefined);
   
     } catch (error) {
       console.log(error);
@@ -169,7 +169,7 @@ export default function OpenViduComponent({
       }
     }
 
-   router.push(`/room`);
+
   };
 
   // 세션이 생성 됐을 때,
@@ -224,6 +224,12 @@ export default function OpenViduComponent({
             isRightPlayerMoveGuildLine = false;
           }, 100);
         }
+      });
+
+      mySession.on("signal:allLeaveSession", (event) => {
+        // 추후 삭제 예정
+        alert("방장이 방나감");
+        sendSurverLeaveSession();
       });
 
       // On every asynchronous exception...
@@ -286,6 +292,42 @@ export default function OpenViduComponent({
   const callLeaveSession = () => {
     isClicked = true;
     leaveSession();
+  }
+
+  const allLeaveSession = () => {
+    if (session) {
+        console.log("allLeaveSession");
+        session.signal({
+            data: "baba",
+            to: [],
+            type: 'allLeaveSession'
+        })
+            .then(() => {
+                console.log('Message successfully sent');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+  };
+
+  const sendSurverLeaveSession = async () => {
+    const roomId = currSession;
+    console.log(roomId);
+    const assessToken = Cookies.get("token");
+    try {
+        const response = await axios.get(API_URL + `/destroy/${roomId}`, {
+            headers: { Authorization: `Bearer ${assessToken}` },
+          });
+          session.disconnect();
+        setOV(null);
+        setSession(undefined);
+        setSubscribers([]);
+        setPublisher(undefined);
+        router.push(`/room`);
+    } catch (error) {
+        console.log("Unexpected Error");
+      }
   }
 
   return (
