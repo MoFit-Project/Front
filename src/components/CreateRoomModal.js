@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../recoil/states";
+import { currSessionId } from "../recoil/currSessionId";
 import { motion } from "framer-motion";
 import { refreshToken } from "public/refreshToken";
 
@@ -13,6 +14,15 @@ function CreateRoomModal({ isOpen, onClose }) {
   const router = useRouter();
   const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const [currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+
+  const userIdRef = useRef('');
+
+  useEffect(() => {
+    if (window)
+      userIdRef.current = localStorage.getItem("username");
+  }, [userIdRef.current]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,15 +34,27 @@ function CreateRoomModal({ isOpen, onClose }) {
       setIsRoomNameEmpty(false);
     }
   };
+  useEffect(() => {
+    if (currSession) {
+
+    }
+  },[currSession])
 
   const createRoom = async (customSessionId) => {
+    setCurrSessionId(customSessionId);
     setIsRoomHost({ roomName: customSessionId, isHost: true });
     const assessToken = Cookies.get("token");
     try {
-      const response = await axios.get(API_URL + `/create/${customSessionId}`, {
-        headers: { Authorization: `Bearer ${assessToken}` },
+      // const response = await axios.get(API_URL + `/create/${customSessionId}`, {
+      //   headers: { Authorization: `Bearer ${assessToken}` },
+      // });
+      console.log(userIdRef.current)
+      const response = await axios.post(API_URL + `/create/${customSessionId}`, {
+        userId: userIdRef.current,
+      }, {
+        headers: { Authorization: `Bearer ${assessToken}` }
       });
-
+      console.log("create Room : " + userIdRef.current + " make " + customSessionId);
       router.push(`/room/${response.data}`);
     } catch (error) {
       console.log(error);
