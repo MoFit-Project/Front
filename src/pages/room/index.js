@@ -19,7 +19,7 @@ export default function RoomList() {
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
 
-  const [currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+  const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 
   useEffect(() => {
     fetchRooms();
@@ -32,17 +32,20 @@ export default function RoomList() {
     try {
       console.log("Enter Room : ", customSessionId);
       setCurrSessionId(customSessionId);
+
+      // 보낼때 post, 바디에 mode랑 방이름 넣어서 보내라.
       const response = await axios.get(API_URL + `/enter/${customSessionId}`, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
 
-      router.push(`/room/${response.data}`);
+      router.push(`/${response.data.mode}/${response.data.sessionId}`);
     } catch (error) {
       const { response } = error;
       if (response) {
         switch (response.status) {
           case 400:
-            alert(response.data);
+            // 방이 꽉찼다. custom alert 만들기
+            alert("방이 꽉찼습니다.");
             break;
           case 401:
             refreshToken();

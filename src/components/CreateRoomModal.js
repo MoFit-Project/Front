@@ -15,7 +15,7 @@ function CreateRoomModal({ isOpen, onClose }) {
   const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const [currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+  const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 
   const userIdRef = useRef('');
 
@@ -38,11 +38,16 @@ function CreateRoomModal({ isOpen, onClose }) {
     if (currSession) {
 
     }
-  },[currSession])
+  }, [currSession])
+
+  // useEffect(() => {
+  //   console.log(isRoomHost);
+  // }, [isRoomHost])
 
   const createRoom = async (customSessionId) => {
     setCurrSessionId(customSessionId);
     setIsRoomHost({ roomName: customSessionId, isHost: true });
+
     const assessToken = Cookies.get("token");
     try {
       // const response = await axios.get(API_URL + `/create/${customSessionId}`, {
@@ -51,6 +56,7 @@ function CreateRoomModal({ isOpen, onClose }) {
       console.log(userIdRef.current)
       const response = await axios.post(API_URL + `/create/${customSessionId}`, {
         userId: userIdRef.current,
+        mode: 'squat'     // TODO: select 
       }, {
         headers: { Authorization: `Bearer ${assessToken}` }
       });
