@@ -4,6 +4,9 @@ import CreateRoomModal from "../components/room/CreateRoomModal";
 export default function Test() {
 
     return (
-        <CreateRoomModal />
+        <div>
+            <CreateRoomModal />
+            <RoomListComponent />
+        </div>
     );
 }

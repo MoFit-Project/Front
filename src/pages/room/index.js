@@ -8,6 +8,7 @@ import LayoutAuthenticated from "../../components/LayoutAuthticated";
 import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
+import { currSessionId } from "../../recoil/currSessionId";
 
 export default function RoomList() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -18,6 +19,8 @@ export default function RoomList() {
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
 
+  const [currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+
   useEffect(() => {
     fetchRooms();
     return setRoomList([]);
@@ -27,6 +30,8 @@ export default function RoomList() {
     setIsRoomHost({ roomName: customSessionId, isHost: false });
     const assessToken = Cookies.get("token");
     try {
+      console.log("Enter Room : ", customSessionId);
+      setCurrSessionId(customSessionId);
       const response = await axios.get(API_URL + `/enter/${customSessionId}`, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });

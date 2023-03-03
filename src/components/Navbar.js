@@ -14,6 +14,11 @@ export default function NavBar({ children }) {
           </div>
           <div className="flex items-center w-auto">
             <div className="text-sm flex-grow">
+              <Link href={'/'} legacyBehavior>
+                <a className="mt-0 inline-block text-teal-200 hover:text-white mr-4">
+                  모드선택
+                </a>
+              </Link>
               <Link href={'/mypage'} legacyBehavior>
                 <a className="mt-0 inline-block text-teal-200 hover:text-white mr-4">
                   마이페이지

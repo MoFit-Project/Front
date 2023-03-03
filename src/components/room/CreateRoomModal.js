@@ -152,9 +152,9 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 					margin-top: 10px;
 				}
 				.btn-box{
-					position: absolute;
-					bottom: 20px;
-					right: 15px;
+					top:0;right:0;bottom:0;left:0;
+					display: flex;
+					justify-content: center;
 				}
 				.confirm-btn{
 					margin-right: 20px;

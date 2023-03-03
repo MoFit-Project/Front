@@ -5,19 +5,23 @@ import { getToken } from "../../../public/createToken.js";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
+import { currSessionId } from "../../recoil/currSessionId";
 import SubVideo from "./SubVideo";
 import Loading from "../Loading";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
+import axios from "axios";
+import Cookies from "js-cookie";
+// import { currSessionId } from "../CreateRoomModal";
+import { enterRoomSessionId } from "@/pages/room";
 
 
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
 export let isRightPlayerThrow = false;
 export let isRightPlayerMoveGuildLine = false;
-const DynamicComponentWithNoSSR = dynamic(
-    () => import('../MultiGame/Index'),
-    { ssr: false }
-)
+const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
+    ssr: false,
+});
 
 export function sendSignalThrow(session) {
     console.log(session);
@@ -61,6 +65,16 @@ export default function OpenViduComponent({
     children,
 }) {
     const [loading, setLoading] = useState(false);
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    const [currSession, setCurrSession] = useRecoilState(currSessionId);
+
+    const userIdRef = useRef('');
+
+    useEffect(() => {
+        if (window)
+            userIdRef.current = localStorage.getItem("username");
+    }, [userIdRef.current]);
 
     useEffect(() => {
         setLoading(true);
@@ -73,14 +87,11 @@ export default function OpenViduComponent({
         }
 
         handleResize(); // 초기화
-        window.addEventListener('resize', handleResize);
+        window.addEventListener("resize", handleResize);
         return () => {
-            window.removeEventListener('resize', handleResize);
+            window.removeEventListener("resize", handleResize);
         };
     }, []);
-
-
-
 
     // 1) OV 오브젝트 생성
     const [OV, setOV] = useState(null);
@@ -92,10 +103,13 @@ export default function OpenViduComponent({
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
 
+    let isClicked = false;
+
     useEffect(() => {
         joinSession();
+        // isClicked = false;
         return () => {
-            leaveSession();
+            // if (!isClicked) leaveSession();
         };
     }, []);
 
@@ -104,29 +118,65 @@ export default function OpenViduComponent({
     };
 
     const deleteSubscriber = (streamManager) => {
-        setSubscribers((current) => current.filter((v) => v !== streamManager));
+        let newSubscribers = [...subscribers];
+        setSubscribers(newSubscribers.filter((v) => v !== streamManager));
     };
 
-    const leaveSession = () => {
+    const leaveSession = async () => {
         const mySession = session;
 
-        if (mySession) {
-            mySession.disconnect();
+        try {
+            // const assessToken = Cookies.get("token");
+            const roomId = currSession;
+            console.log("this is levea room session !!! " + roomId);
+            const response = await axios.post(API_URL + `/leave/${roomId}`, {
+                "userId": userIdRef.current,
+            });
+            console.log(response.data)
+            switch (response.data) {
+                case "deleteRoom":
+                    // message : 방 다 나가
+                    allLeaveSession();
+
+                    break;
+                default:
+                    alert(response.data);
+                    if (mySession) {
+                        mySession.disconnect();
+                        setOV(null);
+                        setSession(undefined);
+                        setSubscribers([]);
+                        setPublisher(undefined);
+                        router.push(`/room`);
+                    }
+                    // disconnect Session
+                    break;
+            }
+
+        } catch (error) {
+            console.log(error);
+            const { response } = error;
+            if (response) {
+                switch (response.status) {
+                    case 404:
+                        alert(response.data);
+                        break;
+                    case 501:
+                        alert(response.data);
+                        break;
+                    default:
+                        alert("Unexpected Error");
+                }
+            }
         }
 
-        setOV(null);
-        setSession(undefined);
-        setSubscribers([]);
-        setPublisher(undefined);
-        router.push(`/room`);
+
     };
 
     // 세션이 생성 됐을 때,
     useEffect(() => {
         if (session !== undefined) {
             let mySession = session;
-
-            // window.addEventListener('keydown', sendSignalThrow);
 
             mySession.on("streamCreated", (event) => {
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
@@ -175,6 +225,12 @@ export default function OpenViduComponent({
                         isRightPlayerMoveGuildLine = false;
                     }, 100);
                 }
+            });
+
+            mySession.on("signal:allLeaveSession", (event) => {
+                // 추후 삭제 예정
+                alert("방장이 방나감");
+                sendSurverLeaveSession();
             });
 
             // On every asynchronous exception...
@@ -234,24 +290,68 @@ export default function OpenViduComponent({
         setSession(newOV.initSession());
     };
 
+    const callLeaveSession = () => {
+        isClicked = true;
+        leaveSession();
+    }
+
+    const allLeaveSession = () => {
+        if (session) {
+            console.log("allLeaveSession");
+            session.signal({
+                data: "baba",
+                to: [],
+                type: 'allLeaveSession'
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    };
+
+    const sendSurverLeaveSession = async () => {
+        const roomId = currSession;
+        console.log(roomId);
+        const assessToken = Cookies.get("token");
+        try {
+            const response = await axios.get(API_URL + `/destroy/${roomId}`, {
+                headers: { Authorization: `Bearer ${assessToken}` },
+            });
+            session.disconnect();
+            setOV(null);
+            setSession(undefined);
+            setSubscribers([]);
+            setPublisher(undefined);
+            router.push(`/room`);
+        } catch (error) {
+            console.log("Unexpected Error");
+        }
+    }
+
     return (
-        <div className="w-screen">
-            <div className="flex justify-center" style={{ border: "solid black" }}>
-                <h1 id="session-title">{roomName}</h1>
-                <button className="" id="buttonLeaveSession" onClick={leaveSession}>
-                    방 나가기
-                </button>
+        <div className="video-container">
+            <div className="nav-bar flex justify-center align-center">
+                <div className="contents-box flex flex-inline justify-center align-center">
+
+                    <p className="session-title">{roomName}</p>
+                    <button className="" id="buttonLeaveSession" onClick={callLeaveSession}>
+                        방 나가기
+                    </button>
+                </div>
             </div>
 
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: "flex" }}>
                 <div style={{ flex: 1 }}>
                     {session && publisher !== undefined ? (
-                        <div id="session" style={{ position: 'relative' }}>
+                        <div id="session" style={{ position: "relative" }}>
                             {publisher !== undefined ? (
-                                <div id="main-video" style={{ top: '0px', left: '0px' }}>
+                                <div id="main-video" style={{ top: "0px", left: "0px" }}>
                                     <OvVideo
                                         streamManager={publisher}
-                                        userName={userName}
+                                        userName={userIdRef.current}
                                         session={session}
                                     />
                                 </div>
@@ -262,19 +362,56 @@ export default function OpenViduComponent({
                     ) : null}
                 </div>
 
-                <div id="game-container" style={{ flex: 3, display: 'flex', justifyContent: 'center' }}>
+                {/* <div
+                    id="game-container"
+                    style={{ flex: 3, display: "flex", justifyContent: "center" }}
+                >
                     {loading ? <DynamicComponentWithNoSSR /> : null}
-                </div>
+                </div> */}
 
                 <div style={{ flex: 1 }}>
                     {subscribers.map((sub, i) => (
-                        <div key={i} style={{ top: '0px', right: '0px' }}>
+                        <div key={i} style={{ top: "0px", right: "0px" }}>
                             <SubVideo streamManager={sub} />
                         </div>
                     ))}
                 </div>
             </div>
-        </div>
 
+            <style jsx>{`
+                .video-container{
+                }
+
+                .nav-bar{
+                    height: 60px;
+                    background-color: #12DEFF;
+                    width: 680px;
+                    margin: 0px auto;
+                    border-bottom-left-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                    box-shadow: 1px 1px 1px 1px;
+                }
+                .session-title{
+                    position: absolute;
+                    left: 10px;
+                    top 50%;
+                    left: 70px;
+                    transform: translate(-50%, 50%);
+                    font-size: 18px;
+                    align-items: center;
+                    color: white;
+                }
+
+                .contents-box{
+                    position: relative;
+                    margin-top: 5px;
+                    background-color: #0ABDFF;
+                    width: 660px;
+                    height: 50px;
+                    border-radius: 10px; 
+                }
+                
+                `}</style>
+        </div>
     );
 }
