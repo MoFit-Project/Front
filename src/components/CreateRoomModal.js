@@ -15,7 +15,7 @@ function CreateRoomModal({ isOpen, onClose }) {
   const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const [currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+  const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 
   const userIdRef = useRef('');
 
@@ -38,7 +38,7 @@ function CreateRoomModal({ isOpen, onClose }) {
     if (currSession) {
 
     }
-  },[currSession])
+  }, [currSession])
 
   // useEffect(() => {
   //   console.log(isRoomHost);
@@ -56,6 +56,7 @@ function CreateRoomModal({ isOpen, onClose }) {
       console.log(userIdRef.current)
       const response = await axios.post(API_URL + `/create/${customSessionId}`, {
         userId: userIdRef.current,
+        mode: 'squat'     // TODO: select 
       }, {
         headers: { Authorization: `Bearer ${assessToken}` }
       });
@@ -121,13 +122,13 @@ function CreateRoomModal({ isOpen, onClose }) {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
                 onClick={onClose}
 
-                >
-                  닫기
-                </button>
-              </div>
-            </form>
-          </div>
-          <style jsx>{`
+              >
+                닫기
+              </button>
+            </div>
+          </form>
+        </div>
+        <style jsx>{`
           .background-div {
             background-image: url("background-img.jpg");
             background-size: cover;
