@@ -59,7 +59,6 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 			}
 		}
 	}
-
 	return (
 		<>
 			<div className="modal-container">

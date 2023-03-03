@@ -45,10 +45,10 @@ export default function RoomListComponent({ roomName, person }) {
                     background-color: #0081C9;
                     {/* border-top:1px solid #ffff;
                     border-left:1px solid #ffff; */}
-                    font-weight: bold;
-                    color: yellow;
-                    -webkit-text-stroke: 0.5px black;
+                    color: white;
+                    -webkit-text-stroke: 0.3px black;
                     text-stroke: 0.5px black;
+                    
                 }
                 p,small,button {
                 }
