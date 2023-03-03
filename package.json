@@ -31,7 +31,8 @@
     "react-dom": "18.2.0",
     "recoil": "^0.7.6",
     "recoil-persist": "^4.2.0",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "sweetalert2": "^11.7.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

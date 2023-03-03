@@ -6,10 +6,9 @@ import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { motion } from "framer-motion";
 import { refreshToken } from "public/refreshToken";
-
+import Swal from 'sweetalert2'
 
 export default function CreateRoomModal({ isOpen, onClose }) {
-
 	const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
 	const [roomName, setRoomName] = useState("");
 	const router = useRouter();
@@ -51,10 +50,16 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						refreshToken();
 						break;
 					case 302:
-						alert("이미 존재하는 방입니다.");
+						Swal.fire({
+							icon: 'error',
+							text: '이미 존재하는 방입니다.'
+						})
 						break;
 					default:
-						console.log("Unexpected Error");
+						Swal.fire({
+							icon: 'error',
+							text: '알 수 없는 에러가 발생했습니다.'
+						})
 				}
 			}
 		}
