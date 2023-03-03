@@ -22,13 +22,13 @@ export default function Index() {
 
       // width: window.innerWidth * window.devicePixelRatio,
       // height: window.innerHeight * window.devicePixelRatio,
-      // backgroundColor: '#FFFFFF',
+      backgroundColor: '#00D8FF',
       scale: {
         mode: Phaser.Scale.CENTER_BOTH,
         autoCenter:Phaser.Scale.CENTER_BOTH,
         parent:"game-container",
         width: 1920,
-        height: 1080,
+        height: 1000,
         zoom:Phaser.Scale.MAX_ZOOM
       },
       physics :{
