@@ -124,6 +124,7 @@ export default function OpenViduComponent({
   const currentVideoDeviceRef = useRef(null);
 
   let isClicked = false;
+  let isAllReady = true;
 
   useEffect(() => {
     joinSession();
@@ -290,8 +291,9 @@ export default function OpenViduComponent({
       });
 
       mySession.on("signal:otherPlayerReady", (event) => {
-
+		isAllReady = true;
         isOtherPlayerReady = true;
+		console.log("OtherPlayerReady !!!" + isAllReady);
       });
 
       // On every asynchronous exception...
@@ -394,16 +396,18 @@ export default function OpenViduComponent({
   };
 
   const gameStart = async () => {
-    const roomId = currSession;
-    const assessToken = Cookies.get("token");
-    try {
-		console.log(roomId);
-      const response = await axios.get(API_URL + `/game/${roomId}`, {
-        headers: { Authorization: `Bearer ${assessToken}` },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+	if (isAllReady) {
+    	const roomId = currSession;
+    	const assessToken = Cookies.get("token");
+    	try {
+			console.log(roomId);
+      		const response = await axios.get(API_URL + `/game/${roomId}`, {
+        	headers: { Authorization: `Bearer ${assessToken}` },
+      	});
+    	} catch (error) {
+      		console.log(error);
+    	}
+	}
   };
   const gameReady = () => {
     if (session) {
@@ -455,7 +459,7 @@ export default function OpenViduComponent({
                 {publisher !== undefined ? (
                     <div
                     id="main-video"
-                    style={{ position: "absolute", top: "30px", left: "30px" }}
+                    style={{ position: "absolute", top: "30px", bottom:"170px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
                     >
                     <OvVideo
                         streamManager={publisher}
@@ -472,7 +476,7 @@ export default function OpenViduComponent({
             {loading ? <DynamicComponentWithNoSSR /> : null}
 
             <button
-                style={{ position: "fixed", top: "810px", left: "850px" }}
+                style={{ position: "absolute", top: "810px", left: "850px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -480,13 +484,14 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "fixed", top: "800px", left: "850px" }}
+                style={{ position: "absolute", top: "800px", left: "850px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
             >
                 준비
             </button>
+			
 
         </div>
 
@@ -494,7 +499,7 @@ export default function OpenViduComponent({
           {subscribers.map((sub, i) => (
             <div
               key={i}
-              style={{ position: "fixed", top: "0px", right: "40px", width: "500px", height: "800px" }}
+              style={{ position: "absolute", top: "30px", bottom:"170px", right: "30px", left: "1370px", width: "500px", height: "800px" }}
             >
               <SubVideo streamManager={sub} />
             </div>
@@ -503,17 +508,17 @@ export default function OpenViduComponent({
       </div>
 
 	  <div className="nav-bar flex justify-center align-center" style={{ position: "absolute" }}>
-        <div className="contents-box flex flex-inline justify-center align-center">
-          <p className="session-title">{roomName}</p>
-          <button
-            className=""
-            id="buttonLeaveSession"
-            onClick={callLeaveSession}
-          >
-            방 나가기
-          </button>
-        </div>
-      </div>
+        		<div className="contents-box flex flex-inline justify-center align-center">
+          			<p className="session-title">{roomName}</p>
+          			<button
+            			className=""
+            			id="buttonLeaveSession"
+            			onClick={callLeaveSession}
+          			>
+            			방 나가기
+          			</button>
+        		</div>
+      		</div>
 
       <style jsx>{`
                 .video-container{
