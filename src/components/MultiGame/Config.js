@@ -220,7 +220,12 @@ export default class Main extends Phaser.Scene {
 
 
     update(time, delta) {
+        const cursors = this.input.keyboard.createCursorKeys();
+
+
+
         if (isPhaserGameStart && this.gameHasNotStarted) {
+            // console.log("isPhaserGameStart is true !!!");
             this.player1InputTime=0;
             this.player2InputTime=0;
         }
@@ -228,7 +233,7 @@ export default class Main extends Phaser.Scene {
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
-        const cursors = this.input.keyboard.createCursorKeys();
+        
         if (this.player1.x < 760) {
             this.player1.x = 760
         }
@@ -334,6 +339,9 @@ export default class Main extends Phaser.Scene {
         }else{
             this.player2Press = false;
         }
+
+
+
         if (isLeftPlayerThrow && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
             // this.player1CountDetector = false;
             this.player1InputTime = time;

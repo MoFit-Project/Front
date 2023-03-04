@@ -19,6 +19,8 @@ export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
 export let isRightPlayerThrow = false;
 export let isRightPlayerMoveGuildLine = false;
+export let mySquart = 0;
+export let heSquart = 0;
 
 export let amIHost = false;
 export let isOtherPlayerReady = false;
@@ -236,14 +238,16 @@ export default function OpenViduComponent({
       mySession.on("signal:throw", (event) => {
         if (event.data === localStorage.getItem("username")) {
 			// alert("I throw !!!");
-          console.log("my character attack throw !!!");
           isLeftPlayerThrow = true;
+		  mySquart += 1;
+          console.log("my count : " + mySquart);
           setTimeout(function () {
             isLeftPlayerThrow = false;
           }, 300);
         } else {
-          console.log("enemy character attack throw !!!");
           isRightPlayerThrow = true;
+		  heSquart += 1;
+		  console.log("he count : " + heSquart);
           setTimeout(function () {
             isRightPlayerThrow = false;
           }, 300);
@@ -275,8 +279,14 @@ export default function OpenViduComponent({
 
       mySession.on("start", (event) => {
         // Phaser 시작
-        console.log("@@@@@@@@@@@@@@@@@@@");
         isPhaserGameStart = true;
+        console.log("isPhaserGameStart : " + isPhaserGameStart);
+      });
+
+	  mySession.on("end", (event) => {
+        // Phaser 종료
+		console.log("PhaserGameEnd : " + event.data);
+        // alert("PhaserGameEnd : " + event.data);
       });
 
       mySession.on("signal:otherPlayerReady", (event) => {
@@ -387,11 +397,12 @@ export default function OpenViduComponent({
     const roomId = currSession;
     const assessToken = Cookies.get("token");
     try {
+		console.log(roomId);
       const response = await axios.get(API_URL + `/game/${roomId}`, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
     } catch (error) {
-      console.log("Unexpected Error In Start Button");
+      console.log(error);
     }
   };
   const gameReady = () => {
