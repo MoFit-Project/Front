@@ -40,14 +40,13 @@ export default function RoomList() {
       const response = await axios.get(API_URL + `/enter/${customSessionId}`, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
-
-      router.push(`/${response.data.mode}/${response.data.sessionId}`);
+      router.push(`/room/${response.data.sessionId}`);
     } catch (error) {
       const { response } = error;
       if (response) {
         switch (response.status) {
           case 400:
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '인원이 가득 찼습니다.'
             })
