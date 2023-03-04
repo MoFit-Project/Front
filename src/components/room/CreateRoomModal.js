@@ -26,7 +26,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 	const userIdRef = useRef('');
 
 	const [gameMode, setGameMode] = useState('스쿼트');
-	const [gameTime, setGameTime] = useState(30);
+	const [gameTime, setGameTime] = useState(10);
 
 	useEffect(() => {
 		if (window)
@@ -61,7 +61,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 
 	const createRoom = async (customSessionId) => {
 		setIsRoomHost({ roomName: customSessionId, isHost: true });
-
+		setCurrSessionId(customSessionId);
 		const assessToken = Cookies.get("token");
 		try {
 			const response = await axios.post(API_URL + `/create/${customSessionId}`,
