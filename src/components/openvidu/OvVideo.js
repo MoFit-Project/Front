@@ -64,6 +64,8 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 				setIsLoaded(true);
 			});
 	}
+
+	let isICurrSquartState = false;
 	let jumpingJack = false;
 	let run = false;
 	async function detectSquat() {
@@ -127,9 +129,15 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 						);
 
 						// Detect squat by checking if the average knee angle is below 90 degrees.
-						if (leftHipAngle < 120 && rightHipAngle < 120) {
-							console.log("squat");
-							if (session) sendSignalThrow(session);
+						if (leftHipAngle < 120 && rightHipAngle < 120 ) {
+							if (session && !isICurrSquartState) {
+								console.log("squat");
+								sendSignalThrow(session);
+							}
+							isICurrSquartState = true;
+						}
+						else if (leftHipAngle > 160 && rightHipAngle > 160 ) {
+							isICurrSquartState = false;
 						}
 					}
 
