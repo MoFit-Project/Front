@@ -8,6 +8,7 @@ import { currSessionId } from "../recoil/currSessionId";
 import { inroomState } from "../recoil/imroomState";
 import { motion } from "framer-motion";
 import { refreshToken } from "public/refreshToken";
+import Swal from 'sweetalert2'
 
 function CreateRoomModal({ isOpen, onClose }) {
   const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
@@ -40,11 +41,16 @@ function CreateRoomModal({ isOpen, onClose }) {
     if (currSession) {
 
     }
-  },[currSession])
+  }, [currSession])
+
+  // useEffect(() => {
+  //   console.log(isRoomHost);
+  // }, [isRoomHost])
 
   const createRoom = async (customSessionId) => {
     setCurrSessionId(customSessionId);
     setIsRoomHost({ roomName: customSessionId, isHost: true });
+
     const assessToken = Cookies.get("token");
     try {
       // const response = await axios.get(API_URL + `/create/${customSessionId}`, {
@@ -53,6 +59,7 @@ function CreateRoomModal({ isOpen, onClose }) {
       console.log(userIdRef.current)
       const response = await axios.post(API_URL + `/create/${customSessionId}`, {
         userId: userIdRef.current,
+        mode: 'squat'     // TODO: select 
       }, {
         headers: { Authorization: `Bearer ${assessToken}` }
       });
@@ -68,10 +75,16 @@ function CreateRoomModal({ isOpen, onClose }) {
             refreshToken();
             break;
           case 302:
-            alert("이미 존재하는 방입니다.");
+            Swal.fire({
+              icon: 'error',
+              text: '이미 존재하는 방입니다.'
+            })
             break;
           default:
-            console.log("Unexpected Error");
+            Swal.fire({
+              icon: 'error',
+              text: '알 수 없는 에러가 발생했습니다.'
+            })
         }
       }
     }

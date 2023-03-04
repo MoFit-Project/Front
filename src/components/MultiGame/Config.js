@@ -8,8 +8,8 @@ import { amIHost, isOtherPlayerReady, isPhaserGameStart, gameReady, gameStart } 
 
 export default class Main extends Phaser.Scene {
 
-    
-    
+    // isPhaserGameStart = true;
+    gameHasNotStarted =true;
     startButton;
     loadingText;
     player1;
@@ -220,6 +220,10 @@ export default class Main extends Phaser.Scene {
 
 
     update(time, delta) {
+        if (isPhaserGameStart && this.gameHasNotStarted) {
+            this.player1InputTime=0;
+            this.player2InputTime=0;
+        }
 
 
 
