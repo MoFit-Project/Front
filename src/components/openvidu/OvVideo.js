@@ -28,7 +28,7 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 	}, [streamManager]);
 
 	useEffect(() => {
-		// if (streamManager) initDetector();
+		if (streamManager) initDetector();
 
 		return () => {
 			console.log(requestAnimeRef.current);
@@ -183,7 +183,7 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 						) {
 							jumpingJack = true;
 							console.log("Jumping Jacks detected!");
-							if (session) sendSignalJumpingJacks(session);
+							// if (session) sendSignalJumpingJacks(session);
 							// console.log(jumpingJack);
 						} else if (
 							leftShoulderAngle < 30 &&

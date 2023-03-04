@@ -28,33 +28,6 @@ const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
   ssr: false,
 });
 
-// export async function gameStart (session) {
-//     const roomId = session;
-//     const assessToken = Cookies.get("token");
-//     try {
-//         const response = await axios.get(API_URL + `/game/${roomId}`, {
-//             headers: { Authorization: `Bearer ${assessToken}` },
-//           });
-//     } catch (error) {
-//         console.log("Unexpected Error");
-//     }
-// };
-// export function gameReady(session) {
-//     if (session) {
-//         session.signal({
-//             data: `${localStorage.getItem("username")}`,
-//             to: [],
-//             type: 'playerReady'
-//         })
-//             .then(() => {
-//                 console.log('Message successfully sent');
-//             })
-//             .catch(error => {
-//                 console.error(error);
-//             });
-//     }
-// };
-
 export function sendSignalThrow(session) {
   console.log(session);
   if (session) {
@@ -65,7 +38,7 @@ export function sendSignalThrow(session) {
         type: "throw", // The type of message (optional)
       })
       .then(() => {
-        console.log("Message successfully sent");
+        console.log("Throw !!! Message successfully sent");
       })
       .catch((error) => {
         console.error(error);
@@ -180,7 +153,7 @@ export default function OpenViduComponent({
 
           break;
         default:
-          alert(response.data);
+        //   alert(response.data);
           if (mySession) {
             mySession.disconnect();
             setOV(null);
@@ -237,17 +210,18 @@ export default function OpenViduComponent({
       // On every asynchronous exception...
       mySession.on("signal:throw", (event) => {
         if (event.data === localStorage.getItem("username")) {
-          //   console.log("my character attack throw !!!");
+			// alert("I throw !!!");
+          console.log("my character attack throw !!!");
           isLeftPlayerThrow = true;
           setTimeout(function () {
             isLeftPlayerThrow = false;
-          }, 100);
+          }, 300);
         } else {
-          //   console.log("enemy character attack throw !!!");
+          console.log("enemy character attack throw !!!");
           isRightPlayerThrow = true;
           setTimeout(function () {
             isRightPlayerThrow = false;
-          }, 100);
+          }, 300);
         }
       });
 
@@ -276,7 +250,7 @@ export default function OpenViduComponent({
 
       mySession.on("start", (event) => {
         // Phaser 시작
-        alert(event.data);
+        // alert(event.data);
         isPhaserGameStart = true;
       });
 
