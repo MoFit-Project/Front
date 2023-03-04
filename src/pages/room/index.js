@@ -9,6 +9,7 @@ import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
+import { inroomState } from "../../recoil/imroomState";
 
 export default function RoomList() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -19,7 +20,8 @@ export default function RoomList() {
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
 
-  const [currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+  const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
+  const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
   useEffect(() => {
     fetchRooms();
@@ -35,8 +37,8 @@ export default function RoomList() {
       const response = await axios.get(API_URL + `/enter/${customSessionId}`, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
-
-      router.push(`/room/${response.data}`);
+      setInRoomState(2);
+      router.push(`/room/${response.data.sessionId}`);
     } catch (error) {
       const { response } = error;
       if (response) {

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
+import { inroomState } from "../../recoil/imroomState";
 import SubVideo from "./SubVideo";
 import Loading from "../Loading";
 import dynamic from "next/dynamic";
@@ -13,14 +14,47 @@ import axios from "axios";
 import Cookies from "js-cookie";
 // import { currSessionId } from "../CreateRoomModal";
 import { enterRoomSessionId } from "@/pages/room";
+import { isGameReadyInPhaser, isGameStartInPhaser } from "../MultiGame/Config";
 
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
 export let isRightPlayerThrow = false;
 export let isRightPlayerMoveGuildLine = false;
+
+export let amIHost = false;
+export let isOtherPlayerReady = false;
+export let isPhaserGameStart = false;
+
 const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
   ssr: false,
 });
+
+// export async function gameStart (session) {
+//     const roomId = session;
+//     const assessToken = Cookies.get("token");
+//     try {
+//         const response = await axios.get(API_URL + `/game/${roomId}`, {
+//             headers: { Authorization: `Bearer ${assessToken}` },
+//           });
+//     } catch (error) {
+//         console.log("Unexpected Error");
+//     }
+// };
+// export function gameReady(session) {
+//     if (session) {
+//         session.signal({
+//             data: `${localStorage.getItem("username")}`,
+//             to: [],
+//             type: 'playerReady'
+//         })
+//             .then(() => {
+//                 console.log('Message successfully sent');
+//             })
+//             .catch(error => {
+//                 console.error(error);
+//             });
+//     }
+// };
 
 export function sendSignalThrow(session) {
   console.log(session);
@@ -66,7 +100,10 @@ export default function OpenViduComponent({
   const [loading, setLoading] = useState(false);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const [currSession, setCurrSession ] = useRecoilState(currSessionId);
+
+
+  const [ currSession, setCurrSession ] = useRecoilState(currSessionId);
+  const [ myInRoomState, setInRoomState ] = useRecoilState(inroomState);
 
   const userIdRef = useRef('');
 
@@ -80,17 +117,55 @@ export default function OpenViduComponent({
   }, []);
   const [height, setHeight] = useState(0);
 
+  let videoWidthSize;
+  let videoHeightSize;
   useEffect(() => {
-    function handleResize() {
-      setHeight(window.innerHeight);
-    }
+    // function handleResize() {
+    //   setHeight(window.innerHeight);
+    // }
 
-    handleResize(); // 초기화
-    window.addEventListener("resize", handleResize);
+    // handleResize(); // 초기화
+    // window.addEventListener("resize", handleResize);
+    function handleResize() {
+        videoWidthSize = window.innerWidth;
+        videoHeightSize = videoWidthSize;
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    window.history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', onBackButtonEvent);
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent);
+    };
+  }, []);
+
+//   useEffect(() => {
+    
+//     if (isGameReadyInPhaser) {
+//         console.log("isGameReadyInPhaser" + isGameReadyInPhaser);
+//         gameReady();
+//     }
+//   }, [isGameReadyInPhaser]);
+//   useEffect(() => {
+//     console.log("isGameStartInPhaser" + isGameStartInPhaser);
+//     // if (isGameStartInPhaser) {
+//     //     console.log("isGameStartInPhaser" + isGameStartInPhaser);
+//     //     gameStart();
+//     // }
+//   }, [isGameStartInPhaser]);
+
+  
+  function onBackButtonEvent(e) {
+    e.preventDefault();
+    window.history.pushState(null, null, document.URL);
+  }
 
   // 1) OV 오브젝트 생성
   const [OV, setOV] = useState(null);
@@ -106,6 +181,14 @@ export default function OpenViduComponent({
 
   useEffect(() => {
     joinSession();
+    if (myInRoomState === 1) {
+        const targetBtn = document.getElementById('buttonGameReady');
+        targetBtn.style.display = "none";
+    } else if (myInRoomState === 2) {
+        const targetBtn = document.getElementById('buttonGameStart');
+        targetBtn.style.display = "none";
+    }
+    // console.log("myInRoomState : " + myInRoomState);
     // isClicked = false;
     return () => {
         // if (!isClicked) leaveSession();
@@ -158,13 +241,16 @@ export default function OpenViduComponent({
       if (response) {
         switch (response.status) {
           case 404:
-            alert(response.data);
+            // alert(response.data);
+            console.log(response.data);
             break;
           case 501:
-            alert(response.data);
+            // alert(response.data);
+            console.log(response.data);
             break;
           default:
-            alert("Unexpected Error");
+            // alert("Unexpected Error");
+            console.log("Unexpected Error");
         }
       }
     }
@@ -196,13 +282,13 @@ export default function OpenViduComponent({
       // On every asynchronous exception...
       mySession.on("signal:throw", (event) => {
         if (event.data === localStorage.getItem("username")) {
-          console.log("my character attack throw !!!");
+        //   console.log("my character attack throw !!!");
           isLeftPlayerThrow = true;
           setTimeout(function () {
             isLeftPlayerThrow = false;
           }, 100);
         } else {
-          console.log("enemy character attack throw !!!");
+        //   console.log("enemy character attack throw !!!");
           isRightPlayerThrow = true;
           setTimeout(function () {
             isRightPlayerThrow = false;
@@ -212,13 +298,13 @@ export default function OpenViduComponent({
 
       mySession.on("signal:jumpingJacks", (event) => {
         if (event.data === localStorage.getItem("username")) {
-          console.log("my character jumping jacks !!!");
+        //   console.log("my character jumping jacks !!!");
           isLeftPlayerMoveGuildLine = true;
           setTimeout(function () {
             isLeftPlayerMoveGuildLine = false;
           }, 100);
         } else {
-          console.log("enemy character attack jumping jacks !!!");
+        //   console.log("enemy character attack jumping jacks !!!");
           isRightPlayerMoveGuildLine = true;
           setTimeout(function () {
             isRightPlayerMoveGuildLine = false;
@@ -228,8 +314,20 @@ export default function OpenViduComponent({
 
       mySession.on("signal:allLeaveSession", (event) => {
         // 추후 삭제 예정
-        alert("방장이 방나감");
+        // alert("방장이 방나감");
         sendSurverLeaveSession();
+        leaveSession();
+      });
+
+      mySession.on("start", (event) => {
+        // Phaser 시작
+        alert(event.data);
+        isPhaserGameStart = true;
+      });
+
+      mySession.on("signal:otherPlayerReady", (event) => {
+        console.log("@@@@@@@@@@@@@@@@@@@");
+        isOtherPlayerReady = true;
       });
 
       // On every asynchronous exception...
@@ -246,7 +344,7 @@ export default function OpenViduComponent({
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: "320x480", // The resolution of your video
+              resolution: "500x500", // 비율 정하기 The resolution of your video
               frameRate: 30, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
@@ -328,7 +426,34 @@ export default function OpenViduComponent({
     } catch (error) {
         console.log("Unexpected Error");
       }
+  };
+
+  const gameStart = async () => {
+    const roomId = currSession;
+    const assessToken = Cookies.get("token");
+    try {
+        const response = await axios.get(API_URL + `/game/${roomId}`, {
+            headers: { Authorization: `Bearer ${assessToken}` },
+          });
+    } catch (error) {
+        console.log("Unexpected Error");
   }
+  };
+  const gameReady = () => {
+    if (session) {
+        session.signal({
+            data: `${localStorage.getItem("username")}`,
+            to: [],
+            type: 'otherPlayerReady'
+        })
+            .then(() => {
+                console.log('Message successfully sent');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+  };
 
   return (
     <div className="w-screen">
@@ -337,14 +462,16 @@ export default function OpenViduComponent({
         <button className="" id="buttonLeaveSession" onClick={callLeaveSession}>
           방 나가기
         </button>
+        
       </div>
 
-      <div style={{ display: "flex" }}>
-        <div style={{ flex: 1 }}>
+      <div>
+        <div>
           {session && publisher !== undefined ? (
-            <div id="session" style={{ position: "relative" }}>
+            <div id="session">
               {publisher !== undefined ? (
-                <div id="main-video" style={{ top: "0px", left: "0px" }}>
+                <div id="main-video" style={{  position: "fixed", top: "30px", left: "30px", width: `${videoWidthSize}px`, height: `${videoHeightSize}px`}}>
+                    
                   <OvVideo
                     streamManager={publisher}
                     userName={userName}
@@ -360,19 +487,25 @@ export default function OpenViduComponent({
 
         <div
           id="game-container"
-          style={{ flex: 3, display: "flex", justifyContent: "center" }}
+          
         >
           {loading ? <DynamicComponentWithNoSSR /> : null}
         </div>
 
-        <div style={{ flex: 1 }}>
+        <div>
           {subscribers.map((sub, i) => (
-            <div key={i} style={{ top: "0px", right: "0px" }}>
+            <div key={i} style={{position: "fixed", top: "0px", right: "0px" }}>
               <SubVideo streamManager={sub} />
             </div>
           ))}
         </div>
       </div>
+      <button className="buttonGameStart" id="buttonGameStart" onClick={gameStart}>
+          시작
+        </button>
+        <button className="buttonGameReady" id="buttonGameReady" onClick={gameReady}>
+          준비
+        </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import {useState, useEffect} from 'react';
 import dynamic from 'next/dynamic'
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 const DynamicComponentWithNoSSR = dynamic(
     () => import('../components/MultiGame/Index'),

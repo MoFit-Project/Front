@@ -1,9 +1,15 @@
 import "phaser";
-import {parseSetCookieString} from "next/dist/server/web/spec-extension/cookies/serialize";
+import { amIHost, isOtherPlayerReady, isPhaserGameStart, gameReady, gameStart } from "../openvidu/OpenviduComponent";
+
+
+//통신
+
 
 
 export default class Main extends Phaser.Scene {
 
+    
+    
     startButton;
     loadingText;
     player1;
@@ -17,16 +23,19 @@ export default class Main extends Phaser.Scene {
     player1Press = false;
     player2Press = false;
 
+    player1CountTempSave = 0;
+    player2CountTempSave = 0;
+    player1CountDetector = false;
+    player2CountDetector = false;
+
     touch = false;
 
-    inputTimeDelay = 0.5;
+    inputTimeDelay = 0.2;
     name;
     backGround_Gameboy;
     backgroundCity;
     ground;
 
-    video1
-    video2
 
     constructor() {
         super();
@@ -46,7 +55,6 @@ export default class Main extends Phaser.Scene {
         });
         this.loadingText.setOrigin(0.5, 0.5);
         this.load.on('progress', (value) => { // arrow function으로 변경
-            console.log(value);
             this.loadingText.text = `${Math.round(value * 100)}%`; // Math.round 수정
         });
 
@@ -93,10 +101,6 @@ export default class Main extends Phaser.Scene {
         this.load.image('ground', '../assets/ground.webp')
 
 
-        //test video size
-        this.load.image('test', '../assets/testv.png')
-
-
     }
 
 
@@ -107,21 +111,8 @@ export default class Main extends Phaser.Scene {
             .setScale(1.35);
         this.backgroundCity = this.add.image(960, 370, 'backgroundCityImage').setScale(1.06, 1.15)
         this.ground = this.add.image(960, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
-        this.video1 = this.add.image(0, 0, 'test').setOrigin(0.0, 0.0);
-        this.video2 = this.add.image(1920, 0, 'test').setOrigin(1, 0.0);
-        this.startButton = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, '준비')
-            .setOrigin(0.5)
-            .setPadding(10)
-            .setStyle({
-                backgroundColor: '#111',
-                fontSize: '50px', // 버튼 글자 크기 수정
-                align: 'center'
-            })
-            .setInteractive({useHandCursor: true})
-            .on('pointerdown', startGame.bind(this))
-            .on('pointerover', () => this.startButton.setStyle({fill: '#f39c12'}))
-            .on('pointerout', () => this.startButton.setStyle({fill: '#FFF'}))
-
+        
+       
         this.player2 = this.physics.add.sprite(1100, 430, 'player2')
             .setScale(5)
             .toggleFlipX();
@@ -339,7 +330,20 @@ export default class Main extends Phaser.Scene {
         }else{
             this.player2Press = false;
         }
-
+        // if (this.player1CountDetector && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
+        //     this.player1CountDetector = false;
+        //     this.player1InputTime = time;
+        //     this.player1Press = true;
+        // }else {
+        //     this.player1Press = false;
+        // }
+        // if (this.player2CountDetector && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
+        //     this.player2CountDetector = false;
+        //     this.player2InputTime = time;
+        //     this.player2Press = true;
+        // }else{
+        //     this.player2Press = false;
+        // }
     }
 
 
@@ -357,19 +361,4 @@ export default class Main extends Phaser.Scene {
 
         }
     }
-
 }
-
-
-function startGame() {
-    this.startButton.setText("준비완료"); // 버튼 클릭 시 "준비 완료"로 변경
-    this.startButton.destroy();
-}
-
-
-/*
-this.physics.add.collider(object1, object2, null, null, this).setOverlapOnly(true);
-위의 코드에서 setOverlapOnly(true)를 사용하여 overlap만 검출하도록 collider를 설정합니다. 이렇게 설정하면 충돌이 감지되어도 물리적인 영향은 주지 않습니다.
-
-반대로, 물리적인 영향까지 주고 싶다면 setOverlapOnly(false)로 설정할 수 있습니다.
- */
