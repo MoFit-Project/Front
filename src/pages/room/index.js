@@ -2,7 +2,7 @@ import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
-import CreateRoomModal from "../../components/CreateRoomModal";
+import CreateRoomModal from "../../components/room/CreateRoomModal";
 import Cookies from "js-cookie";
 import LayoutAuthenticated from "../../components/LayoutAuthticated";
 import { refreshToken } from "public/refreshToken";
@@ -41,6 +41,7 @@ export default function RoomList() {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
       setInRoomState(2);
+      // TODO: 리스폰스로 넘어오는 값 response.data.mode/response.data.sessionId으로 라우팅
       router.push(`/room/${response.data.sessionId}`);
     } catch (error) {
       const { response } = error;
@@ -74,6 +75,7 @@ export default function RoomList() {
   };
 
   const fetchRooms = async () => {
+    setRoomList([]);
     const accessToken = Cookies.get("token");
     try {
       const response = await axios.get(API_URL + "/rooms", {
@@ -118,8 +120,7 @@ export default function RoomList() {
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
-  };
-
+  }
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
