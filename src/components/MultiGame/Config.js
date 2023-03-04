@@ -322,18 +322,18 @@ export default class Main extends Phaser.Scene {
             }
             this.player2Attack = false;
         }
-        // if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
-        //     this.player1InputTime = time;
-        //     this.player1Press = true;
-        // }else {
-        //     this.player1Press = false;
-        // }
-        // if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-        //     this.player2InputTime = time;
-        //     this.player2Press = true;
-        // }else{
-        //     this.player2Press = false;
-        // }
+        if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
+            this.player1InputTime = time;
+            this.player1Press = true;
+        }else {
+            this.player1Press = false;
+        }
+        if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
+            this.player2InputTime = time;
+            this.player2Press = true;
+        }else{
+            this.player2Press = false;
+        }
         if (isLeftPlayerThrow && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
             // this.player1CountDetector = false;
             this.player1InputTime = time;

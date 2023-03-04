@@ -126,6 +126,18 @@ export default function OpenViduComponent({
     };
   }, []);
 
+  useEffect(() => {
+    window.history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', onBackButtonEvent);
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent);
+    };
+  }, []);
+  function onBackButtonEvent(e) {
+    e.preventDefault();
+    window.history.pushState(null, null, document.URL);
+  }
+
   const onbeforeunload = (event) => {
     leaveSession();
   };
@@ -250,7 +262,7 @@ export default function OpenViduComponent({
 
       mySession.on("start", (event) => {
         // Phaser 시작
-        // alert(event.data);
+        console.log("@@@@@@@@@@@@@@@@@@@");
         isPhaserGameStart = true;
       });
 
@@ -273,7 +285,7 @@ export default function OpenViduComponent({
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: "500x500", // 비율 정하기 The resolution of your video
+              resolution: "500x800", // 비율 정하기 The resolution of your video
               frameRate: 30, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
@@ -366,7 +378,7 @@ export default function OpenViduComponent({
         headers: { Authorization: `Bearer ${assessToken}` },
       });
     } catch (error) {
-      console.log("Unexpected Error");
+      console.log("Unexpected Error In Start Button");
     }
   };
   const gameReady = () => {
@@ -388,27 +400,16 @@ export default function OpenViduComponent({
 
   return (
     <div className="video-container">
-      <div className="nav-bar flex justify-center align-center">
-        <div className="contents-box flex flex-inline justify-center align-center">
-          <p className="session-title">{roomName}</p>
-          <button
-            className=""
-            id="buttonLeaveSession"
-            onClick={callLeaveSession}
-          >
-            방 나가기
-          </button>
-        </div>
-      </div>
+      
 
       <div>
-        <div>
+        {/* <div>
           {session && publisher !== undefined ? (
             <div id="session">
               {publisher !== undefined ? (
                 <div
                   id="main-video"
-                  style={{ position: "fixed", top: "30px", left: "30px" }}
+                  style={{ position: "static", top: "30px", left: "30px" }}
                 >
                   <OvVideo
                     streamManager={publisher}
@@ -421,39 +422,75 @@ export default function OpenViduComponent({
               )}
             </div>
           ) : null}
-        </div>
+        </div> */}
 
         <div id="game-container">
-          {loading ? <DynamicComponentWithNoSSR /> : null}
-          <button
-            style={{ position: "fixed", top: "900px", left: "800px" }}
-            className="buttonGameStart"
-            id="buttonGameStart"
-            onClick={gameStart}
-          >
-            시작
-          </button>
-          <button
-            style={{ position: "fixed", top: "900px", left: "800px" }}
-            className="buttonGameReady"
-            id="buttonGameReady"
-            onClick={gameReady}
-          >
-            준비
-          </button>
+		
+            {session && publisher !== undefined ? (
+                <div id="session">
+                {publisher !== undefined ? (
+                    <div
+                    id="main-video"
+                    style={{ position: "absolute", top: "30px", left: "30px" }}
+                    >
+                    <OvVideo
+                        streamManager={publisher}
+                        userName={userName}
+                        session={session}
+                    />
+                    </div>
+                ) : (
+                <Loading />
+                )}
+                </div>
+            ) : null}
+        
+            {loading ? <DynamicComponentWithNoSSR /> : null}
+
+            <button
+                style={{ position: "fixed", top: "810px", left: "850px" }}
+                className="buttonGameStart"
+                id="buttonGameStart"
+                onClick={gameStart}
+            >
+                <span>시작</span>
+            </button>
+            <button
+                style={{ position: "fixed", top: "800px", left: "850px" }}
+                className="buttonGameReady"
+                id="buttonGameReady"
+                onClick={gameReady}
+            >
+                준비
+            </button>
+
         </div>
 
         <div>
           {subscribers.map((sub, i) => (
             <div
               key={i}
-              style={{ position: "fixed", top: "0px", right: "0px" }}
+              style={{ position: "fixed", top: "0px", right: "40px", width: "500px", height: "800px" }}
             >
               <SubVideo streamManager={sub} />
             </div>
           ))}
         </div>
       </div>
+
+	  <div className="nav-bar flex justify-center align-center" style={{ position: "absolute" }}>
+        <div className="contents-box flex flex-inline justify-center align-center">
+          <p className="session-title">{roomName}</p>
+          <button
+            className=""
+            id="buttonLeaveSession"
+            onClick={callLeaveSession}
+          >
+            방 나가기
+          </button>
+        </div>
+      </div>
+
       <style jsx>{`
                 .video-container{
                 }
@@ -487,6 +524,138 @@ export default function OpenViduComponent({
                     border-radius: 10px; 
                 }
                 
+				.buttonGameStart {
+					font-size: 40px;
+					color: white;
+					background-color: red;
+					width: 250px;
+					height: 100px;
+					border-radius: 20px; 
+					// border: 3px solid black;
+				}
+				.buttonGameStart {
+					background: linear-gradient(0deg, rgba(244, 123, 123, 1) 0%, rgba(238, 47, 47, 1) 100%);
+					font-size: 50px;
+					color: white;
+					width: 250px;
+					height: 100px;
+					  line-height: 42px;
+					  padding: 0;
+					  border: none;
+					}
+					.buttonGameStart span {
+						line-height: 100px;
+					  position: relative;
+					  display: block;
+					  width: 100%;
+					  height: 100%;
+					}
+					.buttonGameStart:before,
+					.buttonGameStart:after {
+					  position: absolute;
+					  content: "";
+					  right: 0;
+					  bottom: 0;
+					  background: rgba(238, 47, 47, 1);
+					  box-shadow:
+					   -7px -7px 20px 0px rgba(255,255,255,.9),
+					   -4px -4px 5px 0px rgba(255,255,255,.9),
+					   7px 7px 20px 0px rgba(0,0,0,.2),
+					   4px 4px 5px 0px rgba(0,0,0,.3);
+					  transition: all 0.3s ease;
+					}
+					.buttonGameStart:before{
+					   height: 0%;
+					   width: 2px;
+					}
+					.buttonGameStart:after {
+					  width: 0%;
+					  height: 2px;
+					}
+					.buttonGameStart:hover{
+					  color: rgba(238, 47, 47, 1);
+					  background: transparent;
+					}
+					.buttonGameStart:hover:before {
+					  height: 100%;
+					}
+					.buttonGameStart:hover:after {
+					  width: 100%;
+					}
+					.buttonGameStart span:before,
+					.buttonGameStart span:after {
+					  position: absolute;
+					  content: "";
+					  left: 0;
+					  top: 0;
+					  background: rgba(238, 47, 47, 1);
+					  box-shadow:
+					   -7px -7px 20px 0px rgba(255,255,255,.9),
+					   -4px -4px 5px 0px rgba(255,255,255,.9),
+					   7px 7px 20px 0px rgba(0,0,0,.2),
+					   4px 4px 5px 0px rgba(0,0,0,.3);
+					  transition: all 0.3s ease;
+					}
+					.buttonGameStart span:before {
+					  width: 2px;
+					  height: 0%;
+					}
+					.buttonGameStart span:after {
+					  height: 2px;
+					  width: 0%;
+					}
+					.buttonGameStart span:hover:before {
+					  height: 100%;
+					}
+					.buttonGameStart span:hover:after {
+					  width: 100%;
+					}
+
+
+
+				// .buttonGameStart {
+				// 	font-size: 40px;
+				// 	color: white;
+				// 	width: 250px;
+				// 	height: 80px;
+				// 	line-height: 42px;
+				// 	padding: 0;
+				// 	border: none;
+				// 	border-radius: 50px; 
+				// 	background: rgb(255,27,0);
+				//   	background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(238, 47, 47, 1) 100%);
+				// }
+				// .buttonGameStart:hover {
+				// 	color: #f0094a;
+				// 	background: transparent;
+				// 	box-shadow:none;
+				// }
+				// .buttonGameStart:before,
+				// .buttonGameStart:after{
+				// 	content:'';
+				// 	position:absolute;
+				// 	top:0;
+				// 	right:0;
+				// 	height:4px;
+				// 	width:0;
+				// 	background: #f0094a;
+				// 	box-shadow:
+				// 		-1px -1px 5px 0px #fff,
+				// 		7px 7px 20px 0px #0003,
+				// 		4px 4px 5px 0px #0002;
+				// 		transition:400ms ease all;
+				// }
+				// .buttonGameStart:after{
+				// 	right:inherit;
+				// 	top:inherit;
+				// 	left:0;
+				// 	bottom:0;
+				// }
+				// .buttonGameStart:hover:before,
+				// .buttonGameStart:hover:after{
+				// 	width:100%;
+				// 	transition:800ms ease all;
+				// }
                 `}</style>
     </div>
   );
