@@ -5,17 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
-      <change afterPath="$PROJECT_DIR$/public/assets/backgroundCity.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/characters/biker.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/characters/cyber.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/characters/punk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/gameboy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/ground.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/testv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/characters2/dude.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/characters2/owlet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/characters2/pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/multigame2/runTrack.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/MultiGame2/Index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/multigame2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/angleLine.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/arrow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/ball.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Index.js" afterDir="false" />
     </list>
@@ -59,7 +56,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public/assets",
+    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public/assets/characters",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -75,16 +72,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public/assets" />
       <recent name="$PROJECT_DIR$/public/assets/characters" />
-      <recent name="$PROJECT_DIR$/public/assets/char" />
-      <recent name="$PROJECT_DIR$/public/assets/items" />
-      <recent name="$PROJECT_DIR$/src/components/multigame" />
+      <recent name="$PROJECT_DIR$/src/pages" />
+      <recent name="$PROJECT_DIR$/src/components/MultiGame2" />
+      <recent name="$PROJECT_DIR$/src/components" />
+      <recent name="$PROJECT_DIR$/public/assets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/assets/mulitgame2" />
+      <recent name="$PROJECT_DIR$/public/assets/characters2" />
+      <recent name="$PROJECT_DIR$/src/components/MultiGame2" />
       <recent name="$PROJECT_DIR$/public/assets" />
       <recent name="$PROJECT_DIR$/src/public" />
-      <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
@@ -109,6 +108,7 @@
       <workItem from="1677705832379" duration="7882000" />
       <workItem from="1677746031692" duration="5940000" />
       <workItem from="1677790135146" duration="26671000" />
+      <workItem from="1677907124404" duration="8416000" />
     </task>
     <task id="LOCAL-00001" summary="feat : JWT 쿠기 유/무로 페이지 접근제어 추가">
       <created>1677227365915</created>
