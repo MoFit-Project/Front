@@ -1,5 +1,11 @@
 import "phaser";
-import { isPhaserGameStart, isLeftPlayerThrow, isRightPlayerThrow, mySquart, heSquart } from "../openvidu/OpenviduComponent";
+import {
+    isPhaserGameStart,
+    isLeftPlayerThrow,
+    isRightPlayerThrow,
+    mySquart,
+    heSquart
+} from "../openvidu/OpenviduComponent";
 
 
 //통신
@@ -15,25 +21,20 @@ export default class Main2 extends Phaser.Scene {
     player2;
     player1Run;
     player2Run;
-
-
-    player1InputTime;
-    player2InputTime;
-    player1Press = false;
-    player2Press = false;
-
-    player1CountTempSave = 0;
-    player2CountTempSave = 0;
-    player1CountDetector = false;
-    player2CountDetector = false;
-
-    touch = false;
-
-    inputTimeDelay = 0.5;
+    player1RunSpeed = 25;
+    player2RunSpeed = 25;
     name;
     backGround_Gameboy;
 
     ground;
+    inputTimeDelay = 10;
+    backgroundChangeTime = 0;
+    sky;
+    backgroundCount = 0;
+
+
+    player1Num = 0;
+    player2Num = 0;
 
 
     constructor() {
@@ -101,23 +102,33 @@ export default class Main2 extends Phaser.Scene {
         this.load.spritesheet('runTrack', '../assets/multigame2/runTrack.png', {frameWidth: 1837, frameHeight: 407})
 
         this.load.image('backGround_Gameboy', '../assets/gameboy.png')
+        this.load.image('1_game_background', '../assets/multigame2/1_game_background.png')
+        this.load.image('2_game_background', '../assets/multigame2/2_game_background.png')
+        this.load.image('3_game_background', '../assets/multigame2/3_game_background.png')
+        this.load.image('4_game_background', '../assets/multigame2/4_game_background.png')
+
 
     }
 
 
     create() {
 
-        this.backGround_Gameboy = this.add.image(960, 405, 'backGround_Gameboy')
+
+        this.backGround_Gameboy = this.add.image(950, 405, 'backGround_Gameboy')
             .setOrigin(0.5, 0.5)
             .setScale(1.35);
+        this.sky = this.add.tileSprite(950, 359, 328, 190, '1_game_background')
+            .setOrigin(0.5, 0.5)
+            .setScale(1.86)
 
-        this.ground = this.add.sprite(960, 570, 'runTrack').setScale(0.33);
 
-        this.player2 = this.add.sprite(935, 470, 'player2').setScale(5);
-        this.player2Run = this.add.sprite(935, 470, 'player2').setScale(5);
+        this.ground = this.add.sprite(950, 570, 'runTrack').setScale(0.333);
 
-        this.player1 = this.add.sprite(935, 535, 'player1').setScale(5);
-        this.player1Run = this.add.sprite(935, 535, 'player1').setScale(5);
+        this.player2 = this.add.sprite(925, 465, 'player2').setScale(5);
+        this.player2Run = this.add.sprite(925, 465, 'player2').setScale(5);
+
+        this.player1 = this.add.sprite(925, 535, 'player1').setScale(5);
+        this.player1Run = this.add.sprite(925, 535, 'player1').setScale(5);
 
         this.name = this.add
             .text(this.player1.x - 80, this.player1.y - 80,
@@ -126,12 +137,16 @@ export default class Main2 extends Phaser.Scene {
             )
 
 
+        // this.sky.fixedToCamera = true;
+
+
+        // 달리기 애니매이션 추가!
         //player1
 
         this.anims.create({
             key: 'player1_run',
             frames: this.anims.generateFrameNumbers('player1', {start: 0, end: 5}),
-            frameRate: 20,
+            frameRate: 30,
             repeat: 0,
         });
 
@@ -139,7 +154,7 @@ export default class Main2 extends Phaser.Scene {
         this.anims.create({
             key: 'player1_dust',
             frames: this.anims.generateFrameNumbers('player1', {start: 6, end: 11}),
-            frameRate: 20,
+            frameRate: 30,
             repeat: 0,
         });
 
@@ -147,23 +162,24 @@ export default class Main2 extends Phaser.Scene {
         this.anims.create({
             key: 'player2_run',
             frames: this.anims.generateFrameNumbers('player2', {start: 0, end: 5}),
-            frameRate: 20,
+            frameRate: 30,
             repeat: 0,
         });
 
         this.anims.create({
             key: 'player2_dust',
             frames: this.anims.generateFrameNumbers('player2', {start: 6, end: 11}),
-            frameRate: 20,
+            frameRate: 30,
             repeat: 0,
         });
 
         this.anims.create({
             key: 'trackMove',
             frames: this.anims.generateFrameNumbers('runTrack', {start: 0, end: 27}),
-            frameRate: 20,
+            frameRate: 40,
             repeat: 0,
         });
+
 
     }
 
@@ -184,12 +200,44 @@ export default class Main2 extends Phaser.Scene {
         this.player2Run.anims.play('player2_dust', true);
         this.ground.anims.play('trackMove', true);
 
+        const cursors = this.input.keyboard.createCursorKeys();
+        if (cursors.up.isDown) {
+            this.player1Num += 1
+            console.log(this.player1Num - this.player2Num)
+        }
+        if (cursors.down.isDown) {
+            this.player2Num += 1
+            console.log(this.player1Num - this.player2Num)
+        }
+        let difference = (this.player1Num - this.player2Num) * 10
+        // 여기까지 테스트
 
-        this.name.setPosition(this.player1.x - 30, this.player1.y +80)
+
+        this.name.setPosition(this.player1.x - 30, this.player1.y + 80)
+
+        //테스트용
+
+
+        // let difference = 925 + (mySquart - heSquart)*10
+        if (difference > 240) {
+            difference = 240
+        } else if (difference < -240) {
+            difference = -240
+        }
+        this.player1.x = 925 + difference
+        this.player1Run.x = 925 + difference
+        this.player2.x = 925 - difference
+        this.player2Run.x = 925 - difference
+
+
+        if ((time - this.backgroundChangeTime) > this.inputTimeDelay * 1000) {
+            this.backgroundChangeTime = time;
+            this.backgroundCount += 1
+            this.sky.setTexture(`${Math.floor(this.backgroundCount % 4) + 1}_game_background`)
 
 
 
-
-
+        }
+        this.sky.tilePositionX += 5
     }
 }

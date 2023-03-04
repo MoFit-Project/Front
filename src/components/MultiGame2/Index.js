@@ -24,8 +24,8 @@ export default function Index() {
       // height: window.innerHeight * window.devicePixelRatio,
       backgroundColor: '#00D8FF',
       scale: {
-        mode: Phaser.Scale.CENTER_BOTH,
-        autoCenter:Phaser.Scale.CENTER_BOTH,
+        // mode: Phaser.Scale.CENTER_BOTH,
+        // autoCenter:Phaser.Scale.CENTER_BOTH,
         parent:"game-container",
         width: 1900,
         height: 1000,
