@@ -3,14 +3,14 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 export default function Result(props) {
-  const [names] = useState("john");
-  const [results] = useState("win");
+  const [names] = useState(props.names);
+  const [results] = useState(props.results);
 
   const handleClick = async () => {
     try {
       const response = await axios.post('/mofit/result', {
         userid: names,
-        score: scores
+        results: results
       });
       console.log(response.data);
       // 서버로부터 받은 응답에 대한 처리를 여기에 작성
@@ -30,7 +30,7 @@ export default function Result(props) {
      >
       <div className="flex items-center justify-center">
         <div className="bg-modal rounded-lg shadow-xl p-8 flex flex-col items-center justify-center">
-          <h1 className="text-7xl font-bold text-gray-800 text-center mt-16">🥇 You win!!</h1>
+          <h1 className="text-7xl font-bold text-center mt-16">🥈 You Lose..</h1>
           {/* {names.map((name, index) => ( */}
             {/* <div className="flex justify-between items-center mb-4">
               <span className="text-gray-700"></span>
@@ -66,9 +66,17 @@ export default function Result(props) {
             );
           }
           .bg-modal {
-            box-shadow: 0px 0px 50px 40px rgba(7, 140, 229, 0.57), 0px 0px 30px 10px rgba(40, 0, 255, 0.6);
+            box-shadow: 0px 0px 30px 20px rgba(7, 229, 156, 0.42), 0px 0px 30px 10px rgba(40, 0, 255, 0.37);
             width: 600px;
             height: 300px;
+            background-image: url('result-img.jpg');
+            background-size: cover;
+            background-position: center;
+          }
+          h1 {
+            color: cadetblue;
+            -webkit-text-stroke-width: 1px;
+	          -webkit-text-stroke-color: #005ED4;
           }
         `}</style>
       </div>
