@@ -214,8 +214,7 @@ export default class Main2 extends Phaser.Scene {
 
 
         this.name.setPosition(this.player1.x - 30, this.player1.y + 80)
-
-        //테스트용
+        
 
 
         // let difference = 925 + (mySquart - heSquart)*10
