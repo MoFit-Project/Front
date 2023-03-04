@@ -10,5 +10,5 @@ export default function SubVideo({ streamManager, userName, }) {
         }
     }, [streamManager]);
 
-    return <video autoPlay={true} ref={videoRef} />;
+    return <video autoPlay={true} ref={videoRef} style={{  width: "500px", height: "800px" }}/>;
 }
