@@ -7,23 +7,10 @@ export default function Test() {
     return (
 
         <div>
-            <Head>
-                <link
-                    rel="preload"
-                    href="fonts/dalmoori.woff2"
-                    as="font"
-                    type="font/woff2"
-                    crossOrigin="anonymous"
-                />
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css"></link>
-            </Head>
 
-            <div className="pixel-borders pixel-borders--custom pixel-test ">
-                gdgd
-                <CreateRoomModal />
-                <RoomListComponent />
 
-            </div>
+            <CreateRoomModal />
+
 
             <style jsx>{`
                 .pixel-test{
