@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../recoil/states";
 import { currSessionId } from "../recoil/currSessionId";
 import { inroomState } from "../recoil/imroomState";
+import { motion } from "framer-motion";
 import { refreshToken } from "public/refreshToken";
 import Swal from 'sweetalert2'
 
@@ -36,6 +37,12 @@ function CreateRoomModal({ isOpen, onClose }) {
       setIsRoomNameEmpty(false);
     }
   };
+  useEffect(() => {
+    if (currSession) {
+
+    }
+  }, [currSession])
+
 
   const createRoom = async (customSessionId) => {
     setCurrSessionId(customSessionId);
@@ -124,13 +131,20 @@ function CreateRoomModal({ isOpen, onClose }) {
           </form>
         </div>
         <style jsx>{`
-        
+          .background-div {
+            background-image: url("background-img.jpg");
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            z-inex: -1;
+          }
           .bg-modal {
             background-image: linear-gradient(to right, #E1EEDD, #BFDCE5);
           }
           
         `}</style>
       </div >
+      // </motion.div>
     )
   );
 }

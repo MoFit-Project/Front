@@ -87,6 +87,19 @@ export default function OpenViduComponent({
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
+    window.history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', onBackButtonEvent);
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent);
+    };
+  }, []);
+
+  function onBackButtonEvent(e) {
+    e.preventDefault();
+    window.history.pushState(null, null, document.URL);
+  }
+
+  useEffect(() => {
     function handleResize() {
       setHeight(window.innerHeight);
     }
@@ -255,7 +268,7 @@ export default function OpenViduComponent({
       });
 
       mySession.on("signal:otherPlayerReady", (event) => {
-        // console.log("@@@@@@@@@@@@@@@@@@@");
+
         isOtherPlayerReady = true;
       });
 
