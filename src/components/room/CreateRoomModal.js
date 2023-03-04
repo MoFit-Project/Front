@@ -9,22 +9,30 @@ import { inroomState } from "../../recoil/imroomState";
 import { refreshToken } from "public/refreshToken";
 import Swal from 'sweetalert2'
 import Modal from 'react-modal';
+import Loading from './../Loading';
 
 Modal.setAppElement('#__next');
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const Spinner = () => {
+	return (
+		<div className="spinner-container">
+			<div className="spinner"></div>
+		</div>
+	);
+}
 
 export default function CreateRoomModal({ isOpen, onClose }) {
-	const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-	const [title, setTitle] = useState('');
-	const [roomName, setRoomName] = useState("");
 	const router = useRouter();
+	const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
+	const [roomName, setRoomName] = useState("");
 	const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
-	const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 	const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 	const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
 	const userIdRef = useRef('');
-
+	const [isLoading, setIsLoading] = useState(false);
 	const [gameMode, setGameMode] = useState('스쿼트');
 	const [gameTime, setGameTime] = useState(30);
 
@@ -61,9 +69,10 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 
 	const createRoom = async (customSessionId) => {
 		setIsRoomHost({ roomName: customSessionId, isHost: true });
-
+		setCurrSessionId(customSessionId);
 		const assessToken = Cookies.get("token");
 		try {
+			setIsLoading(true); // 로딩 상태 변경
 			const response = await axios.post(API_URL + `/create/${customSessionId}`,
 				{
 					userId: userIdRef.current,
@@ -98,14 +107,45 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						})
 				}
 			}
+		} finally {
+			setIsLoading(false); // 로딩 상태 변경
 		}
 	}
 	return (
 		<>
+			{isLoading ? <div><Loading />asdasdas</div> : null}
 			<Modal
+				portalClassName="custom-modal"
 				isOpen={isOpen}
 				onRequestClose={onClose}
 				contentLabel="Create Room Modal"
+				style={{
+					overlay: {
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						backgroundColor: 'rgba(255, 255, 255, 0.75)'
+					},
+					content: {
+						position: 'absolute',
+						top: '40px',
+						left: '40px',
+						right: '40px',
+						bottom: '40px',
+						border: '1px solid #ccc',
+						background: '#fff',
+						overflow: 'auto',
+						WebkitOverflowScrolling: 'touch',
+						borderRadius: '4px',
+						outline: 'none',
+						padding: '20px',
+						width: '300px',
+						boxShadow: '1px 1px 1px 1px black'
+
+					}
+				}}
 			>
 				<h2>방 만들기</h2>
 				<div>
@@ -135,14 +175,41 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 				<button onClick={() => {
 					onClose();
 					setIsRoomNameEmpty(false);
-					setTitle('');
+					setRoomName('');
 				}}>취소</button>
 				{isRoomNameEmpty && (
 					<div style={{ color: "red" }}>방이름을 입력해 주세요</div>
 				)}
 			</Modal>
+
+			<style jsx>{`
+					.custom-modal{
+						background-color: white;
+						border-radius: 5px;
+						box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+						padding: 20px;
+						width: 10px;
+					}
+
+					.spinner-container {
+						position: fixed;
+						top: 0;
+						bottom: 0;
+						left: 0;
+						right: 0;
+						background-color: rgba(255, 255, 255, 0.8);
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						}
+
+						.spinner {
+						border: 4px solid rgba(0, 0, 0, 0.1);
+						border-left-color: #798
+				
+				`}</style>
 		</>
 
-	)
+	);
 }
 

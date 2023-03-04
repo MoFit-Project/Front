@@ -93,7 +93,6 @@ function CreateRoomModal({ isOpen, onClose }) {
 
   return (
     isOpen && (
-
       <div className="fixed top-0 left-0 w-full h-full z-10 flex items-center justify-center">
         <div className="bg-modal p-5 rounded-lg border-8 border-indigo-500">
           <h2 className="text-xl font-bold mb-5">방 생성하기</h2>
@@ -144,7 +143,6 @@ function CreateRoomModal({ isOpen, onClose }) {
           
         `}</style>
       </div >
-      // </motion.div>
     )
   );
 }
