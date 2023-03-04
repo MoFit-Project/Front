@@ -49,8 +49,6 @@ export default function Home() {
                         background: rgb(0,3,255);
                         background: linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%);
                     }
-
-
                     
                     `}</style>
             </div>

@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 import Background from "../components/Background";
 import LoginButton from "../components/login/LoginButton";
 import SignupButton from "../components/login/SignupButton";
+import Swal from 'sweetalert2'
+
+
 
 export default function Login() {
-
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [username, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -51,13 +53,23 @@ export default function Login() {
                         break;
                     case 403:
                         // 이전페이지로 리다이렉트
+                        Swal.fire({
+                            icon: 'error',
+                            text: '접근 권한이 없습니다.'
+                        })
                         router.back();
                         break;
                     case 500:
-                        window.alert("서버 오류가 발생했습니다.");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '서버 에러가 발생했습니다.'
+                        })
                         break;
                     default:
-                        console.log("Unexpected Error");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '알 수 없는 에러가 발생했습니다.'
+                        })
                 }
             }
         }

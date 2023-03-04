@@ -9,6 +9,8 @@ import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
+import Swal from 'sweetalert2'
+
 
 export default function RoomList() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -18,6 +20,7 @@ export default function RoomList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
+
 
   const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 
@@ -44,18 +47,26 @@ export default function RoomList() {
       if (response) {
         switch (response.status) {
           case 400:
-            // 방이 꽉찼다. custom alert 만들기
-            alert("방이 꽉찼습니다.");
+            MySwal.fire({
+              icon: 'error',
+              text: '인원이 가득 찼습니다.'
+            })
             break;
           case 401:
             refreshToken();
             break;
           case 404:
-            alert("방을 찾을 수 없습니다");
+            Swal.fire({
+              icon: 'error',
+              text: '없는 방입니다.'
+            })
             router.reload();
             break;
           default:
-            alert("오류 발생");
+            Swal.fire({
+              icon: 'error',
+              text: '알 수 없는 에러가 발생했습니다.'
+            })
             router.reload();
         }
       }
@@ -70,6 +81,7 @@ export default function RoomList() {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+
       setRoomList([...roomList, ...response.data]);
     } catch (error) {
       console.log(error);
@@ -82,14 +94,23 @@ export default function RoomList() {
             break;
           case 403:
             // 이전페이지로 리다이렉트
-            window.alert("접근 권한이 없습니다.");
+            MySwal.fire({
+              icon: 'error',
+              text: '접근 권한이 없습니다.'
+            })
             router.back();
             break;
           case 500:
-            window.alert("서버 오류가 발생했습니다.");
+            MySwal.fire({
+              icon: 'error',
+              text: '서버 에러가 발생했습니다.'
+            })
             break;
           default:
-            console.log("Unexpected Error");
+            MySwal.fire({
+              icon: 'error',
+              text: '알 수 없는 에러가 발생했습니다.'
+            });
         }
       }
     }
@@ -113,13 +134,14 @@ export default function RoomList() {
         <LayoutAuthenticated>
           <title>MOFIT 멀티 게임</title>
           <Navbar>
-            <div className="flex-col items-center flex">
-              <div className="mt-2 w-8/12 flex">
-                <table className="w-full">
+            <div className="tb-container flex-col items-center flex">
+              <div className="mt-2 w-8/12 flex ">
+                <table className="w-full" style={{ overflow: 'auto' }} >
                   <thead>
                     <tr className="text-white">
                       <th className="w-1/4 py-2 px-4">방 제목</th>
                       <th className="w-1/4 py-2 px-4">참여 인원</th>
+                      <th className="w-1/4 py-2 px-4">모드</th>
                       <th className="w-1/4 py-2 px-4">액션</th>
                     </tr>
                   </thead>
@@ -133,17 +155,25 @@ export default function RoomList() {
                           {room.roomId}
                         </td>
                         <td className="py-2 px-4 text-center font-bold">
-                          {room.participant}
+                          {room.participant}/2
+                        </td>
+                        <td className="py-2 px-4 text-center font-bold">
+                          {room.mode}
                         </td>
                         <td className="py-2 px-4">
-                          <button
-                            className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mx-auto block btn-1"
+                          {room.status === "START" || room.participant === 2 ? <button
+                            className=" text-white font-bold py-2 px-4 rounded-md mx-auto block bg-slate-400"
+                            disabled
+                          >참여하기
+                          </button> : <button
+                            className=" text-white font-bold py-2 px-4 rounded-md mx-auto btn-1 block "
                             onClick={() => {
                               handleRoomEnter(room.roomId);
                             }}
                           >
                             참여하기
                           </button>
+                          }
                         </td>
                       </tr>
                     ))}
@@ -177,6 +207,13 @@ export default function RoomList() {
         </LayoutAuthenticated>
       </>
       <style jsx>{`
+
+        .tb-container{
+          margin: 0px auto;
+          width: 1260px;
+          height: 960px;
+        }
+
         .background-div {
           background-image: url("background-img.jpg");
           background-size: cover;
@@ -186,11 +223,9 @@ export default function RoomList() {
         }
 
         table {
-          border: 10px solid #0d4c92;
           background: linear-gradient(to right, #0096ff, #00d7ff);
         }
         .btn-1 {
-          background: rgb(6, 14, 131);
           background: linear-gradient(
             0deg,
             rgba(6, 14, 131, 1) 0%,
@@ -208,6 +243,8 @@ export default function RoomList() {
         }
         table tr {
           border-bottom: 1px solid #e5e5e5;
+        }
+        td{
         }
       `}</style>
     </div>
