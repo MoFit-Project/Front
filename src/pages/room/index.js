@@ -10,7 +10,7 @@ import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
 import Swal from 'sweetalert2'
-
+import { inroomState } from "../../recoil/imroomState";
 
 export default function RoomList() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -21,8 +21,8 @@ export default function RoomList() {
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
 
-
   const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
+  const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
   useEffect(() => {
     fetchRooms();
@@ -40,6 +40,7 @@ export default function RoomList() {
       const response = await axios.get(API_URL + `/enter/${customSessionId}`, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
+      setInRoomState(2);
       router.push(`/room/${response.data.sessionId}`);
     } catch (error) {
       const { response } = error;
@@ -93,20 +94,20 @@ export default function RoomList() {
             break;
           case 403:
             // 이전페이지로 리다이렉트
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '접근 권한이 없습니다.'
             })
             router.back();
             break;
           case 500:
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '서버 에러가 발생했습니다.'
             })
             break;
           default:
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '알 수 없는 에러가 발생했습니다.'
             });

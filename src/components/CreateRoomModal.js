@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../recoil/states";
 import { currSessionId } from "../recoil/currSessionId";
+import { inroomState } from "../recoil/imroomState";
 import { motion } from "framer-motion";
 import { refreshToken } from "public/refreshToken";
 import Swal from 'sweetalert2'
@@ -16,7 +17,8 @@ function CreateRoomModal({ isOpen, onClose }) {
   const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
+  const [ currSession, setCurrSessionId ] = useRecoilState(currSessionId);
+  const [ myInRoomState, setInRoomState ] = useRecoilState(inroomState);
 
   const userIdRef = useRef('');
 
@@ -61,6 +63,7 @@ function CreateRoomModal({ isOpen, onClose }) {
       }, {
         headers: { Authorization: `Bearer ${assessToken}` }
       });
+      setInRoomState(1);
       console.log("create Room : " + userIdRef.current + " make " + customSessionId);
       router.push(`/room/${response.data}`);
     } catch (error) {
