@@ -259,7 +259,7 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 					position: relative;
 					display: inline-block;
 					border: 3px solid black;
-					margin: 10px 0px 0px 10px;
+					margin: 0px 0px 0px 0px;
 				}
 				.user-name{
 					position: absolute;
