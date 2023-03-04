@@ -1,5 +1,5 @@
 import "phaser";
-import {isPhaserGameStart} from "../openvidu/OpenviduComponent";
+import { isPhaserGameStart, isLeftPlayerThrow, isRightPlayerThrow, mySquart, heSquart } from "../openvidu/OpenviduComponent";
 
 
 //통신
@@ -169,10 +169,15 @@ export default class Main2 extends Phaser.Scene {
 
 
     update(time, delta) {
-        if (isPhaserGameStart && this.gameHasNotStarted) {
-            this.player1InputTime = 0;
-            this.player2InputTime = 0;
+        if (isPhaserGameStart) {
+            this.player1.anims.play('player1_run', true);
+            this.player1Run.anims.play('player1_dust', true);
+            this.player2.anims.play('player2_run', true);
+            this.player2Run.anims.play('player2_dust', true);
+            this.ground.anims.play('trackMove', true);
         }
+
+        // 테스트용
         this.player1.anims.play('player1_run', true);
         this.player1Run.anims.play('player1_dust', true);
         this.player2.anims.play('player2_run', true);
@@ -183,7 +188,7 @@ export default class Main2 extends Phaser.Scene {
         this.name.setPosition(this.player1.x - 30, this.player1.y +80)
 
 
-        const cursors = this.input.keyboard.createCursorKeys();
+
 
 
     }

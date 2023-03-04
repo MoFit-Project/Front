@@ -106,17 +106,17 @@ export default class Main extends Phaser.Scene {
 
     create() {
 
-        this.backGround_Gameboy = this.add.image(960, 405, 'backGround_Gameboy')
+        this.backGround_Gameboy = this.add.image(950, 405, 'backGround_Gameboy')
             .setOrigin(0.5, 0.5)
             .setScale(1.35);
-        this.backgroundCity = this.add.image(960, 370, 'backgroundCityImage').setScale(1.06, 1.15)
-        this.ground = this.add.image(960, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
+        this.backgroundCity = this.add.image(950, 370, 'backgroundCityImage').setScale(1.06, 1.15)
+        this.ground = this.add.image(950, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
         
        
-        this.player2 = this.physics.add.sprite(1100, 430, 'player2')
+        this.player2 = this.physics.add.sprite(1090, 430, 'player2')
             .setScale(5)
             .toggleFlipX();
-        this.player1 = this.physics.add.sprite(830, 430, 'player1').setScale(5);
+        this.player1 = this.physics.add.sprite(820, 430, 'player1').setScale(5);
         this.name = this.add
             .text(this.player1.x - 80, this.player1.y - 80,
                 "PLAYER",
@@ -229,16 +229,17 @@ export default class Main extends Phaser.Scene {
             this.player1InputTime=0;
             this.player2InputTime=0;
         }
-
+        // this.player1InputTime=0;
+        // this.player2InputTime=0;
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
         
-        if (this.player1.x < 760) {
-            this.player1.x = 760
+        if (this.player1.x < 750) {
+            this.player1.x = 750
         }
-        if (this.player2.x > 1180) {
-            this.player2.x = 1180
+        if (this.player2.x > 1170) {
+            this.player2.x = 1170
         }
 
         if (this.player2Attacked) {

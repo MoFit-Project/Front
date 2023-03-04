@@ -27,8 +27,8 @@ export default function Index() {
         // mode: Phaser.Scale.CENTER_BOTH,
         // autoCenter:Phaser.Scale.CENTER_BOTH,
         parent:"game-container",
-        width: 1920,
-        height: 800,
+        width: 1900,
+        height: 1000,
         zoom:Phaser.Scale.MAX_ZOOM
       },
       physics :{
