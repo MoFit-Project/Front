@@ -15,7 +15,6 @@ import Cookies from "js-cookie";
 // import { currSessionId } from "../CreateRoomModal";
 import { enterRoomSessionId } from "@/pages/room";
 
-
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
 export let isRightPlayerThrow = false;
@@ -26,7 +25,7 @@ export let isOtherPlayerReady = false;
 export let isPhaserGameStart = false;
 
 const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
-    ssr: false,
+  ssr: false,
 });
 
 // export async function gameStart (session) {
@@ -57,130 +56,127 @@ const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
 // };
 
 export function sendSignalThrow(session) {
-    console.log(session);
-    if (session) {
-        session
-            .signal({
-                data: `${localStorage.getItem("username")}`, // Any string (optional)
-                to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: "throw", // The type of message (optional)
-            })
-            .then(() => {
-                console.log("Message successfully sent");
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+  console.log(session);
+  if (session) {
+    session
+      .signal({
+        data: `${localStorage.getItem("username")}`, // Any string (optional)
+        to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+        type: "throw", // The type of message (optional)
+      })
+      .then(() => {
+        console.log("Message successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 }
 
 export function sendSignalJumpingJacks(session) {
-    if (session) {
-        session
-            .signal({
-                data: `${localStorage.getItem("username")}`, // Any string (optional)
-                to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: "jumpingJacks", // The type of message (optional)
-            })
-            .then(() => {
-                console.log("Message successfully sent");
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+  if (session) {
+    session
+      .signal({
+        data: `${localStorage.getItem("username")}`, // Any string (optional)
+        to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+        type: "jumpingJacks", // The type of message (optional)
+      })
+      .then(() => {
+        console.log("Message successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 }
 
 export default function OpenViduComponent({
-    roomName,
-    userName,
-    jwtToken,
-    children,
+  roomName,
+  userName,
+  jwtToken,
+  children,
 }) {
-    const [loading, setLoading] = useState(false);
-    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const [loading, setLoading] = useState(false);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  const [currSession, setCurrSession] = useRecoilState(currSessionId);
+  const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
+  const userIdRef = useRef("");
 
-  const [ currSession, setCurrSession ] = useRecoilState(currSessionId);
-  const [ myInRoomState, setInRoomState ] = useRecoilState(inroomState);
+  useEffect(() => {
+    if (window) userIdRef.current = localStorage.getItem("username");
+  }, [userIdRef.current]);
 
-    const userIdRef = useRef('');
+  useEffect(() => {
+    setLoading(true);
+  }, []);
+  const [height, setHeight] = useState(0);
 
-    useEffect(() => {
-        if (window)
-            userIdRef.current = localStorage.getItem("username");
-    }, [userIdRef.current]);
+  useEffect(() => {
+    function handleResize() {
+      setHeight(window.innerHeight);
+    }
 
-    useEffect(() => {
-        setLoading(true);
-    }, []);
-    const [height, setHeight] = useState(0);
+    handleResize(); // 초기화
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-    useEffect(() => {
-        function handleResize() {
-            setHeight(window.innerHeight);
-        }
+  // 1) OV 오브젝트 생성
+  const [OV, setOV] = useState(null);
+  const [session, setSession] = useState(undefined);
+  const [publisher, setPublisher] = useState(undefined);
+  const [subscribers, setSubscribers] = useState([]);
 
-        handleResize(); // 초기화
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
+  const router = useRouter();
+  const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
+  const currentVideoDeviceRef = useRef(null);
 
-    // 1) OV 오브젝트 생성
-    const [OV, setOV] = useState(null);
-    const [session, setSession] = useState(undefined);
-    const [publisher, setPublisher] = useState(undefined);
-    const [subscribers, setSubscribers] = useState([]);
-
-    const router = useRouter();
-    const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-    const currentVideoDeviceRef = useRef(null);
-
-    let isClicked = false;
+  let isClicked = false;
 
   useEffect(() => {
     joinSession();
     if (myInRoomState === 1) {
-        const targetBtn = document.getElementById('buttonGameReady');
-        targetBtn.style.display = "none";
+      const targetBtn = document.getElementById("buttonGameReady");
+      targetBtn.style.display = "none";
     } else if (myInRoomState === 2) {
-        const targetBtn = document.getElementById('buttonGameStart');
-        targetBtn.style.display = "none";
+      const targetBtn = document.getElementById("buttonGameStart");
+      targetBtn.style.display = "none";
     }
     // console.log("myInRoomState : " + myInRoomState);
     // isClicked = false;
     return () => {
-        // if (!isClicked) leaveSession();
+      // if (!isClicked) leaveSession();
     };
   }, []);
 
-    const onbeforeunload = (event) => {
-        leaveSession();
-    };
+  const onbeforeunload = (event) => {
+    leaveSession();
+  };
 
-    const deleteSubscriber = (streamManager) => {
-        let newSubscribers = [...subscribers];
-        setSubscribers(newSubscribers.filter((v) => v !== streamManager));
-    };
+  const deleteSubscriber = (streamManager) => {
+    let newSubscribers = [...subscribers];
+    setSubscribers(newSubscribers.filter((v) => v !== streamManager));
+  };
 
-    const leaveSession = async () => {
-        const mySession = session;
+  const leaveSession = async () => {
+    const mySession = session;
 
-        try {
-            // const assessToken = Cookies.get("token");
-            const roomId = currSession;
-            console.log("this is levea room session !!! " + roomId);
-            const response = await axios.post(API_URL + `/leave/${roomId}`, {
-                "userId": userIdRef.current,
-            });
-            console.log(response.data)
-            switch (response.data) {
-                case "deleteRoom":
-                    // message : 방 다 나가
-                    allLeaveSession();
+    try {
+      // const assessToken = Cookies.get("token");
+      const roomId = currSession;
+      console.log("this is levea room session !!! " + roomId);
+      const response = await axios.post(API_URL + `/leave/${roomId}`, {
+        userId: userIdRef.current,
+      });
+      console.log(response.data);
+      switch (response.data) {
+        case "deleteRoom":
+          // message : 방 다 나가
+          allLeaveSession();
 
           break;
         default:
@@ -196,7 +192,6 @@ export default function OpenViduComponent({
           // disconnect Session
           break;
       }
-  
     } catch (error) {
       console.log(error);
       const { response } = error;
@@ -216,41 +211,39 @@ export default function OpenViduComponent({
         }
       }
     }
+  };
 
+  // 세션이 생성 됐을 때,
+  useEffect(() => {
+    if (session !== undefined) {
+      let mySession = session;
 
-    };
+      mySession.on("streamCreated", (event) => {
+        var newsubscriber = mySession.subscribe(event.stream, undefined);
+        setSubscribers((curr) => [...curr, newsubscriber]);
+      });
 
-    // 세션이 생성 됐을 때,
-    useEffect(() => {
-        if (session !== undefined) {
-            let mySession = session;
+      mySession.on("connectionCreated", (event) => {
+        console.log(event.connection);
+      });
 
-            mySession.on("streamCreated", (event) => {
-                var newsubscriber = mySession.subscribe(event.stream, undefined);
-                setSubscribers((curr) => [...curr, newsubscriber]);
-            });
-
-            mySession.on("connectionCreated", (event) => {
-                console.log(event.connection);
-            });
-
-            mySession.on("streamDestroyed", (event) => {
-                // if (!isRoomHost.isHost) {
-                //     leaveSession();
-                // }
-                deleteSubscriber(event.stream.streamManager);
-            });
+      mySession.on("streamDestroyed", (event) => {
+        // if (!isRoomHost.isHost) {
+        //     leaveSession();
+        // }
+        deleteSubscriber(event.stream.streamManager);
+      });
 
       // On every asynchronous exception...
       mySession.on("signal:throw", (event) => {
         if (event.data === localStorage.getItem("username")) {
-        //   console.log("my character attack throw !!!");
+          //   console.log("my character attack throw !!!");
           isLeftPlayerThrow = true;
           setTimeout(function () {
             isLeftPlayerThrow = false;
           }, 100);
         } else {
-        //   console.log("enemy character attack throw !!!");
+          //   console.log("enemy character attack throw !!!");
           isRightPlayerThrow = true;
           setTimeout(function () {
             isRightPlayerThrow = false;
@@ -260,13 +253,13 @@ export default function OpenViduComponent({
 
       mySession.on("signal:jumpingJacks", (event) => {
         if (event.data === localStorage.getItem("username")) {
-        //   console.log("my character jumping jacks !!!");
+          //   console.log("my character jumping jacks !!!");
           isLeftPlayerMoveGuildLine = true;
           setTimeout(function () {
             isLeftPlayerMoveGuildLine = false;
           }, 100);
         } else {
-        //   console.log("enemy character attack jumping jacks !!!");
+          //   console.log("enemy character attack jumping jacks !!!");
           isRightPlayerMoveGuildLine = true;
           setTimeout(function () {
             isRightPlayerMoveGuildLine = false;
@@ -292,10 +285,10 @@ export default function OpenViduComponent({
         isOtherPlayerReady = true;
       });
 
-            // On every asynchronous exception...
-            mySession.on("exception", (exception) => {
-                console.warn(exception);
-            });
+      // On every asynchronous exception...
+      mySession.on("exception", (exception) => {
+        console.warn(exception);
+      });
 
       getToken(roomName, jwtToken).then((token) => {
         mySession
@@ -312,130 +305,137 @@ export default function OpenViduComponent({
               mirror: false, // Whether to mirror your local video or not
             });
 
-                        mySession.publish(publisher);
+            mySession.publish(publisher);
 
-                        var devices = await OV.getDevices();
-                        var videoDevices = devices.filter(
-                            (device) => device.kind === "videoinput"
-                        );
-                        var currentVideoDeviceId = publisher.stream
-                            .getMediaStream()
-                            .getVideoTracks()[0]
-                            .getSettings().deviceId;
-                        var currentVideoDevice = videoDevices.find(
-                            (device) => device.deviceId === currentVideoDeviceId
-                        );
+            var devices = await OV.getDevices();
+            var videoDevices = devices.filter(
+              (device) => device.kind === "videoinput"
+            );
+            var currentVideoDeviceId = publisher.stream
+              .getMediaStream()
+              .getVideoTracks()[0]
+              .getSettings().deviceId;
+            var currentVideoDevice = videoDevices.find(
+              (device) => device.deviceId === currentVideoDeviceId
+            );
 
-                        currentVideoDeviceRef.current = currentVideoDevice;
-                        setPublisher(publisher);
-                    })
-                    .catch((error) => {
-                        console.log(
-                            "There was an error connecting to the session:",
-                            error.code,
-                            error.message
-                        );
-                    });
-            });
-        }
-    }, [session]);
-
-    const joinSession = async () => {
-        let newOV = new OpenVidu();
-        setOV(newOV);
-        newOV.enableProdMode();
-
-        // 2) session 초기화 -> useEffect 호출
-        setSession(newOV.initSession());
-    };
-
-    const callLeaveSession = () => {
-        isClicked = true;
-        leaveSession();
+            currentVideoDeviceRef.current = currentVideoDevice;
+            setPublisher(publisher);
+          })
+          .catch((error) => {
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
+          });
+      });
     }
+  }, [session]);
 
-    const allLeaveSession = () => {
-        if (session) {
-            console.log("allLeaveSession");
-            session.signal({
-                data: "baba",
-                to: [],
-                type: 'allLeaveSession'
-            })
-                .then(() => {
-                    console.log('Message successfully sent');
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-    };
+  const joinSession = async () => {
+    let newOV = new OpenVidu();
+    setOV(newOV);
+    newOV.enableProdMode();
+
+    // 2) session 초기화 -> useEffect 호출
+    setSession(newOV.initSession());
+  };
+
+  const callLeaveSession = () => {
+    isClicked = true;
+    leaveSession();
+  };
+
+  const allLeaveSession = () => {
+    if (session) {
+      console.log("allLeaveSession");
+      session
+        .signal({
+          data: "baba",
+          to: [],
+          type: "allLeaveSession",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
 
   const sendSurverLeaveSession = async () => {
     const roomId = currSession;
     console.log(roomId);
     const assessToken = Cookies.get("token");
     try {
-        const response = await axios.get(API_URL + `/destroy/${roomId}`, {
-            headers: { Authorization: `Bearer ${assessToken}` },
-          });
-          session.disconnect();
-        setOV(null);
-        setSession(undefined);
-        setSubscribers([]);
-        setPublisher(undefined);
-        router.push(`/room`);
+      const response = await axios.get(API_URL + `/destroy/${roomId}`, {
+        headers: { Authorization: `Bearer ${assessToken}` },
+      });
+      session.disconnect();
+      setOV(null);
+      setSession(undefined);
+      setSubscribers([]);
+      setPublisher(undefined);
+      router.push(`/room`);
     } catch (error) {
-        console.log("Unexpected Error");
-      }
+      console.log("Unexpected Error");
+    }
   };
 
   const gameStart = async () => {
     const roomId = currSession;
     const assessToken = Cookies.get("token");
     try {
-        const response = await axios.get(API_URL + `/game/${roomId}`, {
-            headers: { Authorization: `Bearer ${assessToken}` },
-          });
+      const response = await axios.get(API_URL + `/game/${roomId}`, {
+        headers: { Authorization: `Bearer ${assessToken}` },
+      });
     } catch (error) {
-        console.log("Unexpected Error");
-  }
+      console.log("Unexpected Error");
+    }
   };
   const gameReady = () => {
     if (session) {
-        session.signal({
-            data: `${localStorage.getItem("username")}`,
-            to: [],
-            type: 'otherPlayerReady'
+      session
+        .signal({
+          data: `${localStorage.getItem("username")}`,
+          to: [],
+          type: "otherPlayerReady",
         })
-            .then(() => {
-                console.log('Message successfully sent');
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
-    return (
-        <div className="video-container">
-            <div className="nav-bar flex justify-center align-center">
-                <div className="contents-box flex flex-inline justify-center align-center">
-
-                    <p className="session-title">{roomName}</p>
-                    <button className="" id="buttonLeaveSession" onClick={callLeaveSession}>
-                        방 나가기
-                    </button>
-                </div>
-            </div>
+  return (
+    <div className="video-container">
+      <div className="nav-bar flex justify-center align-center">
+        <div className="contents-box flex flex-inline justify-center align-center">
+          <p className="session-title">{roomName}</p>
+          <button
+            className=""
+            id="buttonLeaveSession"
+            onClick={callLeaveSession}
+          >
+            방 나가기
+          </button>
+        </div>
+      </div>
 
       <div>
         <div>
           {session && publisher !== undefined ? (
             <div id="session">
               {publisher !== undefined ? (
-                <div id="main-video" style={{  position: "fixed", top: "30px", left: "30px"}}>
-                    
+                <div
+                  id="main-video"
+                  style={{ position: "fixed", top: "30px", left: "30px" }}
+                >
                   <OvVideo
                     streamManager={publisher}
                     userName={userName}
@@ -449,28 +449,38 @@ export default function OpenViduComponent({
           ) : null}
         </div>
 
-        <div
-          id="game-container"
-          
-        >
+        <div id="game-container">
           {loading ? <DynamicComponentWithNoSSR /> : null}
+          <button
+            style={{ position: "fixed", top: "900px", left: "800px" }}
+            className="buttonGameStart"
+            id="buttonGameStart"
+            onClick={gameStart}
+          >
+            시작
+          </button>
+          <button
+            style={{ position: "fixed", top: "900px", left: "800px" }}
+            className="buttonGameReady"
+            id="buttonGameReady"
+            onClick={gameReady}
+          >
+            준비
+          </button>
         </div>
 
         <div>
           {subscribers.map((sub, i) => (
-            <div key={i} style={{position: "fixed", top: "0px", right: "0px" }}>
+            <div
+              key={i}
+              style={{ position: "fixed", top: "0px", right: "0px" }}
+            >
               <SubVideo streamManager={sub} />
             </div>
           ))}
         </div>
       </div>
-      <button className="buttonGameStart" id="buttonGameStart" onClick={gameStart}>
-          시작
-        </button>
-        <button className="buttonGameReady" id="buttonGameReady" onClick={gameReady}>
-          준비
-        </button>
-        <style jsx>{`
+      <style jsx>{`
                 .video-container{
                 }
 

@@ -30,7 +30,7 @@ export default class Main extends Phaser.Scene {
 
     touch = false;
 
-    inputTimeDelay = 0.2;
+    inputTimeDelay = 0.5;
     name;
     backGround_Gameboy;
     backgroundCity;

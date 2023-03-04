@@ -41,13 +41,13 @@ export default function RoomList() {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
       setInRoomState(2);
-      router.push(`/${response.data.mode}/${response.data.sessionId}`);
+      router.push(`/room/${response.data.sessionId}`);
     } catch (error) {
       const { response } = error;
       if (response) {
         switch (response.status) {
           case 400:
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '인원이 가득 찼습니다.'
             })
@@ -94,20 +94,20 @@ export default function RoomList() {
             break;
           case 403:
             // 이전페이지로 리다이렉트
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '접근 권한이 없습니다.'
             })
             router.back();
             break;
           case 500:
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '서버 에러가 발생했습니다.'
             })
             break;
           default:
-            MySwal.fire({
+            Swal.fire({
               icon: 'error',
               text: '알 수 없는 에러가 발생했습니다.'
             });
