@@ -1,5 +1,5 @@
 import "phaser";
-import { isPhaserGameStart, isLeftPlayerThrow, isRightPlayerThrow } from "../openvidu/OpenviduComponent";
+import { isPhaserGameStart, isLeftPlayerThrow, isRightPlayerThrow, mySquart, heSquart } from "../openvidu/OpenviduComponent";
 
 
 //통신
