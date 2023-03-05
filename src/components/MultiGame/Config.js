@@ -157,6 +157,8 @@ export default class Main extends Phaser.Scene {
                 "TIME LEFT:",
                 {color: "#000000", fontSize: "61px", fontFamily: 'dalmoori'}
             )
+        this.timeBar.visible =false;
+        this.timeText.visible = false;
 
 
 
@@ -334,8 +336,6 @@ export default class Main extends Phaser.Scene {
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(1330, 0, 570, 1000);
-        } else {
-            this.playerFire.visible = false;
         }
 
 
@@ -360,6 +360,8 @@ export default class Main extends Phaser.Scene {
 
         if (isPhaserGameStart && this.gameHasNotStarted) {
             this.gameHasNotStarted = false;
+            this.timeBar.visible =true;
+            this.timeText.visible = true;
             this.countDown.call(this);
         }
         if (!this.fightBgm.isPlaying && isPhaserGameStart) {
@@ -521,6 +523,7 @@ export default class Main extends Phaser.Scene {
             this.player2InputTime = 0;
             this.noDisplay.destroy();
             this.waitBgm.destroy();
+            this.fightBgm.play()
             return;
         }
         this.bee.play();
