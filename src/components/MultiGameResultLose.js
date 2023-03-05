@@ -10,19 +10,21 @@ export default function Result(props) {
 
 
   const handleClick = async () => {
-    try {
-      const response = await axios.post('/mofit/result', {
-        userid: names,
-        results: results
-      });
-      console.log(response.data);
-      // 서버로부터 받은 응답에 대한 처리를 여기에 작성
+    // try {
+    //   const response = await axios.post('/mofit/result', {
+    //     userid: names,
+    //     results: results
+    //   });
+    //   console.log(response.data);
+    //   // 서버로부터 받은 응답에 대한 처리를 여기에 작성
 
-      router.push('/room')
-    } catch (error) {
-      console.error(error);
-      // 에러 처리를 여기에 작성
-    }
+    //   router.push('/room')
+    // } catch (error) {
+    //   console.error(error);
+    //   // 에러 처리를 여기에 작성
+    // }
+    props.setIsLoseModalOpen(false);
+    props.setIsModalClose(true);
   }
 
   return (
