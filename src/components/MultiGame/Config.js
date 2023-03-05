@@ -2,9 +2,11 @@ import "phaser";
 import {
     isPhaserGameStart,
     gameTimePassed,
+    gameTimeTotal,
     mySquart,
     heSquart
 } from "../openvidu/OpenviduComponent";
+import {gameTimePassed2} from "@/components/openvidu/OpenviduComponent";
 
 
 //통신
@@ -39,6 +41,7 @@ export default class Main extends Phaser.Scene {
     waitBgm;
     bee;
     ding;
+    start;
     noDisplay;
     number;
     countdown = 5;
@@ -48,6 +51,11 @@ export default class Main extends Phaser.Scene {
     player2Number100;
     player2Number10;
     player2Number1;
+    timeBar;
+    timeText;
+    playerFire;
+
+    playerBackground;
 
     constructor() {
         super();
@@ -118,6 +126,11 @@ export default class Main extends Phaser.Scene {
             '../assets/numbers.png',
             {frameWidth: 130, frameHeight: 150}
         )
+        this.load.spritesheet(
+            "fire",
+            '../assets/fire.png',
+            {frameWidth: 192, frameHeight: 32}
+        )
         this.load.image('backGround_Gameboy', '../assets/gameboy.png')
         this.load.image('backgroundCityImage', '../assets/backgroundCity.png')
         this.load.image('ground', '../assets/ground.webp')
@@ -126,17 +139,34 @@ export default class Main extends Phaser.Scene {
         this.load.audio('wait', ['../assets/sound/waitBGM.mp3'])
         this.load.audio('bee', ['../assets/sound/bee.mp3'])
         this.load.audio('ding', ['../assets/sound/ding.mp3'])
+        this.load.audio('start', ['../assets/sound/start.mp3'])
 
 
     }
 
 
     create() {
+        this.playerBackground = this.add.graphics();
+
+        this.timeBar = this.add.graphics();
+
+        this.timeText = this.add
+            .text(580, 930,
+                "TIME LEFT:",
+                {color: "#000000", fontSize: "61px", fontFamily: 'dalmoori'}
+            )
+        this.timeBar.visible =false;
+        this.timeText.visible = false;
+
+
+
+
         this.punchSound = this.sound.add('punch');
         this.fightBgm = this.sound.add('fight');
         this.waitBgm = this.sound.add('wait');
         this.bee = this.sound.add('bee');
         this.ding = this.sound.add('ding');
+        this.start = this.sound.add('start');
 
         this.waitBgm.play();
 
@@ -257,6 +287,20 @@ export default class Main extends Phaser.Scene {
             frameRate: 20,
             repeat: -1,
         });
+
+        this.playerFire = this.add.sprite(280, 930, 'fire')
+            .setOrigin(0.5, 0.5)
+            .setScale(1.8, 3)
+            .setDepth(1)
+            .setVisible(false);
+
+        this.anims.create({
+            key: 'player_fire',
+            frames: this.anims.generateFrameNumbers('fire', {start: 0, end: 3}),
+            frameRate: 15,
+            repeat: 0,
+        });
+
         this.noDisplay.anims.play('beforeStart')
         this.number = this.add.sprite(950, 410, 'numbers').setVisible(false);
         this.player1Number100 = this.add.sprite(170, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
@@ -269,8 +313,36 @@ export default class Main extends Phaser.Scene {
 
 
     update(time, delta) {
+        let currentGameTime = gameTimePassed - 5
+        if (currentGameTime < 0){
+            currentGameTime = 0
+        }
+        this.timeBar.clear();
+        this.timeBar.fillStyle(0xff0000, 1);
+        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal - currentGameTime) / (gameTimeTotal)), 59);
+        const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
+        const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
+        const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);
+
 
         const cursors = this.input.keyboard.createCursorKeys();
+        if (mySquart > heSquart) {
+            this.playerFire.x = 280;
+            this.playerFire.visible = true;
+            this.playerFire.anims.play('player_fire', true)
+            this.playerBackground.clear();
+            this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
+            this.playerBackground.fillRect(0, 0, 570, 1000);
+        } else if (mySquart < heSquart) {
+            this.playerFire.x = 1640;
+            this.playerFire.visible = true;
+            this.playerFire.anims.play('player_fire', true)
+            this.playerBackground.clear();
+            this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
+            this.playerBackground.fillRect(1330, 0, 570, 1000);
+        }
+
+
 
         if (mySquart != this.player1CountTempSave && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
             this.ding.play();
@@ -292,6 +364,8 @@ export default class Main extends Phaser.Scene {
 
         if (isPhaserGameStart && this.gameHasNotStarted) {
             this.gameHasNotStarted = false;
+            this.timeBar.visible =true;
+            this.timeText.visible = true;
             this.countDown.call(this);
         }
         if (!this.fightBgm.isPlaying && isPhaserGameStart) {
@@ -447,11 +521,13 @@ export default class Main extends Phaser.Scene {
 
     countDown() {
         if (this.countdown === 0) {
+            this.start.play();
             this.number.visible = false;
             this.player1InputTime = 0;
             this.player2InputTime = 0;
             this.noDisplay.destroy();
             this.waitBgm.destroy();
+            this.fightBgm.play()
             return;
         }
         this.bee.play();
@@ -466,7 +542,6 @@ export default class Main extends Phaser.Scene {
         this.countdown--;
 
         this.time.delayedCall(1000, this.countDown, [], this);
-
-
     }
+
 }
