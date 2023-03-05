@@ -2,7 +2,7 @@ const background = ({children}) => (
         <div style={{
             position:'relative',
             width: '100vw',
-            height: 'calc(100vh - 48px)'
+            height: '100vh'
         
         }}
         >
@@ -10,7 +10,7 @@ const background = ({children}) => (
         
         <div style={{
             position:'absolute', 
-            top: '39%',
+            top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)'
             

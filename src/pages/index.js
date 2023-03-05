@@ -1,4 +1,4 @@
-import Background from "../components/Background";
+import Background from "../components/backgrounds/SelectBackground";
 import LayoutAuthenticated from "../components/LayoutAuthticated";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
