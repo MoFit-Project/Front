@@ -30,13 +30,13 @@ export default function Ranking() {
   }, []);
 
   return (
-    <div className="background-div ">
+    <div className="background-div">
     <>
     <LayoutAuthenticated>
     <Navbar />
       <div className="center-container mt-2">
         <div className="ranking-container">
-          <h2 className="ranking-title">랭킹 게시판</h2>
+          <h2 className="ranking-title">Ranking</h2>
           <div className="ranking-box">
             <table className="ranking-list">
               <thead>
@@ -56,7 +56,7 @@ export default function Ranking() {
                       {index >= 3 && index + 1}
                     </td>
                     <td className="table-data-row">{item.id}</td>
-                    <td className="table-data-row">{item.win}</td>
+                    <td className="table-data-row">{item.win} 승</td>
                   </tr>
                 ))}
               </tbody>
@@ -83,20 +83,19 @@ export default function Ranking() {
         }
 
         .ranking-container{
-          background-color: #0DDFFF;
+          background-color: transparent;
           width: 750px;
-          border-radius: 10px;
+          border: none;
           padding: 5px;
-          box-shadow: 3px 3px 8px .1px #053B58;
+          
           height: 680px;
         }
         .ranking-title{
-          font-size: 33px;
+          font-size: 40px;
           color:white;
           font-weight: bold;
-          -webkit-text-stroke-width: 1px;
-	        -webkit-text-stroke-color: #005ED4;
-          margin-left: 10px;
+         
+          margin-left: 20px;
 
         }
         .ranking-box{

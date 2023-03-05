@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router"
 
 export default function Result(props) {
   const [names] = useState(props.names);
   const [results] = useState(props.results);
+  const router = useRouter();
+
 
   const handleClick = async () => {
     try {
@@ -14,6 +17,8 @@ export default function Result(props) {
       });
       console.log(response.data);
       // 서버로부터 받은 응답에 대한 처리를 여기에 작성
+
+      router.push('/room')
     } catch (error) {
       console.error(error);
       // 에러 처리를 여기에 작성
@@ -67,8 +72,8 @@ export default function Result(props) {
           }
           .bg-modal {
             box-shadow: 0px 0px 30px 20px rgba(7, 229, 156, 0.42), 0px 0px 30px 10px rgba(40, 0, 255, 0.37);
-            width: 600px;
-            height: 300px;
+            width: 700px;
+            height: 600px;
             background-image: url('result-img.jpg');
             background-size: cover;
             background-position: center;
