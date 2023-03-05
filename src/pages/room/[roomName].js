@@ -21,7 +21,7 @@ export default function GameRoom() {
     const [isOpenViduLoaded, setIsOpenViduLoaded] = useState(false);
     const [isPhaserLoaded, setIsPhaserLoaded] = useState(true);
 
-    let username = window.localStorage.getItem('username');
+    let username;
 
     useEffect(() => {
         // if (!token) router.push("/login");
