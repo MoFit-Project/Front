@@ -14,6 +14,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 // import { currSessionId } from "../CreateRoomModal";
 import { enterRoomSessionId } from "@/pages/room";
+import Swal from "sweetalert2"; 
+
 
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
@@ -276,8 +278,14 @@ export default function OpenViduComponent({
             mySession.on("signal:allLeaveSession", (event) => {
                 // 추후 삭제 예정
                 // alert("방장이 방나감");
+                console.log(event.from);
                 sendSurverLeaveSession();
                 leaveSession();
+
+                Swal.fire({
+                    title: '방장이 나갔습니다',
+                    icon: 'warning',
+                });
             });
 
             mySession.on("start", (event) => {
