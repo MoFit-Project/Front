@@ -14,7 +14,14 @@ import {
 	sendSignalJumpingJacks,
 } from "../openvidu/OpenviduComponent";
 
-export default function OvVideo({ streamManager, userName, session, children }) {
+export default function OvVideo({
+	streamManager,
+	userName,
+	session,
+	children,
+	setIsOpenViduLoaded,
+	setIsMovenetLoaded
+}) {
 	const videoRef = useRef(null);
 	const detectorRef = useRef(null);
 	const requestAnimeRef = useRef(null);
@@ -24,6 +31,7 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 	useEffect(() => {
 		if (streamManager && !!videoRef.current) {
 			streamManager.addVideoElement(videoRef.current);
+			setIsOpenViduLoaded(true);
 		}
 	}, [streamManager]);
 
@@ -48,7 +56,8 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 		if (isLoaded) {
 			if (detectorRef.current && videoRef.current) {
 				console.log("detectSquat");
-				detectSquat();
+				setIsMovenetLoaded(true);
+				//detectSquat();
 			}
 		}
 	}, [isLoaded]);
@@ -129,14 +138,14 @@ export default function OvVideo({ streamManager, userName, session, children }) 
 						);
 
 						// Detect squat by checking if the average knee angle is below 90 degrees.
-						if (leftHipAngle < 120 && rightHipAngle < 120 ) {
+						if (leftHipAngle < 120 && rightHipAngle < 120) {
 							if (session && !isICurrSquartState) {
 								console.log("squat");
 								sendSignalThrow(session);
 							}
 							isICurrSquartState = true;
 						}
-						else if (leftHipAngle > 160 && rightHipAngle > 160 ) {
+						else if (leftHipAngle > 160 && rightHipAngle > 160) {
 							isICurrSquartState = false;
 						}
 					}

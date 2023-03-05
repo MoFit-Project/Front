@@ -9,22 +9,22 @@ import { inroomState } from "../../recoil/imroomState";
 import { refreshToken } from "public/refreshToken";
 import Swal from 'sweetalert2'
 import Modal from 'react-modal';
+import Loading from './../Loading';
 
 Modal.setAppElement('#__next');
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CreateRoomModal({ isOpen, onClose }) {
-	const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-	const [title, setTitle] = useState('');
-	const [roomName, setRoomName] = useState("");
 	const router = useRouter();
+	const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
+	const [roomName, setRoomName] = useState("");
 	const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
-	const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 	const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 	const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
 	const userIdRef = useRef('');
-
+	const [isLoading, setIsLoading] = useState(false);
 	const [gameMode, setGameMode] = useState('스쿼트');
 	const [gameTime, setGameTime] = useState(10);
 
@@ -103,18 +103,48 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 	return (
 		<>
 			<Modal
+				portalClassName="custom-modal"
 				isOpen={isOpen}
 				onRequestClose={onClose}
 				contentLabel="Create Room Modal"
+				style={{
+					overlay: {
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						backgroundColor: 'rgba(255, 255, 255, 0.75)'
+					},
+					content: {
+						margin: '0px auto',
+						position: 'absolute',
+						top: '40px',
+						left: '40px',
+						right: '40px',
+						bottom: '40px',
+						border: '1px solid #000',
+						background: '#fff',
+						overflow: 'auto',
+						borderRadius: '4px',
+						outline: 'none',
+						padding: '20px',
+						width: '480px',
+						height: '380px',
+						boxShadow: '1px 1px 1px 1px black'
+
+					}
+				}}
 			>
-				<h2>방 만들기</h2>
-				<div>
+
+				<h1 className='head'>방 만들기</h1>
+				<div className='modal-contents room-title-box'>
 					<label>
 						방 제목:
 						<input type="text" value={roomName} onChange={handleRoomNameChange} />
 					</label>
 				</div>
-				<div>
+				<div className='modal-contents'>
 					<label>
 						게임 모드:
 						<select value={gameMode} onChange={handleGameModeChange}>
@@ -123,7 +153,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						</select>
 					</label>
 				</div>
-				<div>
+				<div className='modal-contents'>
 					<label>
 						게임 시간:
 						<input type="range" min="30" max="300" step="10" value={gameTime} onChange={handleGameTimeChange} />
@@ -131,18 +161,55 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						<button onClick={handleGameTimeIncrease}>10초 추가</button>
 					</label>
 				</div>
-				<button className="mr-5" onClick={handleSubmit}>확인</button>
-				<button onClick={() => {
-					onClose();
-					setIsRoomNameEmpty(false);
-					setTitle('');
-				}}>취소</button>
-				{isRoomNameEmpty && (
-					<div style={{ color: "red" }}>방이름을 입력해 주세요</div>
-				)}
+				<div className='modal-contents button-component'>
+					<button className="mr-5 confirm-btn" onClick={handleSubmit}>확인</button>
+					<button className="cancel-btn" onClick={() => {
+						onClose();
+						setIsRoomNameEmpty(false);
+						setRoomName('');
+					}}>취소</button>
+					{isRoomNameEmpty && (
+						<div style={{ color: "red" }}>방이름을 입력해 주세요</div>
+					)}
+				</div>
 			</Modal>
+			<style jsx>{`
+					h1{
+						font-size:28px;
+						padding: 10px;
+					}
+					input{
+						border: 1px solid black;
+					}
+					.button-component{
+						margin-top: 20px; 
+					}
+
+					.modal-contents{
+						font-size: 18px;
+					}
+
+					.confirm-btn{
+					}
+
+					.cancel-btn{
+						
+					}
+					.room-title-box{
+						font-size: 18px;
+					}
+					
+					.custom-modal{
+						background-color: white;
+						border-radius: 5px;
+						box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+						padding: 20px;
+						width: 10px;
+					}
+				
+				`}</style>
 		</>
 
-	)
+	);
 }
 

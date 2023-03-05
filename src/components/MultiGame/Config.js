@@ -229,7 +229,8 @@ export default class Main extends Phaser.Scene {
             this.player1InputTime=0;
             this.player2InputTime=0;
         }
-
+        // this.player1InputTime=0;
+        // this.player2InputTime=0;
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
