@@ -8,10 +8,11 @@ export default function Home() {
     return (
         <LayoutAuthenticated>
             <Navbar>
+            
             <title>
                 MOFIT 모드 선택
             </title>
-            <div className="flex h-full justify-center items-center">
+            <div className="flex justify-center items-center">
                 <div>
                     <Background />
                 </div>
@@ -54,7 +55,7 @@ export default function Home() {
 
                   .select-modal {
                     position: relative;
-                    top: -160px;
+                    top: 170px;
 
                   }
 
