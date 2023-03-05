@@ -125,15 +125,20 @@ export default function OpenViduComponent({
 
   let isClicked = false;
   let isAllReady = true;
+  let isRoomOutBtnClicked = false
+
+  const [ rightUserName, setRightUserName ] = useState("");
 
   useEffect(() => {
     joinSession();
     if (myInRoomState === 1) {
-      const targetBtn = document.getElementById("buttonGameReady");
-      targetBtn.style.display = "none";
+      const targetBtnReady = document.getElementById("buttonGameReady");
+      targetBtnReady.style.display = "none";
+	  const targetBtnStart = document.getElementById("buttonGameStart");
+      targetBtnStart.style.display = "none";
     } else if (myInRoomState === 2) {
-      const targetBtn = document.getElementById("buttonGameStart");
-      targetBtn.style.display = "none";
+      const targetBtnStart = document.getElementById("buttonGameStart");
+      targetBtnStart.style.display = "none";
     }
     // console.log("myInRoomState : " + myInRoomState);
     // isClicked = false;
@@ -225,7 +230,7 @@ export default function OpenViduComponent({
       });
 
       mySession.on("connectionCreated", (event) => {
-        console.log(event.connection);
+        console.log("connectionCreated : " + event.connection);
       });
 
       mySession.on("streamDestroyed", (event) => {
@@ -282,6 +287,16 @@ export default function OpenViduComponent({
         // Phaser 시작
         isPhaserGameStart = true;
         console.log("isPhaserGameStart : " + isPhaserGameStart);
+
+		const targetBtnReady = document.getElementById("buttonGameReady");
+      	targetBtnReady.style.display = "none";
+	  	const targetBtnStart = document.getElementById("buttonGameStart");
+      	targetBtnStart.style.display = "none";
+		// const targetBtnLeave = document.getElementById("buttonLeaveRoom");
+		// targetBtnLeave.style.display = "none";
+
+		mySquart = 0;
+		heSquart = 0;
       });
 
 	  mySession.on("end", (event) => {
@@ -293,7 +308,11 @@ export default function OpenViduComponent({
       mySession.on("signal:otherPlayerReady", (event) => {
 		isAllReady = true;
         isOtherPlayerReady = true;
-		console.log("OtherPlayerReady !!!" + isAllReady);
+		setRightUserName(event.data);
+		console.log("OtherPlayerReady !!!" + rightUserName);
+
+		const targetBtnStart = document.getElementById("buttonGameStart");
+      	targetBtnStart.style.display = "block";
       });
 
       // On every asynchronous exception...
@@ -354,8 +373,10 @@ export default function OpenViduComponent({
   };
 
   const callLeaveSession = () => {
-    isClicked = true;
-    leaveSession();
+	if (!isRoomOutBtnClicked) {
+    	isRoomOutBtnClicked = true;
+    	leaveSession();
+	}
   };
 
   const allLeaveSession = () => {
@@ -459,7 +480,7 @@ export default function OpenViduComponent({
                 {publisher !== undefined ? (
                     <div
                     id="main-video"
-                    style={{ position: "absolute", top: "30px", bottom:"170px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
+                    style={{ position: "absolute", top: "30px", bottom:"140px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
                     >
                     <OvVideo
                         streamManager={publisher}
@@ -474,9 +495,13 @@ export default function OpenViduComponent({
             ) : null}
         
             {loading ? <DynamicComponentWithNoSSR /> : null}
-
+			
+			<p className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
+			<p className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}>VS</p>
+			<span className="user-name" style={{ position: "absolute", top: "810px", left: "570px" }}>{userName}</span>
+			<span className="user-name" style={{ position: "absolute", top: "810px", right: "570px" }}>{rightUserName}</span>
             <button
-                style={{ position: "absolute", top: "810px", left: "850px" }}
+                style={{ position: "absolute", top: "820px", left: "850px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -484,12 +509,20 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "absolute", top: "800px", left: "850px" }}
+                style={{ position: "absolute", top: "820px", left: "850px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
             >
-                준비
+                <span>준비</span>
+            </button>
+			<button
+                style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "1600px", width: "250px", height: "100px", fontSize: "50px", color: "white", backgroundColor: "red", borderRadius: "20px" }}
+                className="buttonLeaveRoom"
+                id="buttonLeaveRoom"
+                onClick={callLeaveSession}
+            >
+                방나가기
             </button>
 			
 
@@ -507,7 +540,7 @@ export default function OpenViduComponent({
         </div>
       </div>
 
-	  <div className="nav-bar flex justify-center align-center" style={{ position: "absolute" }}>
+	  		{/* <div className="nav-bar flex justify-center align-center" style={{ position: "absolute", top: "800px", bottom:"30px", right: "30px", left: "1400px", width: "300px", height: "100px" }}>
         		<div className="contents-box flex flex-inline justify-center align-center">
           			<p className="session-title">{roomName}</p>
           			<button
@@ -518,7 +551,7 @@ export default function OpenViduComponent({
             			방 나가기
           			</button>
         		</div>
-      		</div>
+      		</div> */}
 
       <style jsx>{`
                 .video-container{
@@ -543,6 +576,17 @@ export default function OpenViduComponent({
                     align-items: center;
                     color: white;
                 }
+
+				.user-name {
+					display: flex;
+					justify-content: center;
+					font-size: 60px;
+					background-color: ;
+				}
+
+				.stringVS {
+					
+				}
 
                 .contents-box{
                     position: relative;
@@ -640,7 +684,92 @@ export default function OpenViduComponent({
 					  width: 100%;
 					}
 
-
+				.buttonGameReady {
+					font-size: 40px;
+					color: white;
+					background-color: red;
+					width: 250px;
+					height: 100px;
+					border-radius: 20px; 
+					// border: 3px solid black;
+				}
+				.buttonGameReady {
+					background: linear-gradient(0deg, rgba(244, 123, 123, 1) 0%, rgba(238, 47, 47, 1) 100%);
+					font-size: 50px;
+					color: white;
+					width: 250px;
+					height: 100px;
+					  line-height: 42px;
+					  padding: 0;
+					  border: none;
+					}
+					.buttonGameReady span {
+						line-height: 100px;
+					  position: relative;
+					  display: block;
+					  width: 100%;
+					  height: 100%;
+					}
+					.buttonGameReady:before,
+					.buttonGameReady:after {
+					  position: absolute;
+					  content: "";
+					  right: 0;
+					  bottom: 0;
+					  background: rgba(238, 47, 47, 1);
+					  box-shadow:
+					   -7px -7px 20px 0px rgba(255,255,255,.9),
+					   -4px -4px 5px 0px rgba(255,255,255,.9),
+					   7px 7px 20px 0px rgba(0,0,0,.2),
+					   4px 4px 5px 0px rgba(0,0,0,.3);
+					  transition: all 0.3s ease;
+					}
+					.buttonGameReady:before{
+					   height: 0%;
+					   width: 2px;
+					}
+					.buttonGameReady:after {
+					  width: 0%;
+					  height: 2px;
+					}
+					.buttonGameReady:hover{
+					  color: rgba(238, 47, 47, 1);
+					  background: transparent;
+					}
+					.buttonGameReady:hover:before {
+					  height: 100%;
+					}
+					.buttonGameReady:hover:after {
+					  width: 100%;
+					}
+					.buttonGameReady span:before,
+					.buttonGameReady span:after {
+					  position: absolute;
+					  content: "";
+					  left: 0;
+					  top: 0;
+					  background: rgba(238, 47, 47, 1);
+					  box-shadow:
+					   -7px -7px 20px 0px rgba(255,255,255,.9),
+					   -4px -4px 5px 0px rgba(255,255,255,.9),
+					   7px 7px 20px 0px rgba(0,0,0,.2),
+					   4px 4px 5px 0px rgba(0,0,0,.3);
+					  transition: all 0.3s ease;
+					}
+					.buttonGameReady span:before {
+					  width: 2px;
+					  height: 0%;
+					}
+					.buttonGameReady span:after {
+					  height: 2px;
+					  width: 0%;
+					}
+					.buttonGameReady span:hover:before {
+					  height: 100%;
+					}
+					.buttonGameStart span:hover:after {
+					  width: 100%;
+					}
 
 				// .buttonGameStart {
 				// 	font-size: 40px;

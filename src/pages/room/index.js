@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useRef } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
@@ -24,6 +24,12 @@ export default function RoomList() {
   const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
   const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
+  const userIdRef = useRef('');
+  useEffect(() => {
+    if (window)
+      userIdRef.current = localStorage.getItem("username");
+  }, [userIdRef.current]);
+
   useEffect(() => {
     fetchRooms();
     return setRoomList([]);
@@ -37,7 +43,8 @@ export default function RoomList() {
       setCurrSessionId(customSessionId);
 
       // 보낼때 post, 바디에 mode랑 방이름 넣어서 보내라.
-      const response = await axios.get(API_URL + `/enter/${customSessionId}`, {
+      const response = await axios.post(API_URL + `/enter/${customSessionId}`,
+        { userId: userIdRef.current }, {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
       setInRoomState(2);

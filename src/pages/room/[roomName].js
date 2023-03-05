@@ -17,7 +17,7 @@ export default function GameRoom() {
     const token = Cookies.get("token");
     const roomName = router.query.roomName;
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-    let username
+    let username = window.localStorage.getItem('username');
 
 
 
