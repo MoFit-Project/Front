@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
-      <change afterPath="$PROJECT_DIR$/public/assets/sound/inGameBgm.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/sound/waitBgm2.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MultiGame2/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame2/Index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -6,6 +6,7 @@ import {
     mySquart,
     heSquart
 } from "../openvidu/OpenviduComponent";
+import {gameTimePassed2} from "@/components/openvidu/OpenviduComponent";
 
 
 //통신
@@ -148,8 +149,7 @@ export default class Main extends Phaser.Scene {
         this.playerBackground = this.add.graphics();
 
         this.timeBar = this.add.graphics();
-        // this.timeBar.fillStyle(0x000000, 1)
-        // this.timeBar.fillRect(950, 910, 200, 20);
+
         this.timeText = this.add
             .text(580, 930,
                 "TIME LEFT:",
@@ -329,14 +329,14 @@ export default class Main extends Phaser.Scene {
         if (mySquart > heSquart) {
             this.playerFire.x = 280;
             this.playerFire.visible = true;
-            this.playerFire.anims.play('player_fire', true);
+            this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(0, 0, 570, 1000);
         } else if (mySquart < heSquart) {
             this.playerFire.x = 1640;
             this.playerFire.visible = true;
-            this.playerFire.anims.play('player_fire', true);
+            this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(1330, 0, 570, 1000);
