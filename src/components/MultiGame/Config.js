@@ -6,6 +6,7 @@ import {
     mySquart,
     heSquart
 } from "../openvidu/OpenviduComponent";
+import {gameTimePassed2} from "@/components/openvidu/OpenviduComponent";
 
 
 //통신
@@ -312,9 +313,13 @@ export default class Main extends Phaser.Scene {
 
 
     update(time, delta) {
+        let currentGameTime = gameTimePassed - 5
+        if (currentGameTime < 0){
+            currentGameTime = 0
+        }
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
-        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal - gameTimePassed) / gameTimeTotal), 59);
+        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal - currentGameTime) / (gameTimeTotal)), 59);
         const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
         const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
         const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);

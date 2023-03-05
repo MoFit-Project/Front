@@ -262,9 +262,13 @@ export default class Main2 extends Phaser.Scene {
         if (!this.inGameBgm.isPlaying && isPhaserGameStart) {
             this.inGameBgm.play()
         }
+        let currentGameTime = gameTimePassed2 - 5
+        if (currentGameTime < 0){
+            currentGameTime = 0
+        }
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
-        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal2 - gameTimePassed2) / gameTimeTotal2), 59);
+        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal2 - currentGameTime) / (gameTimeTotal2)), 59);
 
         const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
         const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
