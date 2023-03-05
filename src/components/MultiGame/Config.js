@@ -1,8 +1,7 @@
 import "phaser";
 import {
     isPhaserGameStart,
-    isLeftPlayerThrow,
-    isRightPlayerThrow,
+    gameTimePassed,
     mySquart,
     heSquart
 } from "../openvidu/OpenviduComponent";
@@ -12,10 +11,7 @@ import {
 
 
 export default class Main extends Phaser.Scene {
-
-    // isPhaserGameStart = true;
     gameHasNotStarted = true;
-    startButton;
     loadingText;
     player1;
     player2;
@@ -30,8 +26,6 @@ export default class Main extends Phaser.Scene {
 
     player1CountTempSave = 0;
     player2CountTempSave = 0;
-    player1CountDetector = false;
-    player2CountDetector = false;
 
     touch = false;
 
@@ -41,9 +35,19 @@ export default class Main extends Phaser.Scene {
     backgroundCity;
     ground;
     punchSound;
-    bgm;
+    fightBgm;
+    waitBgm;
+    bee;
+    ding;
     noDisplay;
-
+    number;
+    countdown = 5;
+    player1Number100;
+    player1Number10;
+    player1Number1;
+    player2Number100;
+    player2Number10;
+    player2Number1;
 
     constructor() {
         super();
@@ -109,11 +113,19 @@ export default class Main extends Phaser.Scene {
             '../assets/notStart.png',
             {frameWidth: 467, frameHeight: 262}
         )
+        this.load.spritesheet(
+            "numbers",
+            '../assets/numbers.png',
+            {frameWidth: 130, frameHeight: 150}
+        )
         this.load.image('backGround_Gameboy', '../assets/gameboy.png')
         this.load.image('backgroundCityImage', '../assets/backgroundCity.png')
         this.load.image('ground', '../assets/ground.webp')
         this.load.audio('punch', ['../assets/sound/punch.mp3'])
         this.load.audio('fight', ['../assets/sound/fightBGM.mp3'])
+        this.load.audio('wait', ['../assets/sound/waitBGM.mp3'])
+        this.load.audio('bee', ['../assets/sound/bee.mp3'])
+        this.load.audio('ding', ['../assets/sound/ding.mp3'])
 
 
     }
@@ -121,7 +133,13 @@ export default class Main extends Phaser.Scene {
 
     create() {
         this.punchSound = this.sound.add('punch');
-        this.bgm = this.sound.add('fight');
+        this.fightBgm = this.sound.add('fight');
+        this.waitBgm = this.sound.add('wait');
+        this.bee = this.sound.add('bee');
+        this.ding = this.sound.add('ding');
+
+        this.waitBgm.play();
+
         this.backGround_Gameboy = this.add.image(950, 405, 'backGround_Gameboy')
             .setOrigin(0.5, 0.5)
             .setScale(1.35);
@@ -232,7 +250,7 @@ export default class Main extends Phaser.Scene {
         });
         this.noDisplay = this.add.sprite(950, 410, 'displayDisable')
             .setOrigin(0.5, 0.5)
-            .setScale(1.31,1.75);
+            .setScale(1.31, 1.75);
         this.anims.create({
             key: 'beforeStart',
             frames: this.anims.generateFrameNumbers('displayDisable', {start: 0, end: 1}),
@@ -240,32 +258,52 @@ export default class Main extends Phaser.Scene {
             repeat: -1,
         });
         this.noDisplay.anims.play('beforeStart')
+        this.number = this.add.sprite(950, 410, 'numbers').setVisible(false);
+        this.player1Number100 = this.add.sprite(170, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number10 = this.add.sprite(280, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number1 = this.add.sprite(390, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number100 = this.add.sprite(1530, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number10 = this.add.sprite(1640, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number1 = this.add.sprite(1750, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
     }
 
 
     update(time, delta) {
-        // this.noDisplay.anims.play('beforeStart', false)
 
         const cursors = this.input.keyboard.createCursorKeys();
 
+        if (mySquart != this.player1CountTempSave && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
+            this.ding.play();
+            this.player1CountTempSave = mySquart;
+            this.player1InputTime = time;
+            this.player1Press = true;
+        } else {
+            this.player1Press = false;
+        }
+        if (heSquart != this.player2CountTempSave && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
+            this.ding.play();
+            this.player2CountTempSave = heSquart;
+            this.player2InputTime = time;
+            this.player2Press = true;
+        } else {
+            this.player2Press = false;
+        }
 
 
         if (isPhaserGameStart && this.gameHasNotStarted) {
-            // console.log("isPhaserGameStart is true !!!");
-            this.player1InputTime = 0;
-            this.player2InputTime = 0;
-            this.bgm.play();
             this.gameHasNotStarted = false;
-
+            this.countDown.call(this);
         }
-        if(!this.bgm.isPlaying && !this.gameHasNotStarted) {
-            this.bgm.play()
+        if (!this.fightBgm.isPlaying && isPhaserGameStart) {
+            this.fightBgm.play()
+        }
+        if (!this.waitBgm.isPlaying && this.gameHasNotStarted) {
+            this.waitBgm.play()
         }
 
         //테스트용 코드
         this.player1InputTime = 0;
         this.player2InputTime = 0;
-
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
@@ -365,34 +403,30 @@ export default class Main extends Phaser.Scene {
             }
             this.player2Attack = false;
         }
-        if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
-            this.player1InputTime = time;
-            this.player1Press = true;
-        } else {
-            this.player1Press = false;
-        }
-        if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-            this.player2InputTime = time;
-            this.player2Press = true;
-        } else {
-            this.player2Press = false;
-        }
 
+        this.player1Number100.setFrame(Math.floor(mySquart / 100))
+        this.player1Number10.setFrame(Math.floor((mySquart % 100) / 10))
+        this.player1Number1.setFrame(Math.floor(mySquart % 10))
 
-        // if (isLeftPlayerThrow && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
-        //     // this.player1CountDetector = false;
+        this.player2Number100.setFrame(Math.floor(heSquart / 100))
+        this.player2Number10.setFrame(Math.floor((heSquart % 100) / 10))
+        this.player2Number1.setFrame(Math.floor(heSquart % 10))
+
+        // 이것은 키보드로하는 테스트 용입니다.
+        // if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
         //     this.player1InputTime = time;
         //     this.player1Press = true;
-        // }else {
+        // } else {
         //     this.player1Press = false;
         // }
-        // if (isRightPlayerThrow && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-        //     this.player2CountDetector = false;
+        // if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
         //     this.player2InputTime = time;
         //     this.player2Press = true;
-        // }else{
+        // } else {
         //     this.player2Press = false;
         // }
+
+
     }
 
 
@@ -409,5 +443,30 @@ export default class Main extends Phaser.Scene {
             this.player1.body.velocity.x = -700;
 
         }
+    }
+
+    countDown() {
+        if (this.countdown === 0) {
+            this.number.visible = false;
+            this.player1InputTime = 0;
+            this.player2InputTime = 0;
+            this.noDisplay.destroy();
+            this.waitBgm.destroy();
+            return;
+        }
+        this.bee.play();
+        this.number.destroy();
+        this.number = this.add.sprite(950, 410, 'numbers').setFrame(this.countdown);
+        this.tweens.add({
+            targets: this.number,
+            duration: 1000, // 애니메이션 지속 시간
+            scale: 2, // X축으로 2배 키우기
+            repeat: 0
+        });
+        this.countdown--;
+
+        this.time.delayedCall(1000, this.countDown, [], this);
+
+
     }
 }
