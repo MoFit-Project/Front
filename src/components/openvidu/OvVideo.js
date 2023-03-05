@@ -57,7 +57,7 @@ export default function OvVideo({
 			if (detectorRef.current && videoRef.current) {
 				console.log("detectSquat");
 				setIsMovenetLoaded(true);
-				//detectSquat();
+				detectSquat();
 			}
 		}
 	}, [isLoaded]);

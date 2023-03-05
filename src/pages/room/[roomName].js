@@ -21,13 +21,11 @@ export default function GameRoom() {
     const [isOpenViduLoaded, setIsOpenViduLoaded] = useState(false);
     const [isPhaserLoaded, setIsPhaserLoaded] = useState(true);
 
-    let username;
+    const [ username, setUsername ] = useState("");
 
     useEffect(() => {
-        // if (!token) router.push("/login");
-        username = window.localStorage.getItem('username');
+        setUsername(localStorage.getItem('username'));
         setLoading(true);
-        
     }, [])
    
     useEffect(() => {
@@ -36,7 +34,6 @@ export default function GameRoom() {
 
     }, [isMovenetLoaded, isOpenViduLoaded, isPhaserLoaded])
 
-    //const userName = result.sub;
 
     return (
         <>
