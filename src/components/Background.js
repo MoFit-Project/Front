@@ -1,11 +1,25 @@
-const background = () => (
-    <div>
+const background = ({children}) => (
+    <div style={{
+        position:'relative',
+        width: '100vw',
+        height: 'calc(100vh - 48px)'
+    
+    }}
+        >
         <img className={"bg-video"} src="gameBoy.gif" />
+        
+        <div style={{
+            position:'absolute', 
+            top: '39%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+            
+        }}>
+        {children}
+        </div>
         <style jsx>{`
           .bg-video {
-            position: absolute;
-            top: 0;
-            left: 0;
+            
             height: 100%;
             width: 100%;
             z-index: -1;
