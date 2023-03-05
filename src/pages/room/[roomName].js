@@ -45,8 +45,8 @@ export default function GameRoom() {
                 <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
                     setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}
                 >
-                    <div key={Math.random()} id="game"></div>
-                    {loading ? <DynamicComponentWithNoSSR style="width:60%" /> : null}
+                    {/* <div key={Math.random()} id="game"></div> */}
+                    {/* {loading ? <DynamicComponentWithNoSSR style="width:60%" /> : null} */}
                 </OpenViduComponent>
             </div>
             <style jsx>{`

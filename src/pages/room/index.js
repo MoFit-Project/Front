@@ -1,5 +1,4 @@
 import { useState, useEffect, createContext, useRef } from "react";
-import { useState, useEffect, createContext, useRef } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
