@@ -292,14 +292,14 @@ export default class Main2 extends Phaser.Scene {
         if (mySquart > heSquart) {
             this.playerFire.x = 280;
             this.playerFire.visible = true;
-            this.playerFire.anims.play('player_fire', false)
+            this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(0, 0, 570, 1000);
         } else if (mySquart < heSquart) {
             this.playerFire.x = 1640;
             this.playerFire.visible = true;
-            this.playerFire.anims.play('player_fire', false)
+            this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(1330, 0, 570, 1000);
