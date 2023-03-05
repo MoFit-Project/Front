@@ -117,11 +117,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						backgroundColor: 'rgba(255, 255, 255, 0.75)'
 					},
 					content: {
-						position: 'absolute',
-						top: '40px',
-						left: '40px',
-						right: '40px',
-						bottom: '40px',
+						margin: '0px auto',
 						border: '1px solid #000',
 						background: '#fff',
 						overflow: 'auto',
@@ -131,7 +127,6 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						width: '480px',
 						height: '380px',
 						boxShadow: '1px 1px 1px 1px black'
-
 					}
 				}}
 			>

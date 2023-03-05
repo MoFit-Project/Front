@@ -1,6 +1,6 @@
 import OpenViduComponent from "../../components/openvidu/OpenviduComponent";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
@@ -17,26 +17,33 @@ export default function GameRoom() {
     const token = Cookies.get("token");
     const roomName = router.query.roomName;
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-    let username
+    let username;
 
+    const movenetRef = useRef(false);
+    const gameRef = useRef(true);
+    const openViduRef = useRef(false);
 
 
     useEffect(() => {
         // if (!token) router.push("/login");
         username = window.localStorage.getItem('username');
         console.log(isRoomHost);
-        setLoading(true)
     }, [])
 
-    //const userName = result.sub;
+    useEffect(() => {
+        if (movenetRef.current && game.current && openvidu.current)
+            setLoading(true);
+        console.log(movenetRef.current)
+        console.log(gameRef.current)
+        console.log(openViduRef.current)
+    }, [movenetRef, gameRef, openViduRef])
 
     return (
         <>
             <title>MOFIT 게임룸</title>
-
             <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}>
-                {/* <div key={Math.random()} id="game"></div> */}
-                {/* {loading ? <DynamicComponentWithNoSSR style="width:60%" /> : null} */}
+                <div key={Math.random()} id="game"></div>
+                {loading ? <DynamicComponentWithNoSSR style="width:60%" /> : null}
             </OpenViduComponent>
         </>
 

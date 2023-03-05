@@ -70,6 +70,8 @@ export default function OpenViduComponent({
     userName,
     jwtToken,
     children,
+    movenetRef,
+    openViduRef
 }) {
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -86,6 +88,7 @@ export default function OpenViduComponent({
     useEffect(() => {
         setLoading(true);
     }, []);
+
     const [height, setHeight] = useState(0);
 
     useEffect(() => {
@@ -330,6 +333,10 @@ export default function OpenViduComponent({
 
                         currentVideoDeviceRef.current = currentVideoDevice;
                         setPublisher(publisher);
+                        console.log('vidu');
+                        console.log('vidu' + openViduRef.current);
+                        openViduRef.current = true;
+                        console.log('vidu' + openViduRef.current);
                     })
                     .catch((error) => {
                         console.log(
@@ -382,6 +389,7 @@ export default function OpenViduComponent({
             const response = await axios.get(API_URL + `/destroy/${roomId}`, {
                 headers: { Authorization: `Bearer ${assessToken}` },
             });
+            openViduRef.current = false;
             session.disconnect();
             setOV(null);
             setSession(undefined);
@@ -461,6 +469,7 @@ export default function OpenViduComponent({
                                         streamManager={publisher}
                                         userName={userName}
                                         session={session}
+                                        movenetRef={movenetRef}
                                     />
                                 </div>
                             ) : (
