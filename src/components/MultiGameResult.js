@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router"
+import Cookies from "js-cookie";
 
 export default function Result(props) {
   const [names] = useState(props.names);
   const [results] = useState(props.results);
-  const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const assessToken = Cookies.get("token");
 
   const handleClick = async () => {
     try {
-      const response = await axios.post('/mofit/result', {
-        userid: names,
-        results: results
+      console.log("roomId : " + props.roomId);
+      console.log("userName : " + props.name);
+
+      const response = await axios.post(API_URL + `/result/${props.roomId}`, {
+        userId: props.name
+      },
+      {
+        headers: { Authorization: `Bearer ${assessToken}` }
       });
+
+      props.setIsWinModalOpen(false);
       console.log(response.data);
       // 서버로부터 받은 응답에 대한 처리를 여기에 작성
 
