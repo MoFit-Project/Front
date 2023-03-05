@@ -40,7 +40,7 @@ export default function SignupForm() {
       <div>
         <Background />
       </div>
-      <div className="max-w-md mx-auto w-full">
+      <div className="max-w-md mx-auto w-full login-modal">
         <Link href="/login">
           <h1 className="text-7xl font-bold text-center text-blue-800">
             Mofit
@@ -101,6 +101,16 @@ export default function SignupForm() {
             background: linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%);
           }
         `}</style>
+      <style jsx>{`
+            
+            .login-modal{
+              position: relative;
+              top: -100px;
+            
+            }
+
+            `}
+      </style>
     </div>
   );
 }
