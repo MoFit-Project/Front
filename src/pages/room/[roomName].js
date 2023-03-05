@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
 import dynamic from 'next/dynamic'
+import Loading from '../../components/Loading'
 
 const DynamicComponentWithNoSSR = dynamic(
     () => import('../../components/MultiGame/Index'),
@@ -40,18 +41,29 @@ export default function GameRoom() {
             <title>MOFIT 게임룸</title>
             <div className='curtain'>
                 <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
-                    setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}
-                >
-                    {/* <div key={Math.random()} id="game"></div> */}
-                    {/* {loading ? <DynamicComponentWithNoSSR style="width:60%" /> : null} */}
+                    setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
                 </OpenViduComponent>
+            </div>
+
+            <div className="loading">
+                <div>
+                    <Loading/>
+                </div>
             </div>
             <style jsx>{`
                     .curtain{
-                        width: 100vh;
-                        height: 100vh; /* 화면 전체를 커버하도록 설정 */
-                        visibility: ${loading ? 'hidden' : 'visible'}; 
+                        display: ${loading ? 'none' : 'block'}; 
                     }
+                    .loading{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: black;
+                        width: 100vw;
+                        height: 100vh; 
+                        visibility: ${loading ? 'visible' : 'hidden'};
+                    }
+
                 `}</style>
 
         </>
