@@ -6,6 +6,7 @@ import {
     mySquart,
     heSquart, isPhaserGameStart
 } from "../openvidu/OpenviduComponent";
+import {gameTimePassed, gameTimeTotal} from "@/components/openvidu/OpenviduComponent";
 
 
 //통신
@@ -144,10 +145,7 @@ export default class Main2 extends Phaser.Scene {
         this.playerBackground = this.add.graphics();
 
         this.timeBar = this.add.graphics();
-        // this.timeBar.fillStyle(0x000000, 1)
-        // this.timeBar.fillRect(950, 910, 200, 20);
-        this.timeBar.fillStyle(0xff0000, 1);
-        this.timeBar.fillRect(890, 929, 430, 59);
+
         this.timeText = this.add
             .text(580, 930,
                 "TIME LEFT:",
@@ -264,7 +262,9 @@ export default class Main2 extends Phaser.Scene {
         if (!this.inGameBgm.isPlaying && isPhaserGameStart) {
             this.inGameBgm.play()
         }
-        this.timeBar.fillRect(750, 929, 430 * ((gameTimeTotal2 - gameTimePassed2) / gameTimeTotal2), 59);
+        this.timeBar.clear();
+        this.timeBar.fillStyle(0xff0000, 1);
+        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal2 - gameTimePassed2) / gameTimeTotal2), 59);
 
         const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
         const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
