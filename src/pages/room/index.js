@@ -37,7 +37,10 @@ export default function RoomList() {
 
   useEffect(() => {
     fetchRooms();
-    return setRoomList([]);
+    return ()=> {
+      setIsLoading(false);
+      setRoomList([]);
+    } 
   }, []);
 
   const enterRoom = async (customSessionId) => {
@@ -45,7 +48,6 @@ export default function RoomList() {
     const assessToken = Cookies.get("token");
     try {
       setIsLoading(true);
-      console.log("Enter Room : ", customSessionId);
       setCurrSessionId(customSessionId);
 
       // 보낼때 post, 바디에 mode랑 방이름 넣어서 보내라.
@@ -85,13 +87,10 @@ export default function RoomList() {
             router.reload();
         }
       }
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   const fetchRooms = async () => {
-    setRoomList([]);
     const accessToken = Cookies.get("token");
     try {
       const response = await axios.get(API_URL + "/rooms", {
@@ -159,7 +158,7 @@ export default function RoomList() {
 
           <div className="tb-container flex-col items-center flex">
 
-            <div className="mt-2 w-8/12 flex ">
+            <div className="mt-6 w-8/12 flex ">
               <table className="w-full" style={{ overflow: 'auto' }} >
                 <thead>
                   <tr className="text-white">
@@ -188,7 +187,7 @@ export default function RoomList() {
                         {room.status === "START" || room.participant === 2 ? <button
                           className=" text-white font-bold py-2 px-4 rounded-md mx-auto block bg-slate-400"
                           disabled
-                        >참여하기
+                        >게임중
                         </button> : <button
                           className=" text-white font-bold py-2 px-4 rounded-md mx-auto btn-1 block "
                           onClick={() => {
@@ -225,7 +224,7 @@ export default function RoomList() {
                     />
                   </svg>
                 </button>
-                  <img className={"bg-img"}src="packMan.gif" />
+                <img className={"bg-img"} src="packMan.gif" />
 
 
               </div>
@@ -233,14 +232,16 @@ export default function RoomList() {
 
           </div>
         </Navbar>
-        <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
+        <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} setIsLoading={setIsLoading} />
       </LayoutAuthenticated>
       <style jsx>{`
+
         .loading-container{
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100vh; /* 화면 전체를 커버하도록 설정 */
+          width: 100vw;
         }
         .tb-container {
           margin: 0px auto;

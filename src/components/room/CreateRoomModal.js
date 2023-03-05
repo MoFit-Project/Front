@@ -9,24 +9,36 @@ import { inroomState } from "../../recoil/imroomState";
 import { refreshToken } from "public/refreshToken";
 import Swal from 'sweetalert2'
 import Modal from 'react-modal';
-import Loading from './../Loading';
 
 Modal.setAppElement('#__next');
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function CreateRoomModal({ isOpen, onClose }) {
+export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 	const router = useRouter();
 	const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
-	const [roomName, setRoomName] = useState("");
+
 	const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(false);
+	const [isRoomNameOver, setIsRoomNameOver] = useState(false);
+	const [isModeNotSelected, setIsModeNotSelected] = useState(false);
 
 	const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 	const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
 	const userIdRef = useRef('');
-	const [isLoading, setIsLoading] = useState(false);
-	const [gameMode, setGameMode] = useState('스쿼트');
-	const [gameTime, setGameTime] = useState(10);
+
+	const [roomName, setRoomName] = useState("");
+	const [gameMode, setGameMode] = useState('모드 선택');
+	const [gameTime, setGameTime] = useState(30);
+
+	function handleOnRequestClose() {
+		onClose();
+		setIsRoomNameEmpty(false);
+		setIsRoomNameOver(false);
+		setIsModeNotSelected(false);
+		setRoomName('')
+		setGameMode('모드 선택')
+		setGameTime(30);
+	}
 
 	useEffect(() => {
 		if (window)
@@ -37,17 +49,22 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 		event.preventDefault();
 		if (!roomName) {
 			setIsRoomNameEmpty(true);
-		} else {
-			createRoom(roomName);
-			setRoomName("");
-			setIsRoomNameEmpty(false);
+			return;
 		}
+		if (roomName.length > 10) {
+			setIsRoomNameOver(true);
+			return;
+		}
+		if (gameMode === '모드 선택') {
+			setIsModeNotSelected(true);
+			return;
+		}
+		createRoom(roomName);
+		setRoomName("");
+		setIsRoomNameEmpty(false);
 	};
 	const handleRoomNameChange = (e) => {
 		setRoomName(e.target.value);
-	};
-	const handleGameTimeIncrease = () => {
-		setGameTime((time) => time + 10);
 	};
 
 	const handleGameModeChange = (e) => {
@@ -60,6 +77,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 
 
 	const createRoom = async (customSessionId) => {
+		setIsLoading(true);
 		setIsRoomHost({ roomName: customSessionId, isHost: true });
 		setCurrSessionId(customSessionId);
 		const assessToken = Cookies.get("token");
@@ -76,6 +94,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 				},
 			);
 			setInRoomState(1);
+			onClose();
 			router.push(`/room/${response.data}`);
 		} catch (error) {
 			console.log(error);
@@ -98,6 +117,8 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						})
 				}
 			}
+		} finally {
+			onClose();
 		}
 	}
 	return (
@@ -105,7 +126,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 			<Modal
 				portalClassName="custom-modal"
 				isOpen={isOpen}
-				onRequestClose={onClose}
+				onRequestClose={handleOnRequestClose}
 				contentLabel="Create Room Modal"
 				style={{
 					overlay: {
@@ -131,7 +152,9 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						padding: '20px',
 						width: '480px',
 						height: '380px',
-						boxShadow: '1px 1px 1px 1px black'
+						boxShadow: '1px 1px 1px 1px black',
+						display: 'flex',
+						flexDirection: 'column'
 
 					}
 				}}
@@ -141,13 +164,15 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 				<div className='modal-contents room-title-box'>
 					<label>
 						방 제목:
-						<input type="text" value={roomName} onChange={handleRoomNameChange} />
+						<input className="title-input text-contents" type="text" value={roomName} onChange={handleRoomNameChange} />
 					</label>
+
 				</div>
 				<div className='modal-contents'>
 					<label>
 						게임 모드:
-						<select value={gameMode} onChange={handleGameModeChange}>
+						<select className="mode-selector" value={gameMode} onChange={handleGameModeChange}>
+							<option value="default">모드 선택</option>
 							<option value="스쿼트">스쿼트</option>
 							<option value="푸쉬업">푸쉬업</option>
 						</select>
@@ -156,37 +181,64 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 				<div className='modal-contents'>
 					<label>
 						게임 시간:
-						<input type="range" min="30" max="300" step="10" value={gameTime} onChange={handleGameTimeChange} />
+						<input type="range" min="30" max="180" step="10" value={gameTime} onChange={handleGameTimeChange} />
 						{gameTime}초
-						<button onClick={handleGameTimeIncrease}>10초 추가</button>
 					</label>
 				</div>
-				<div className='modal-contents button-component'>
-					<button className="mr-5 confirm-btn" onClick={handleSubmit}>확인</button>
-					<button className="cancel-btn" onClick={() => {
-						onClose();
-						setIsRoomNameEmpty(false);
-						setRoomName('');
-					}}>취소</button>
-					{isRoomNameEmpty && (
-						<div style={{ color: "red" }}>방이름을 입력해 주세요</div>
-					)}
+				{isRoomNameEmpty && (
+					<div style={{ color: "red" }}>방이름을 입력해 주세요</div>
+				)}
+
+				{isRoomNameOver && (
+					<div style={{ color: "red" }}>10자 이하로 작성해 주세요</div>
+				)}
+
+				{isModeNotSelected && (
+					<div style={{ color: "red" }}>모드를 선택해 주세요</div>
+				)}
+				<div className='modal-contents button-component flex justify-end'>
+
+					<div>
+						<button className="mr-5 confirm-btn" onClick={handleSubmit}>확인</button>
+						<button className="cancel-btn" onClick={() => {
+							onClose();
+							setRoomName('');
+							setIsRoomNameEmpty(false);
+							setIsRoomNameOver(false);
+							setIsModeNotSelected(false);
+						}}>취소</button>
+					</div>
+
 				</div>
+
+
 			</Modal>
 			<style jsx>{`
 					h1{
-						font-size:28px;
+						width: 100%;
+						font-size:32px;
 						padding: 10px;
+						margin-bottom: 10px;
 					}
-					input{
-						border: 1px solid black;
+					.mode-selector{
+						padding: 5px;
+					}
+					.text-contents{
+						font-size: 20px;
+					}
+					.title-input{
+						border: 2px solid black;
+						border-radius: 5px;
+						width: 80%;
+						padding: 2px;
 					}
 					.button-component{
-						margin-top: 20px; 
+						margin-top: 30px; 
 					}
 
 					.modal-contents{
-						font-size: 18px;
+						font-size: 20px;
+						margin-bottom: 15px;
 					}
 
 					.confirm-btn{
@@ -195,9 +247,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 					.cancel-btn{
 						
 					}
-					.room-title-box{
-						font-size: 18px;
-					}
+					
 					
 					.custom-modal{
 						background-color: white;
