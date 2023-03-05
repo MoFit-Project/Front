@@ -5,13 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
-      <change afterPath="$PROJECT_DIR$/public/assets/multigame2/1_game_background.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/multigame2/2_game_background.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/multigame2/3_game_background.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/multigame2/4_game_background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/packMan.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MultiGame2/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame2/Index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/gameBoy.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/gameBoy.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LayoutAuthticated.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LayoutAuthticated.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/room/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/room/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/signup.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +53,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public/assets/multigame2",
+    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -69,18 +69,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$/public/assets" />
       <recent name="$PROJECT_DIR$/public/assets/multigame2" />
       <recent name="$PROJECT_DIR$/public/assets/characters" />
       <recent name="$PROJECT_DIR$/src/pages" />
-      <recent name="$PROJECT_DIR$/src/components/MultiGame2" />
-      <recent name="$PROJECT_DIR$/src/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$/public/assets/mulitgame2" />
       <recent name="$PROJECT_DIR$/public/assets/characters2" />
       <recent name="$PROJECT_DIR$/src/components/MultiGame2" />
       <recent name="$PROJECT_DIR$/public/assets" />
-      <recent name="$PROJECT_DIR$/src/public" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
