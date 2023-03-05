@@ -131,23 +131,21 @@ export default function OpenViduComponent({
 
   const [ rightUserName, setRightUserName ] = useState("");
 
-  useEffect(() => {
-    joinSession();
-    if (myInRoomState === 1) {
-      const targetBtnReady = document.getElementById("buttonGameReady");
-      targetBtnReady.style.display = "none";
-	  const targetBtnStart = document.getElementById("buttonGameStart");
-      targetBtnStart.style.display = "none";
-    } else if (myInRoomState === 2) {
-      const targetBtnStart = document.getElementById("buttonGameStart");
-      targetBtnStart.style.display = "none";
-    }
-    // console.log("myInRoomState : " + myInRoomState);
-    // isClicked = false;
-    return () => {
-      // if (!isClicked) leaveSession();
-    };
-  }, []);
+    useEffect(() => {
+        joinSession();
+        if (myInRoomState === 1) {
+            const targetBtn = document.getElementById("buttonGameReady");
+            targetBtn.style.display = "none";
+        } else if (myInRoomState === 2) {
+            const targetBtn = document.getElementById("buttonGameStart");
+            targetBtn.style.display = "none";
+        }
+        // console.log("myInRoomState : " + myInRoomState);
+        // isClicked = false;
+        return () => {
+            // if (!isClicked) leaveSession();
+        };
+    }, []);
 
     useEffect(() => {
         window.history.pushState(null, null, document.URL);
@@ -285,21 +283,11 @@ export default function OpenViduComponent({
                 leaveSession();
             });
 
-      		mySession.on("start", (event) => {
-        		// Phaser 시작
-        		isPhaserGameStart = true;
-        		console.log("isPhaserGameStart : " + isPhaserGameStart);
-
-				const targetBtnReady = document.getElementById("buttonGameReady");
-      			targetBtnReady.style.display = "none";
-	  			const targetBtnStart = document.getElementById("buttonGameStart");
-      			targetBtnStart.style.display = "none";
-				// const targetBtnLeave = document.getElementById("buttonLeaveRoom");
-				// targetBtnLeave.style.display = "none";
-
-				mySquart = 0;
-				heSquart = 0;
-      		});
+            mySession.on("start", (event) => {
+                // Phaser 시작
+                isPhaserGameStart = true;
+                console.log("isPhaserGameStart : " + isPhaserGameStart);
+            });
 
             mySession.on("end", (event) => {
                 // Phaser 종료
@@ -374,12 +362,10 @@ export default function OpenViduComponent({
         setSession(newOV.initSession());
     };
 
-  const callLeaveSession = () => {
-	if (!isRoomOutBtnClicked) {
-    	isRoomOutBtnClicked = true;
-    	leaveSession();
-	}
-  };
+    const callLeaveSession = () => {
+        isClicked = true;
+        leaveSession();
+    };
 
     const allLeaveSession = () => {
         if (session) {
