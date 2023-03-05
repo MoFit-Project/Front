@@ -22,10 +22,11 @@ export default function Result(props) {
       });
 
       props.setIsWinModalOpen(false);
+      props.setIsModalClose(true);
       console.log(response.data);
       // 서버로부터 받은 응답에 대한 처리를 여기에 작성
 
-      router.push('/room')
+      // router.push('/room')
     } catch (error) {
       console.error(error);
       // 에러 처리를 여기에 작성
