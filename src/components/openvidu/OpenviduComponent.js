@@ -14,6 +14,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 // import { currSessionId } from "../CreateRoomModal";
 import { enterRoomSessionId } from "@/pages/room";
+import MultiGameResultWin from "../MultiGameResult";
+import MultiGameResultLose from "../MultiGameResultLose";
 
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
@@ -25,6 +27,7 @@ export let heSquart = 0;
 export let amIHost = false;
 export let isOtherPlayerReady = false;
 export let isPhaserGameStart = false;
+export let gameTimePassed = 0;
 
 const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
     ssr: false,
@@ -73,6 +76,7 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
+
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -125,9 +129,17 @@ export default function OpenViduComponent({
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
 
+	const [isWinModalOpen, setIsWinModalOpen] = useState(false);
+	const [isLoseModalOpen, setIsLoseModalOpen] = useState(false);
+
+	const [isMoveNetStart, setIsMoveNetStart] = useState(false);
+
   let isClicked = false;
   let isAllReady = true;
   let isRoomOutBtnClicked = false
+  let gameTimer;
+  let gameStartTime;
+  let gameCurrTime;
 
   const [ rightUserName, setRightUserName ] = useState("");
 
@@ -288,6 +300,7 @@ export default function OpenViduComponent({
             mySession.on("start", (event) => {
                 // Phaser 시작
                 isPhaserGameStart = true;
+				setIsMoveNetStart(true);
                 console.log("isPhaserGameStart : " + isPhaserGameStart);
 
 				const targetBtnReady = document.getElementById("buttonGameReady");
@@ -302,12 +315,17 @@ export default function OpenViduComponent({
 
 				mySquart = 0;
 				heSquart = 0;
+
+				gameStartTime = new Date;
+				gameTimer = setInterval(setTimePassed, 1000);
             });
 
             mySession.on("end", (event) => {
                 // Phaser 종료
                 console.log("PhaserGameEnd : " + event.data);
                 // alert("PhaserGameEnd : " + event.data);
+				clearInterval(gameTimer);
+				handleOpenWinModal();
             });
 
       		mySession.on("signal:otherPlayerReady", (event) => {
@@ -450,6 +468,24 @@ export default function OpenViduComponent({
     }
   };
 
+  const setTimePassed = () => {
+	var gameCurrTime = new Date();
+	// var hours = now.getHours();
+	// var minutes = now.getMinutes();
+	// var seconds = now.getSeconds();
+	// gameStartTime = (hours*3600) + (minutes*60) + seconds;
+	gameTimePassed = Math.floor((gameCurrTime.getTime() - gameStartTime.getTime()) / 1000);
+	
+	console.log("지난 시간 : ", gameTimePassed);
+  };
+
+  const handleOpenWinModal = () => {
+    setIsWinModalOpen(true);
+  }
+  const handleCloseWinModal = () => {
+    setIsWinModalOpen(false);
+  };
+
     return (
         <div className="video-container">
 
@@ -491,6 +527,7 @@ export default function OpenViduComponent({
                         session={session}
                         setIsOpenViduLoaded={setIsOpenViduLoaded}
                         setIsMovenetLoaded={setIsMovenetLoaded}
+						isMoveNetStart={isMoveNetStart}
                     />
                     </div>
                 ) : (
@@ -556,6 +593,9 @@ export default function OpenViduComponent({
         		</div>
       		</div> */}
 
+			{isWinModalOpen && <MultiGameResultWin roomId={currSession} name={userName} setIsWinModalOpen={setIsWinModalOpen}/>}
+			{/* <MultiGameResultLose isOpen={isLoseModalOpen} onClose={handleCloseLoseModal} /> */}
+			
             <style jsx>{`
                 .video-container{
                 }
