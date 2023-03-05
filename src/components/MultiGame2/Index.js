@@ -1,4 +1,4 @@
-import Main from './Config';
+import Main2 from './Config';
 import { useEffect, useRef } from 'react';
 import 'phaser';
 
@@ -43,7 +43,7 @@ export default function Index() {
     // const game = new Phaser.Game(config);
     gameRef.current = new Phaser.Game(config);
 
-    gameRef.current.scene.add('main', Main);
+    gameRef.current.scene.add('main', Main2);
     gameRef.current.scene.start('main');
     gameRef.current.scale.setMaxZoom();
   };

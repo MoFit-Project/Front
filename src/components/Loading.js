@@ -14,6 +14,8 @@ export default function Loading() {
                     align-items: center;
                     z-index: 3;
                 }
+
+                
             `}</style>
         </div>
     )

@@ -117,6 +117,7 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						backgroundColor: 'rgba(255, 255, 255, 0.75)'
 					},
 					content: {
+						margin: '0px auto',
 						position: 'absolute',
 						top: '40px',
 						left: '40px',
@@ -160,9 +161,9 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 						<button onClick={handleGameTimeIncrease}>10초 추가</button>
 					</label>
 				</div>
-				<div className='modal-contents'>
-					<button className="mr-5" onClick={handleSubmit}>확인</button>
-					<button onClick={() => {
+				<div className='modal-contents button-component'>
+					<button className="mr-5 confirm-btn" onClick={handleSubmit}>확인</button>
+					<button className="cancel-btn" onClick={() => {
 						onClose();
 						setIsRoomNameEmpty(false);
 						setRoomName('');
@@ -180,12 +181,20 @@ export default function CreateRoomModal({ isOpen, onClose }) {
 					input{
 						border: 1px solid black;
 					}
+					.button-component{
+						margin-top: 20px; 
+					}
 
 					.modal-contents{
 						font-size: 18px;
-						margin: 5px 5px;
 					}
 
+					.confirm-btn{
+					}
+
+					.cancel-btn{
+						
+					}
 					.room-title-box{
 						font-size: 18px;
 					}

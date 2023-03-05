@@ -70,6 +70,8 @@ export default function OpenViduComponent({
     userName,
     jwtToken,
     children,
+    setIsMovenetLoaded,
+    setIsOpenViduLoaded
 }) {
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -123,7 +125,8 @@ export default function OpenViduComponent({
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
 
-    let isClicked = false;
+  let isClicked = false;
+  let isAllReady = true;
 
     useEffect(() => {
         joinSession();
@@ -289,10 +292,11 @@ export default function OpenViduComponent({
                 // alert("PhaserGameEnd : " + event.data);
             });
 
-            mySession.on("signal:otherPlayerReady", (event) => {
-
-                isOtherPlayerReady = true;
-            });
+      mySession.on("signal:otherPlayerReady", (event) => {
+		isAllReady = true;
+        isOtherPlayerReady = true;
+		console.log("OtherPlayerReady !!!" + isAllReady);
+      });
 
             // On every asynchronous exception...
             mySession.on("exception", (exception) => {
@@ -393,34 +397,36 @@ export default function OpenViduComponent({
         }
     };
 
-    const gameStart = async () => {
-        const roomId = currSession;
-        const assessToken = Cookies.get("token");
-        try {
-            console.log(roomId);
-            const response = await axios.get(API_URL + `/game/${roomId}`, {
-                headers: { Authorization: `Bearer ${assessToken}` },
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const gameReady = () => {
-        if (session) {
-            session
-                .signal({
-                    data: `${localStorage.getItem("username")}`,
-                    to: [],
-                    type: "otherPlayerReady",
-                })
-                .then(() => {
-                    console.log("Message successfully sent");
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    };
+  const gameStart = async () => {
+	if (isAllReady) {
+    	const roomId = currSession;
+    	const assessToken = Cookies.get("token");
+    	try {
+			console.log(roomId);
+      		const response = await axios.get(API_URL + `/game/${roomId}`, {
+        	headers: { Authorization: `Bearer ${assessToken}` },
+      	});
+    	} catch (error) {
+      		console.log(error);
+    	}
+	}
+  };
+  const gameReady = () => {
+    if (session) {
+      session
+        .signal({
+          data: `${localStorage.getItem("username")}`,
+          to: [],
+          type: "otherPlayerReady",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
 
     return (
         <div className="video-container">
@@ -448,72 +454,73 @@ export default function OpenViduComponent({
           ) : null}
         </div> */}
 
-                <div id="game-container">
-
-                    {session && publisher !== undefined ? (
-                        <div id="session">
-                            {publisher !== undefined ? (
-                                <div
-                                    id="main-video"
-                                    style={{ position: "absolute", top: "30px", left: "30px" }}
-                                >
-                                    <OvVideo
-                                        streamManager={publisher}
-                                        userName={userName}
-                                        session={session}
-                                    />
-                                </div>
-                            ) : (
-                                <Loading />
-                            )}
-                        </div>
-                    ) : null}
-
-                    {loading ? <DynamicComponentWithNoSSR /> : null}
-
-                    <button
-                        style={{ position: "fixed", top: "810px", left: "850px" }}
-                        className="buttonGameStart"
-                        id="buttonGameStart"
-                        onClick={gameStart}
+        <div id="game-container">
+		
+            {session !== undefined ? (
+                <div id="session">
+                {publisher !== undefined ? (
+                    <div
+                    id="main-video"
+                    style={{ position: "absolute", top: "30px", bottom:"170px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
                     >
-                        <span>시작</span>
-                    </button>
-                    <button
-                        style={{ position: "fixed", top: "800px", left: "850px" }}
-                        className="buttonGameReady"
-                        id="buttonGameReady"
-                        onClick={gameReady}
-                    >
-                        준비
-                    </button>
-
+                    <OvVideo
+                        streamManager={publisher}
+                        userName={userName}
+                        session={session}
+                        setIsOpenViduLoaded={setIsOpenViduLoaded}
+                        setIsMovenetLoaded={setIsMovenetLoaded}
+                    />
+                    </div>
+                ) : (
+                <Loading />
+                )}
                 </div>
+            ) : null}
+        
+            {loading ? <DynamicComponentWithNoSSR /> : null}
 
-                <div style={{ width: "500px" }}>
-                    {subscribers.map((sub, i) => (
-                        <div
-                            key={i}
-                            style={{ position: "fixed", top: "0px", right: "40px", width: "500px", height: "800px" }}
-                        >
-                            <SubVideo streamManager={sub} />
-                        </div>
-                    ))}
-                </div>
+            <button
+                style={{ position: "absolute", top: "810px", left: "850px" }}
+                className="buttonGameStart"
+                id="buttonGameStart"
+                onClick={gameStart}
+            >
+                <span>시작</span>
+            </button>
+            <button
+                style={{ position: "absolute", top: "800px", left: "850px" }}
+                className="buttonGameReady"
+                id="buttonGameReady"
+                onClick={gameReady}
+            >
+                준비
+            </button>
+        </div>
+
+        <div>
+          {subscribers.map((sub, i) => (
+            <div
+              key={i}
+              style={{ position: "absolute", top: "30px", bottom:"170px", right: "30px", left: "1370px", width: "500px", height: "800px" }}
+            >
+              <SubVideo streamManager={sub} />
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="nav-bar flex justify-center align-center" style={{ position: "absolute" }}>
-                <div className="contents-box flex flex-inline justify-center align-center">
-                    <p className="session-title">{roomName}</p>
-                    <button
-                        className=""
-                        id="buttonLeaveSession"
-                        onClick={callLeaveSession}
-                    >
-                        방 나가기
-                    </button>
-                </div>
-            </div>
+	  <div className="nav-bar flex justify-center align-center" style={{ position: "absolute" }}>
+        		<div className="contents-box flex flex-inline justify-center align-center">
+          			<p className="session-title">{roomName}</p>
+          			<button
+            			className=""
+            			id="buttonLeaveSession"
+            			onClick={callLeaveSession}
+          			>
+            			방 나가기
+          			</button>
+        		</div>
+      		</div>
 
             <style jsx>{`
                 .video-container{

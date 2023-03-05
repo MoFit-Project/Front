@@ -11,6 +11,9 @@ import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
 import Swal from 'sweetalert2'
 import { inroomState } from "../../recoil/imroomState";
+import Loading from "../../components/Loading"
+
+
 
 export default function RoomList() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -20,7 +23,7 @@ export default function RoomList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomList, setRoomList] = useState([]);
   const [isAlert, setIsAlert] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
   const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 
@@ -40,112 +43,118 @@ export default function RoomList() {
   const enterRoom = async (customSessionId) => {
     setIsRoomHost({ roomName: customSessionId, isHost: false });
     const assessToken = Cookies.get("token");
-    console.log(userIdRef.current,"        >>>>>>>>>>333333@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     try {
+      setIsLoading(true);
       console.log("Enter Room : ", customSessionId);
       setCurrSessionId(customSessionId);
 
       // 보낼때 post, 바디에 mode랑 방이름 넣어서 보내라.
       const response = await axios.post(API_URL + `/enter/${customSessionId}`,
         { userId: userIdRef.current }, {
-        
+
         headers: { Authorization: `Bearer ${assessToken}` },
       });
-    setInRoomState(2);
-    // TODO: 리스폰스로 넘어오는 값 response.data.mode/response.data.sessionId으로 라우팅
-    router.push(`/room/${response.data.sessionId}`);
-  } catch (error) {
-    const { response } = error;
-    if (response) {
-      switch (response.status) {
-        case 400:
-          Swal.fire({
-            icon: 'error',
-            text: '인원이 가득 찼습니다.'
-          })
-          break;
-        case 401:
-          refreshToken();
-          break;
-        case 404:
-          Swal.fire({
-            icon: 'error',
-            text: '없는 방입니다.'
-          })
-          router.reload();
-          break;
-        default:
-          Swal.fire({
-            icon: 'error',
-            text: '알 수 없는 에러가 발생했습니다.'
-          })
-          router.reload();
+      setInRoomState(2);
+      // TODO: 리스폰스로 넘어오는 값 response.data.mode/response.data.sessionId으로 라우팅
+      router.push(`/room/${response.data.sessionId}`);
+    } catch (error) {
+      const { response } = error;
+      if (response) {
+        switch (response.status) {
+          case 400:
+            Swal.fire({
+              icon: 'error',
+              text: '인원이 가득 찼습니다.'
+            })
+            break;
+          case 401:
+            refreshToken();
+            break;
+          case 404:
+            Swal.fire({
+              icon: 'error',
+              text: '없는 방입니다.'
+            })
+            router.reload();
+            break;
+          default:
+            Swal.fire({
+              icon: 'error',
+              text: '알 수 없는 에러가 발생했습니다.'
+            })
+            router.reload();
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchRooms = async () => {
+    setRoomList([]);
+    const accessToken = Cookies.get("token");
+    try {
+      const response = await axios.get(API_URL + "/rooms", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      setRoomList([...roomList, ...response.data]);
+    } catch (error) {
+      console.log(error);
+      const { response } = error;
+      if (response) {
+        //모달
+        switch (response.status) {
+          case 401:
+            refreshToken();
+            break;
+          case 403:
+            // 이전페이지로 리다이렉트
+            Swal.fire({
+              icon: 'error',
+              text: '접근 권한이 없습니다.'
+            })
+            router.back();
+            break;
+          case 500:
+            Swal.fire({
+              icon: 'error',
+              text: '서버 에러가 발생했습니다.'
+            })
+            break;
+          default:
+            Swal.fire({
+              icon: 'error',
+              text: '알 수 없는 에러가 발생했습니다.'
+            });
+        }
       }
     }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   }
-};
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
-const fetchRooms = async () => {
-  setRoomList([]);
-  const accessToken = Cookies.get("token");
-  try {
-    const response = await axios.get(API_URL + "/rooms", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  const handleRoomEnter = (roomId) => {
+    enterRoom(roomId);
+  };
 
-    setRoomList([...roomList, ...response.data]);
-  } catch (error) {
-    console.log(error);
-    const { response } = error;
-    if (response) {
-      //모달
-      switch (response.status) {
-        case 401:
-          refreshToken();
-          break;
-        case 403:
-          // 이전페이지로 리다이렉트
-          Swal.fire({
-            icon: 'error',
-            text: '접근 권한이 없습니다.'
-          })
-          router.back();
-          break;
-        case 500:
-          Swal.fire({
-            icon: 'error',
-            text: '서버 에러가 발생했습니다.'
-          })
-          break;
-        default:
-          Swal.fire({
-            icon: 'error',
-            text: '알 수 없는 에러가 발생했습니다.'
-          });
-      }
-    }
-  }
-};
-
-const handleOpenModal = () => {
-  setIsModalOpen(true);
-}
-const handleCloseModal = () => {
-  setIsModalOpen(false);
-};
-
-const handleRoomEnter = (roomId) => {
-  enterRoom(roomId);
-};
-
-return (
-  <div className="background-div">
-    <>
+  return (
+    <div className="background-div">
       <LayoutAuthenticated>
         <title>MOFIT 멀티 게임</title>
         <Navbar>
+          {isLoading &&
+            <div className="loading-container">
+              <Loading />
+            </div>
+          }
           <div className="tb-container flex-col items-center flex">
             <div className="mt-2 w-8/12 flex ">
               <table className="w-full" style={{ overflow: 'auto' }} >
@@ -217,9 +226,13 @@ return (
         </Navbar>
         <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
       </LayoutAuthenticated>
-    </>
-    <style jsx>{`
-
+      <style jsx>{`
+        .loading-container{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh; /* 화면 전체를 커버하도록 설정 */
+        }
         .tb-container{
           margin: 0px auto;
           width: 1260px;
@@ -259,6 +272,6 @@ return (
         td{
         }
       `}</style>
-  </div>
-);
+    </div>
+  );
 }
