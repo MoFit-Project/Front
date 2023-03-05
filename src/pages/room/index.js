@@ -147,6 +147,7 @@ export default function RoomList() {
 
   return (
     <div className="background-div">
+
       <LayoutAuthenticated>
         <title>MOFIT 멀티 게임</title>
         <Navbar>
@@ -155,7 +156,9 @@ export default function RoomList() {
               <Loading />
             </div>
           }
+
           <div className="tb-container flex-col items-center flex">
+
             <div className="mt-2 w-8/12 flex ">
               <table className="w-full" style={{ overflow: 'auto' }} >
                 <thead>
@@ -200,7 +203,9 @@ export default function RoomList() {
                   ))}
                 </tbody>
               </table>
+
               <div className="fixed right-56 top-3/4 mt-20">
+
                 <button
                   className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl btn-1"
                   onClick={handleOpenModal}
@@ -220,8 +225,12 @@ export default function RoomList() {
                     />
                   </svg>
                 </button>
+                  <img className={"bg-img"}src="packMan.gif" />
+
+
               </div>
             </div>
+
           </div>
         </Navbar>
         <CreateRoomModal isOpen={isModalOpen} onClose={handleCloseModal} />
@@ -233,7 +242,7 @@ export default function RoomList() {
           align-items: center;
           height: 100vh; /* 화면 전체를 커버하도록 설정 */
         }
-        .tb-container{
+        .tb-container {
           margin: 0px auto;
           width: 1260px;
           height: 960px;
@@ -250,27 +259,35 @@ export default function RoomList() {
         table {
           background: linear-gradient(to right, #0096ff, #00d7ff);
         }
+
         .btn-1 {
-          background: linear-gradient(
-            0deg,
-            rgba(6, 14, 131, 1) 0%,
-            rgba(12, 25, 180, 1) 100%
-          );
+          background: linear-gradient(0deg,
+          rgba(6, 14, 131, 1) 0%,
+          rgba(12, 25, 180, 1) 100%);
           border: none;
         }
+
         .btn-1:hover {
           background: rgb(0, 3, 255);
-          background: linear-gradient(
-            0deg,
-            rgba(0, 3, 255, 1) 0%,
-            rgba(2, 126, 251, 1) 100%
-          );
+          background: linear-gradient(0deg,
+          rgba(0, 3, 255, 1) 0%,
+          rgba(2, 126, 251, 1) 100%);
         }
+
         table tr {
           border-bottom: 1px solid #e5e5e5;
         }
-        td{
+
+        td {
         }
+
+        .bg-img {
+          position: relative;
+          top: -120px;
+          right: 1400px;
+
+        }
+
       `}</style>
     </div>
   );
