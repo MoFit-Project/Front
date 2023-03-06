@@ -3,13 +3,10 @@ import {
     isPhaserGameStart,
     gameTimePassed,
     gameTimeTotal,
-    // mySquart,
-    // heSquart
+    mySquart,
+    heSquart
 } from "../openvidu/OpenviduComponent";
-import {gameTimePassed2} from "@/components/openvidu/OpenviduComponent";
 
-let mySquart = 0;
-let heSquart = 0;
 //통신
 
 
@@ -20,14 +17,8 @@ export default class Main extends Phaser.Scene {
     player2;
     player1Hurt;
     player2Hurt;
-    player1Attack = false;
-    player2Attack = false;
-    player1Attacked = false;
-    player2Attacked = false;
     player1InputTime = 0;
     player2InputTime = 0;
-    player1Press = false;
-    player2Press = false;
 
     player1CountTempSave = 0;
     player2CountTempSave = 0;
@@ -322,16 +313,18 @@ export default class Main extends Phaser.Scene {
         const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);
 
 
-        const cursors = this.input.keyboard.createCursorKeys();
-        if (cursors.down.isDown && (time - this.player1InputTime) > 500){
-            mySquart += 1
-            this.player1InputTime = time;
-        }
-        if (cursors.right.isDown && (time - this.player2InputTime) > 500){
-            heSquart += 1
-            this.player2InputTime = time;
+        // const cursors = this.input.keyboard.createCursorKeys();
+        // if (cursors.down.isDown && (time - this.player1InputTime) > 500){
+        //     mySquart += 1
+        //     this.player1InputTime = time;
+        // }
+        // if (cursors.right.isDown && (time - this.player2InputTime) > 500){
+        //     heSquart += 1
+        //     this.player2InputTime = time;
+        // }
 
-        }
+        
+
         if (mySquart > heSquart) {
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
