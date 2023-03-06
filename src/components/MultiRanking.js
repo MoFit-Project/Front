@@ -3,8 +3,6 @@ import Navbar from "../components/Navbar"
 import axios from "axios";
 import LayoutAuthenticated from "../components/LayoutAuthticated";
 import Cookies from "js-cookie";
-import SingleRanking from "../components/SingleRanking"
-import MultiRanking from "../components/MultiRanking"
 
 export default function Ranking() {
   const [data, setData] = useState([]);
@@ -38,23 +36,32 @@ export default function Ranking() {
   }, []);
 
   return (
-    <div className="background-div">
     <>
-    <LayoutAuthenticated>
-    <Navbar />
-      <div className="center-container mt-2">
-        <div className="ranking-container">
-          <div className="flex">
-            <h2 className="ranking-title">Ranking</h2>
-            <button className="btn-1 change-btn" onClick={handleClick}>
-              {isSingle ? "싱글 랭킹" : "멀티 랭킹"}
-            </button>
-          </div>
-          {isSingle ? <MultiRanking/> : <SingleRanking/>}
-        </div>
+      <div className="ranking-box">
+        <table className="ranking-list">
+          <thead>
+            <tr className="table-title">
+              <td className="table-title-row">랭킹</td>
+              <td className="table-title-row">아이디</td>
+              <td className="table-title-row">전적</td>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item,index) => (
+              <tr className="table-data hover:bg-blue-500" key={item}>
+                <td className="table-data-row">
+                  {index === 0 && <span role="img" aria-label="crown">👑</span>}
+                  {index === 1 && <span role="img" aria-label="second place">🥈</span>}
+                  {index === 2 && <span role="img" aria-label="third place">🥉</span>}
+                  {index >= 3 && index + 1}
+                </td>
+                <td className="table-data-row">{item.id}</td>
+                <td className="table-data-row">{item.win} 승</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      </LayoutAuthenticated>
-      </>
       <style jsx>{`
         .background-div {
           background-image: url('background-img.jpg');
@@ -170,6 +177,6 @@ export default function Ranking() {
 
 
       `}</style>
-      </div>
-  );
+      </>
+  );   
 };

@@ -5,10 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/2023_02_25_4_25_PM,_체크아웃_전에_커밋되지_않은_변경_내용_[변경]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/2023_02_25_4_25_PM__________.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
+=======
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/openvidu/OpenviduComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/openvidu/OpenviduComponent.js" afterDir="false" />
+>>>>>>> b942e172d22a3009859c00bf92f06dd1b1c4f534
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

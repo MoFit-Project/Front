@@ -184,34 +184,29 @@ export default function RoomList() {
                         {room.mode}
                       </td>
                       <td className="py-2 px-4">
-                        {room.status === "START" || room.participant === 2 ? <button
-                          className=" text-white font-bold py-2 px-4 rounded-md mx-auto block bg-slate-400"
-                          disabled
-                        >게임중
-                        </button> : <button
-                          className=" text-white font-bold py-2 px-4 rounded-md mx-auto btn-1 block "
-                          onClick={() => {
-                            handleRoomEnter(room.roomId);
-                          }}
-                        >
-                          참여하기
-                        </button>
-                        }
+                        {room.status === "START" || room.participant === 2 ? (
+                          <button className="text-white font-bold py-2 px-4 rounded-md mx-auto block bg-slate-400 w-24 " disabled>
+                            {room.status === "START" ? "게임 중" : "가득 참"}
+                          </button>
+                        ) : (
+                          <button className="text-white font-bold py-2 px-4 rounded-md mx-auto btn-1 block w-24 " onClick={() => { handleRoomEnter(room.roomId); }}>
+                            참여하기
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
 
-              <div className="fixed right-56 top-3/4 mt-20">
-
+              <div className="fixed right-64 top-3/4 mt-20">
                 <button
-                  className="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center ml-auto hover:bg-teal-800 shadow-xl btn-1"
+                  className="w-18 h-18 text-white rounded-full flex items-center justify-center ml-auto shadow-xl btn-1"
                   onClick={handleOpenModal}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10"
+                    className="h-14 w-14"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

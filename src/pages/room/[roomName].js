@@ -47,9 +47,7 @@ export default function GameRoom() {
             </div>
 
             <div className="loading">
-                <div>
-                    <Loading/>
-                </div>
+                <Loading/>
             </div>
             <style jsx>{`
                     .curtain{
