@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
+import { gamePlayTime } from "../../recoil/gamePlayTime";
 import { currSessionId } from "../../recoil/currSessionId";
 import { inroomState } from "../../recoil/imroomState";
 import { refreshToken } from "public/refreshToken";
@@ -23,6 +24,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 
 	const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 	const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
+	const [timeOfGamePlay, setTimeOfGamePlay] = useRecoilState(gamePlayTime);
 
 	const userIdRef = useRef('');
 
@@ -39,6 +41,11 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 		setGameMode('모드 선택')
 		setGameTime(30);
 	}
+
+	useEffect(() => {
+		setTimeOfGamePlay(gameTime);
+		console.log("Game Play Time : " + timeOfGamePlay);
+	}, [gameTime]);
 
 	useEffect(() => {
 		if (window)

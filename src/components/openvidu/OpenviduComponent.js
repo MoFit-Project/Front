@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
 import { inroomState } from "../../recoil/imroomState";
+import { gamePlayTime } from "../../recoil/gamePlayTime";
 import SubVideo from "./SubVideo";
 import Loading from "../Loading";
 import dynamic from "next/dynamic";
@@ -30,6 +31,7 @@ export let amIHost = false;
 export let isOtherPlayerReady = false;
 export let isPhaserGameStart = false;
 export let gameTimePassed = 0;
+export let gameTimeTotal;
 
 const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
     ssr: false,
@@ -84,6 +86,7 @@ export default function OpenViduComponent({
 
     const [currSession, setCurrSession] = useRecoilState(currSessionId);
     const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
+	const [timeOfGamePlay, setTimeOfGamePlay] = useRecoilState(gamePlayTime);
 
     const userIdRef = useRef("");
 
@@ -136,6 +139,8 @@ export default function OpenViduComponent({
 
 	const [isMoveNetStart, setIsMoveNetStart] = useState(false);
 
+	const [isModalClose, setIsModalClose] = useState(false);
+
   let isClicked = false;
   let isAllReady = true;
   let isRoomOutBtnClicked = false
@@ -174,6 +179,12 @@ export default function OpenViduComponent({
         e.preventDefault();
         window.history.pushState(null, null, document.URL);
     }
+
+	useEffect(() => {
+		if (isModalClose) {
+			leaveSession();
+		}
+	}, [isModalClose]);
 
     const onbeforeunload = (event) => {
         leaveSession();
@@ -239,10 +250,13 @@ export default function OpenViduComponent({
     useEffect(() => {
         if (session !== undefined) {
             let mySession = session;
+			gameTimeTotal = timeOfGamePlay;
+			console.log("Phaser 에게 넘겨주는 시간 : " + gameTimeTotal);
 
             mySession.on("streamCreated", (event) => {
                 var newsubscriber = mySession.subscribe(event.stream, undefined);
                 setSubscribers((curr) => [...curr, newsubscriber]);
+				sendSignalInRoom();
             });
 
             mySession.on("connectionCreated", (event) => {
@@ -254,6 +268,13 @@ export default function OpenViduComponent({
                 //     leaveSession();
                 // }
                 deleteSubscriber(event.stream.streamManager);
+            });
+
+			mySession.on("signal:inRoom", (event) => {
+				if (event.data !== localStorage.getItem("username")) {
+					setRightUserName(event.data);
+					console.log("상대 User Name !!!" + rightUserName);
+				}
             });
 
             // On every asynchronous exception...
@@ -333,7 +354,12 @@ export default function OpenViduComponent({
                 console.log("PhaserGameEnd : " + event.data);
                 // alert("PhaserGameEnd : " + event.data);
 				clearInterval(gameTimer);
-				handleOpenWinModal();
+				// handleOpenWinModal();
+				if (mySquart >= heSquart) {
+					handleOpenWinModal();
+				} else {
+					handleOpenLoseModal();
+				}
             });
 
       		mySession.on("signal:otherPlayerReady", (event) => {
@@ -445,6 +471,23 @@ export default function OpenViduComponent({
         }
     };
 
+	function sendSignalInRoom() {
+        if (session) {
+            console.log("sendSignalInRoom");
+            session.signal({
+                data: `${localStorage.getItem('username')}`,
+                to: [],
+                type: 'inRoom'
+            })
+                .then(() => {
+                    console.log('Message successfully sent');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+
   const gameStart = async () => {
 	if (isAllReady) {
     	const roomId = currSession;
@@ -485,6 +528,16 @@ export default function OpenViduComponent({
 	gameTimePassed = Math.floor((gameCurrTime.getTime() - gameStartTime.getTime()) / 1000);
 	
 	console.log("지난 시간 : ", gameTimePassed);
+
+	if (gameTimePassed + 5 > gamePlayTime) {
+		console.log("SetTimePassed 에서 게임이 끝나따 !!! ");
+		clearInterval(gameTimer);
+		if (mySquart >= heSquart) {
+			handleOpenWinModal();
+		} else {
+			handleOpenLoseModal();
+		}
+	}
   };
 
   const handleOpenWinModal = () => {
@@ -492,6 +545,12 @@ export default function OpenViduComponent({
   }
   const handleCloseWinModal = () => {
     setIsWinModalOpen(false);
+  };
+  const handleOpenLoseModal = () => {
+    setIsLoseModalOpen(true);
+  }
+  const handleCloseLoseModal = () => {
+    setIsLoseModalOpen(false);
   };
 
     return (
@@ -601,8 +660,8 @@ export default function OpenViduComponent({
         		</div>
       		</div> */}
 
-			{isWinModalOpen && <MultiGameResultWin roomId={currSession} name={userName} setIsWinModalOpen={setIsWinModalOpen}/>}
-			{/* <MultiGameResultLose isOpen={isLoseModalOpen} onClose={handleCloseLoseModal} /> */}
+			{isWinModalOpen && <MultiGameResultWin roomId={currSession} name={userName} setIsWinModalOpen={setIsWinModalOpen} setIsModalClose={setIsModalClose}/>}
+			{isLoseModalOpen && <MultiGameResultLose setIsWinModalOpen={setIsLoseModalOpen} setIsModalClose={setIsModalClose} />}
 			
             <style jsx>{`
                 .video-container{
