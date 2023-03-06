@@ -5,10 +5,9 @@ import {
 	leftCalculateAngle,
 	rightCalculateAngle,
 	calculateAngle,
-} from "../../../public/detector.js";
+} from "../../public/detector.js";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
-import * as tf from "@tensorflow/tfjs-core";
 import {
 	sendSignalThrow,
 	sendSignalJumpingJacks,
@@ -20,7 +19,8 @@ export default function OvVideo({
 	session,
 	children,
 	setIsOpenViduLoaded,
-	setIsMovenetLoaded
+	setIsMovenetLoaded,
+	isMoveNetStart
 }) {
 	const videoRef = useRef(null);
 	const detectorRef = useRef(null);
@@ -34,6 +34,12 @@ export default function OvVideo({
 			setIsOpenViduLoaded(true);
 		}
 	}, [streamManager]);
+
+	useEffect(() => {
+		if (isMoveNetStart) {
+			detectSquat();
+		}
+	}, [isMoveNetStart]);
 
 	useEffect(() => {
 		if (streamManager) initDetector();
@@ -57,7 +63,7 @@ export default function OvVideo({
 			if (detectorRef.current && videoRef.current) {
 				console.log("detectSquat");
 				setIsMovenetLoaded(true);
-				//detectSquat();
+				// detectSquat();
 			}
 		}
 	}, [isLoaded]);

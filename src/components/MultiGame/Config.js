@@ -1,16 +1,18 @@
 import "phaser";
-import { isPhaserGameStart, isLeftPlayerThrow, isRightPlayerThrow, mySquart, heSquart } from "../openvidu/OpenviduComponent";
+import {
+    isPhaserGameStart,
+    gameTimePassed,
+    gameTimeTotal,
+    mySquart,
+    heSquart
+} from "../openvidu/OpenviduComponent";
 
 
 //통신
 
 
-
 export default class Main extends Phaser.Scene {
-
-    // isPhaserGameStart = true;
-    gameHasNotStarted =true;
-    startButton;
+    gameHasNotStarted = true;
     loadingText;
     player1;
     player2;
@@ -25,8 +27,6 @@ export default class Main extends Phaser.Scene {
 
     player1CountTempSave = 0;
     player2CountTempSave = 0;
-    player1CountDetector = false;
-    player2CountDetector = false;
 
     touch = false;
 
@@ -35,7 +35,26 @@ export default class Main extends Phaser.Scene {
     backGround_Gameboy;
     backgroundCity;
     ground;
+    punchSound;
+    fightBgm;
+    waitBgm;
+    bee;
+    ding;
+    start;
+    noDisplay;
+    number;
+    countdown = 5;
+    player1Number100;
+    player1Number10;
+    player1Number1;
+    player2Number100;
+    player2Number10;
+    player2Number1;
+    timeBar;
+    timeText;
+    playerFire;
 
+    playerBackground;
 
     constructor() {
         super();
@@ -96,23 +115,70 @@ export default class Main extends Phaser.Scene {
             `../assets/characters/${random2}`,
             {frameWidth: 48, frameHeight: 48}
         )
+        this.load.spritesheet(
+            "displayDisable",
+            '../assets/notStart.png',
+            {frameWidth: 467, frameHeight: 262}
+        )
+        this.load.spritesheet(
+            "numbers",
+            '../assets/numbers.png',
+            {frameWidth: 130, frameHeight: 150}
+        )
+        this.load.spritesheet(
+            "fire",
+            '../assets/fire.png',
+            {frameWidth: 192, frameHeight: 32}
+        )
         this.load.image('backGround_Gameboy', '../assets/gameboy.png')
         this.load.image('backgroundCityImage', '../assets/backgroundCity.png')
         this.load.image('ground', '../assets/ground.webp')
+        this.load.audio('punch', ['../assets/sound/punch.mp3'])
+        this.load.audio('fight', ['../assets/sound/fightBGM.mp3'])
+        this.load.audio('wait', ['../assets/sound/waitBGM.mp3'])
+        this.load.audio('bee', ['../assets/sound/bee.mp3'])
+        this.load.audio('ding', ['../assets/sound/ding.mp3'])
+        this.load.audio('start', ['../assets/sound/start.mp3'])
 
 
     }
 
 
     create() {
+        this.playerBackground = this.add.graphics();
+
+        this.timeBar = this.add.graphics();
+        // this.timeBar.fillStyle(0x000000, 1)
+        // this.timeBar.fillRect(950, 910, 200, 20);
+        this.timeBar.fillStyle(0xff0000, 1);
+        this.timeBar.fillRect(890, 929, 430, 59);
+        this.timeText = this.add
+            .text(580, 930,
+                "TIME LEFT:",
+                {color: "#000000", fontSize: "61px", fontFamily: 'dalmoori'}
+            )
+        this.timeBar.visible =false;
+        this.timeText.visible = false;
+
+
+
+
+        this.punchSound = this.sound.add('punch');
+        this.fightBgm = this.sound.add('fight');
+        this.waitBgm = this.sound.add('wait');
+        this.bee = this.sound.add('bee');
+        this.ding = this.sound.add('ding');
+        this.start = this.sound.add('start');
+
+        this.waitBgm.play();
 
         this.backGround_Gameboy = this.add.image(950, 405, 'backGround_Gameboy')
             .setOrigin(0.5, 0.5)
             .setScale(1.35);
         this.backgroundCity = this.add.image(950, 370, 'backgroundCityImage').setScale(1.06, 1.15)
         this.ground = this.add.image(950, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
-        
-       
+
+
         this.player2 = this.physics.add.sprite(1090, 430, 'player2')
             .setScale(5)
             .toggleFlipX();
@@ -141,25 +207,25 @@ export default class Main extends Phaser.Scene {
         this.anims.create({
             key: 'player1_attack1',
             frames: this.anims.generateFrameNumbers('player1', {start: 8, end: 15}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
             key: 'player1_attack2',
             frames: this.anims.generateFrameNumbers('player1', {start: 16, end: 23}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
             key: 'player1_attack3',
             frames: this.anims.generateFrameNumbers('player1', {start: 0, end: 5}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
             key: 'player1_attack4',
             frames: this.anims.generateFrameNumbers('player1', {start: 72, end: 77}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
@@ -187,25 +253,25 @@ export default class Main extends Phaser.Scene {
         this.anims.create({
             key: 'player2_attack1',
             frames: this.anims.generateFrameNumbers('player2', {start: 8, end: 15}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
             key: 'player2_attack2',
             frames: this.anims.generateFrameNumbers('player2', {start: 16, end: 23}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
             key: 'player2_attack3',
             frames: this.anims.generateFrameNumbers('player2', {start: 0, end: 5}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
             key: 'player2_attack4',
             frames: this.anims.generateFrameNumbers('player2', {start: 72, end: 77}),
-            frameRate: 20,
+            frameRate: 25,
             repeat: 0,
         });
         this.anims.create({
@@ -214,27 +280,104 @@ export default class Main extends Phaser.Scene {
             frameRate: 10,
             repeat: 3,
         });
+        this.noDisplay = this.add.sprite(950, 410, 'displayDisable')
+            .setOrigin(0.5, 0.5)
+            .setScale(1.31, 1.75);
+        this.anims.create({
+            key: 'beforeStart',
+            frames: this.anims.generateFrameNumbers('displayDisable', {start: 0, end: 1}),
+            frameRate: 20,
+            repeat: -1,
+        });
 
+        this.playerFire = this.add.sprite(280, 930, 'fire')
+            .setOrigin(0.5, 0.5)
+            .setScale(1.8, 3)
+            .setDepth(1)
+            .setVisible(false);
 
+        this.anims.create({
+            key: 'player_fire',
+            frames: this.anims.generateFrameNumbers('fire', {start: 0, end: 3}),
+            frameRate: 15,
+            repeat: 0,
+        });
+
+        this.noDisplay.anims.play('beforeStart')
+        this.number = this.add.sprite(950, 410, 'numbers').setVisible(false);
+        this.player1Number100 = this.add.sprite(170, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number10 = this.add.sprite(280, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number1 = this.add.sprite(390, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number100 = this.add.sprite(1530, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number10 = this.add.sprite(1640, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number1 = this.add.sprite(1750, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
     }
 
 
     update(time, delta) {
-        const cursors = this.input.keyboard.createCursorKeys();
+        this.timeBar.fillRect(750, 929, 430 * ((gameTimeTotal - gameTimePassed) / gameTimeTotal), 59);
+        const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
+        const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
+        const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);
 
+
+        const cursors = this.input.keyboard.createCursorKeys();
+        if (mySquart > heSquart) {
+            this.playerFire.x = 280;
+            this.playerFire.visible = true;
+            this.playerFire.anims.play('player_fire', false)
+            this.playerBackground.clear();
+            this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
+            this.playerBackground.fillRect(0, 0, 570, 1000);
+        } else if (mySquart < heSquart) {
+            this.playerFire.x = 1640;
+            this.playerFire.visible = true;
+            this.playerFire.anims.play('player_fire', false)
+            this.playerBackground.clear();
+            this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
+            this.playerBackground.fillRect(1330, 0, 570, 1000);
+        }
+
+
+
+        if (mySquart != this.player1CountTempSave && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
+            this.ding.play();
+            this.player1CountTempSave = mySquart;
+            this.player1InputTime = time;
+            this.player1Press = true;
+        } else {
+            this.player1Press = false;
+        }
+        if (heSquart != this.player2CountTempSave && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
+            this.ding.play();
+            this.player2CountTempSave = heSquart;
+            this.player2InputTime = time;
+            this.player2Press = true;
+        } else {
+            this.player2Press = false;
+        }
 
 
         if (isPhaserGameStart && this.gameHasNotStarted) {
-            // console.log("isPhaserGameStart is true !!!");
-            this.player1InputTime=0;
-            this.player2InputTime=0;
+            this.gameHasNotStarted = false;
+            this.timeBar.visible =true;
+            this.timeText.visible = true;
+            this.countDown.call(this);
         }
-        // this.player1InputTime=0;
-        // this.player2InputTime=0;
+        if (!this.fightBgm.isPlaying && isPhaserGameStart) {
+            this.fightBgm.play()
+        }
+        if (!this.waitBgm.isPlaying && this.gameHasNotStarted) {
+            this.waitBgm.play()
+        }
+
+        //테스트용 코드
+        this.player1InputTime = 0;
+        this.player2InputTime = 0;
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
-        
+
         if (this.player1.x < 750) {
             this.player1.x = 750
         }
@@ -281,6 +424,7 @@ export default class Main extends Phaser.Scene {
         //player1 이동
         if (this.player1Press && this.touch) {
             this.player1Attack = true;
+            this.punchSound.play();
             const number = Math.random()
             if (number < 0.25) {
                 this.player1.anims.play('player1_attack1', true);
@@ -305,7 +449,8 @@ export default class Main extends Phaser.Scene {
         // player2
         if (this.player2Press && this.touch) {
             this.player2Attack = true;
-            const number = Math.random()
+            this.punchSound.play();
+            const number = Math.random();
             if (number < 0.25) {
                 this.player2.anims.play('player2_attack2', true);
             } else if (number < 0.5) {
@@ -328,35 +473,30 @@ export default class Main extends Phaser.Scene {
             }
             this.player2Attack = false;
         }
-        if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
-            this.player1InputTime = time;
-            this.player1Press = true;
-        }else {
-            this.player1Press = false;
-        }
-        if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-            this.player2InputTime = time;
-            this.player2Press = true;
-        }else{
-            this.player2Press = false;
-        }
+
+        this.player1Number100.setFrame(Math.floor(mySquart / 100))
+        this.player1Number10.setFrame(Math.floor((mySquart % 100) / 10))
+        this.player1Number1.setFrame(Math.floor(mySquart % 10))
+
+        this.player2Number100.setFrame(Math.floor(heSquart / 100))
+        this.player2Number10.setFrame(Math.floor((heSquart % 100) / 10))
+        this.player2Number1.setFrame(Math.floor(heSquart % 10))
+
+        // 이것은 키보드로하는 테스트 용입니다.
+        // if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
+        //     this.player1InputTime = time;
+        //     this.player1Press = true;
+        // } else {
+        //     this.player1Press = false;
+        // }
+        // if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
+        //     this.player2InputTime = time;
+        //     this.player2Press = true;
+        // } else {
+        //     this.player2Press = false;
+        // }
 
 
-
-        if (isLeftPlayerThrow && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
-            // this.player1CountDetector = false;
-            this.player1InputTime = time;
-            this.player1Press = true;
-        }else {
-            this.player1Press = false;
-        }
-        if (isRightPlayerThrow && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-            this.player2CountDetector = false;
-            this.player2InputTime = time;
-            this.player2Press = true;
-        }else{
-            this.player2Press = false;
-        }
     }
 
 
@@ -374,4 +514,30 @@ export default class Main extends Phaser.Scene {
 
         }
     }
+
+    countDown() {
+        if (this.countdown === 0) {
+            this.start.play();
+            this.number.visible = false;
+            this.player1InputTime = 0;
+            this.player2InputTime = 0;
+            this.noDisplay.destroy();
+            this.waitBgm.destroy();
+            this.fightBgm.play()
+            return;
+        }
+        this.bee.play();
+        this.number.destroy();
+        this.number = this.add.sprite(950, 410, 'numbers').setFrame(this.countdown);
+        this.tweens.add({
+            targets: this.number,
+            duration: 1000, // 애니메이션 지속 시간
+            scale: 2, // X축으로 2배 키우기
+            repeat: 0
+        });
+        this.countdown--;
+
+        this.time.delayedCall(1000, this.countDown, [], this);
+    }
+
 }

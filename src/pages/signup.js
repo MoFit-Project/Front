@@ -1,7 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import {useRouter} from "next/router";
-import Background from "../components/Background";
+import Background from "../components/backgrounds/SignUpBackground";
 import Link from "next/link";
 import SignupButton from "../components/login/SignupButton";
 import LoginButton from "@/components/login/LoginButton";
@@ -37,11 +37,9 @@ export default function SignupForm() {
 
         <div className="flex w-screen h-screen justify-center items-center">
             <title>MOFIT 회원가입</title>
-            <div>
-                <Background/>
-            </div>
+                <Background>
             <div className="max-w-md mt-10 w-full login-modal">
-                <h1 className="text-7xl font-bold text-center text-blue-800">회원가입</h1>
+                <h1 className="text-6xl font-bold text-center text-blue-800">회원가입</h1>
                 <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <input
@@ -82,11 +80,13 @@ export default function SignupForm() {
                     </div>
                 </form>
             </div>
+            </Background>
             <style jsx>{`
 
               .login-modal {
                 position: relative;
                 top: -100px;
+                width: 600px;
 
               }
 

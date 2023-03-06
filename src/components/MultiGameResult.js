@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
 
 export default function Result(props) {
   const [names] = useState(props.names);
   const [results] = useState(props.results);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const assessToken = Cookies.get("token");
 
   const handleClick = async () => {
     try {
-      const response = await axios.post('/mofit/result', {
-        userid: names,
-        results: results
+      console.log("roomId : " + props.roomId);
+      console.log("userName : " + props.name);
+
+      const response = await axios.post(API_URL + `/result/${props.roomId}`, {
+        userId: props.name
+      },
+      {
+        headers: { Authorization: `Bearer ${assessToken}` }
       });
+
+      props.setIsWinModalOpen(false);
       console.log(response.data);
       // 서버로부터 받은 응답에 대한 처리를 여기에 작성
+
+      router.push('/room')
     } catch (error) {
       console.error(error);
       // 에러 처리를 여기에 작성
@@ -29,7 +41,7 @@ export default function Result(props) {
       transition={{ duration: 1.5 }}
      >
       <div className="flex items-center justify-center">
-        <div className="bg-modal rounded-lg shadow-xl p-8 flex flex-col items-center justify-center">
+        <div className="bg-modal rounded-xl shadow-xl p-8 flex flex-col items-center justify-center">
           <h1 className="text-7xl font-bold text-center mt-16">🥇 You win!!</h1>
           {/* {names.map((name, index) => ( */}
             {/* <div className="flex justify-between items-center mb-4">
@@ -67,8 +79,8 @@ export default function Result(props) {
           }
           .bg-modal {
             box-shadow: 0px 0px 30px 20px rgba(7, 229, 156, 0.42), 0px 0px 30px 10px rgba(40, 0, 255, 0.37);
-            width: 600px;
-            height: 300px;
+            width: 700px;
+            height: 600px;
             background-image: url('result-img.jpg');
             background-size: cover;
             background-position: center;

@@ -15,6 +15,8 @@ import Cookies from "js-cookie";
 // import { currSessionId } from "../CreateRoomModal";
 import { enterRoomSessionId } from "@/pages/room";
 import Swal from "sweetalert2"; 
+import MultiGameResultWin from "../MultiGameResult";
+import MultiGameResultLose from "../MultiGameResultLose";
 
 
 export let isLeftPlayerThrow = false;
@@ -27,6 +29,7 @@ export let heSquart = 0;
 export let amIHost = false;
 export let isOtherPlayerReady = false;
 export let isPhaserGameStart = false;
+export let gameTimePassed = 0;
 
 const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
     ssr: false,
@@ -75,6 +78,7 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
+
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -127,8 +131,19 @@ export default function OpenViduComponent({
     const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
     const currentVideoDeviceRef = useRef(null);
 
+	const [isWinModalOpen, setIsWinModalOpen] = useState(false);
+	const [isLoseModalOpen, setIsLoseModalOpen] = useState(false);
+
+	const [isMoveNetStart, setIsMoveNetStart] = useState(false);
+
   let isClicked = false;
   let isAllReady = true;
+  let isRoomOutBtnClicked = false
+  let gameTimer;
+  let gameStartTime;
+  let gameCurrTime;
+
+  const [ rightUserName, setRightUserName ] = useState("");
 
     useEffect(() => {
         joinSession();
@@ -139,6 +154,8 @@ export default function OpenViduComponent({
             const targetBtn = document.getElementById("buttonGameStart");
             targetBtn.style.display = "none";
         }
+		const targetStringVS = document.getElementById("stringVS");
+		targetStringVS.style.display = "none";
         // console.log("myInRoomState : " + myInRoomState);
         // isClicked = false;
         return () => {
@@ -291,20 +308,43 @@ export default function OpenViduComponent({
             mySession.on("start", (event) => {
                 // Phaser 시작
                 isPhaserGameStart = true;
+				setIsMoveNetStart(true);
                 console.log("isPhaserGameStart : " + isPhaserGameStart);
+
+				const targetBtnReady = document.getElementById("buttonGameReady");
+      			targetBtnReady.style.display = "none";
+	  			const targetBtnStart = document.getElementById("buttonGameStart");
+      			targetBtnStart.style.display = "none";
+				// const targetBtnLeave = document.getElementById("buttonLeaveRoom");
+				// targetBtnLeave.style.display = "none";
+
+				const targetStringVS = document.getElementById("stringVS");
+				targetStringVS.style.display = "block";
+
+				mySquart = 0;
+				heSquart = 0;
+
+				gameStartTime = new Date;
+				gameTimer = setInterval(setTimePassed, 1000);
             });
 
             mySession.on("end", (event) => {
                 // Phaser 종료
                 console.log("PhaserGameEnd : " + event.data);
                 // alert("PhaserGameEnd : " + event.data);
+				clearInterval(gameTimer);
+				handleOpenWinModal();
             });
 
-      mySession.on("signal:otherPlayerReady", (event) => {
-		isAllReady = true;
-        isOtherPlayerReady = true;
-		console.log("OtherPlayerReady !!!" + isAllReady);
-      });
+      		mySession.on("signal:otherPlayerReady", (event) => {
+				isAllReady = true;
+				isOtherPlayerReady = true;
+				setRightUserName(event.data);
+				console.log("OtherPlayerReady !!!" + rightUserName);
+
+				const targetBtnStart = document.getElementById("buttonGameStart");
+				targetBtnStart.style.display = "block";
+			});
 
             // On every asynchronous exception...
             mySession.on("exception", (exception) => {
@@ -436,6 +476,24 @@ export default function OpenViduComponent({
     }
   };
 
+  const setTimePassed = () => {
+	var gameCurrTime = new Date();
+	// var hours = now.getHours();
+	// var minutes = now.getMinutes();
+	// var seconds = now.getSeconds();
+	// gameStartTime = (hours*3600) + (minutes*60) + seconds;
+	gameTimePassed = Math.floor((gameCurrTime.getTime() - gameStartTime.getTime()) / 1000);
+	
+	console.log("지난 시간 : ", gameTimePassed);
+  };
+
+  const handleOpenWinModal = () => {
+    setIsWinModalOpen(true);
+  }
+  const handleCloseWinModal = () => {
+    setIsWinModalOpen(false);
+  };
+
     return (
         <div className="video-container">
 
@@ -469,7 +527,7 @@ export default function OpenViduComponent({
                 {publisher !== undefined ? (
                     <div
                     id="main-video"
-                    style={{ position: "absolute", top: "30px", bottom:"170px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
+                    style={{ position: "absolute", top: "30px", bottom:"140px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
                     >
                     <OvVideo
                         streamManager={publisher}
@@ -477,6 +535,7 @@ export default function OpenViduComponent({
                         session={session}
                         setIsOpenViduLoaded={setIsOpenViduLoaded}
                         setIsMovenetLoaded={setIsMovenetLoaded}
+						isMoveNetStart={isMoveNetStart}
                     />
                     </div>
                 ) : (
@@ -486,9 +545,13 @@ export default function OpenViduComponent({
             ) : null}
         
             {loading ? <DynamicComponentWithNoSSR /> : null}
-
+			
+			<p className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
+			<p id="stringVS" className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}>VS</p>
+			<span className="user-name" style={{ position: "absolute", top: "810px", left: "570px" }}>{userName}</span>
+			<span className="user-name" style={{ position: "absolute", top: "810px", right: "570px" }}>{rightUserName}</span>
             <button
-                style={{ position: "absolute", top: "810px", left: "850px" }}
+                style={{ position: "absolute", top: "820px", left: "850px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -496,12 +559,20 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "absolute", top: "800px", left: "850px" }}
+                style={{ position: "absolute", top: "820px", left: "850px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
             >
-                준비
+                <span>준비</span>
+            </button>
+			<button
+                style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "1600px", width: "250px", height: "100px", fontSize: "50px", color: "white", backgroundColor: "red", borderRadius: "20px" }}
+                className="buttonLeaveRoom"
+                id="buttonLeaveRoom"
+                onClick={callLeaveSession}
+            >
+                방나가기
             </button>
         </div>
 
@@ -517,7 +588,7 @@ export default function OpenViduComponent({
         </div>
       </div>
 
-	  <div className="nav-bar flex justify-center align-center" style={{ position: "absolute" }}>
+	  		{/* <div className="nav-bar flex justify-center align-center" style={{ position: "absolute", top: "800px", bottom:"30px", right: "30px", left: "1400px", width: "300px", height: "100px" }}>
         		<div className="contents-box flex flex-inline justify-center align-center">
           			<p className="session-title">{roomName}</p>
           			<button
@@ -528,8 +599,11 @@ export default function OpenViduComponent({
             			방 나가기
           			</button>
         		</div>
-      		</div>
+      		</div> */}
 
+			{isWinModalOpen && <MultiGameResultWin roomId={currSession} name={userName} setIsWinModalOpen={setIsWinModalOpen}/>}
+			{/* <MultiGameResultLose isOpen={isLoseModalOpen} onClose={handleCloseLoseModal} /> */}
+			
             <style jsx>{`
                 .video-container{
                 }
@@ -553,6 +627,17 @@ export default function OpenViduComponent({
                     align-items: center;
                     color: white;
                 }
+
+				.user-name {
+					display: flex;
+					justify-content: center;
+					font-size: 60px;
+					background-color: ;
+				}
+
+				.stringVS {
+					
+				}
 
                 .contents-box{
                     position: relative;
@@ -650,7 +735,92 @@ export default function OpenViduComponent({
 					  width: 100%;
 					}
 
-
+					.buttonGameReady {
+						font-size: 40px;
+						color: white;
+						background-color: red;
+						width: 250px;
+						height: 100px;
+						border-radius: 20px; 
+						// border: 3px solid black;
+					}
+					.buttonGameReady {
+						background: linear-gradient(0deg, rgba(244, 123, 123, 1) 0%, rgba(238, 47, 47, 1) 100%);
+						font-size: 50px;
+						color: white;
+						width: 250px;
+						height: 100px;
+						  line-height: 42px;
+						  padding: 0;
+						  border: none;
+						}
+						.buttonGameReady span {
+							line-height: 100px;
+						  position: relative;
+						  display: block;
+						  width: 100%;
+						  height: 100%;
+						}
+						.buttonGameReady:before,
+						.buttonGameReady:after {
+						  position: absolute;
+						  content: "";
+						  right: 0;
+						  bottom: 0;
+						  background: rgba(238, 47, 47, 1);
+						  box-shadow:
+						   -7px -7px 20px 0px rgba(255,255,255,.9),
+						   -4px -4px 5px 0px rgba(255,255,255,.9),
+						   7px 7px 20px 0px rgba(0,0,0,.2),
+						   4px 4px 5px 0px rgba(0,0,0,.3);
+						  transition: all 0.3s ease;
+						}
+						.buttonGameReady:before{
+						   height: 0%;
+						   width: 2px;
+						}
+						.buttonGameReady:after {
+						  width: 0%;
+						  height: 2px;
+						}
+						.buttonGameReady:hover{
+						  color: rgba(238, 47, 47, 1);
+						  background: transparent;
+						}
+						.buttonGameReady:hover:before {
+						  height: 100%;
+						}
+						.buttonGameReady:hover:after {
+						  width: 100%;
+						}
+						.buttonGameReady span:before,
+						.buttonGameReady span:after {
+						  position: absolute;
+						  content: "";
+						  left: 0;
+						  top: 0;
+						  background: rgba(238, 47, 47, 1);
+						  box-shadow:
+						   -7px -7px 20px 0px rgba(255,255,255,.9),
+						   -4px -4px 5px 0px rgba(255,255,255,.9),
+						   7px 7px 20px 0px rgba(0,0,0,.2),
+						   4px 4px 5px 0px rgba(0,0,0,.3);
+						  transition: all 0.3s ease;
+						}
+						.buttonGameReady span:before {
+						  width: 2px;
+						  height: 0%;
+						}
+						.buttonGameReady span:after {
+						  height: 2px;
+						  width: 0%;
+						}
+						.buttonGameReady span:hover:before {
+						  height: 100%;
+						}
+						.buttonGameReady span:hover:after {
+						  width: 100%;
+						}
 
 				// .buttonGameStart {
 				// 	font-size: 40px;
