@@ -3,9 +3,9 @@ import {
     isPhaserGameStart2,
     gameTimePassed2,
     gameTimeTotal2,
-    mySquart,
-    heSquart, isPhaserGameStart
-} from "../openvidu/OpenviduComponent";
+    mySquart2,
+    heSquart2, isPhaserGameStart
+} from "../openvidu/OpenviduComponent2";
 import {gameTimePassed, gameTimeTotal} from "@/components/openvidu/OpenviduComponent";
 
 
@@ -50,6 +50,7 @@ export default class Main2 extends Phaser.Scene {
     ding;
     inGameBgm;
     waitBgm2;
+    countdown = 5;
 
 
     constructor() {
@@ -274,29 +275,29 @@ export default class Main2 extends Phaser.Scene {
         const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
         const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);
 
-        this.player1Number100.setFrame(Math.floor(mySquart / 100))
-        this.player1Number10.setFrame(Math.floor((mySquart % 100) / 10))
-        this.player1Number1.setFrame(Math.floor(mySquart % 10))
+        this.player1Number100.setFrame(Math.floor(mySquart2 / 100))
+        this.player1Number10.setFrame(Math.floor((mySquart2 % 100) / 10))
+        this.player1Number1.setFrame(Math.floor(mySquart2 % 10))
 
-        this.player2Number100.setFrame(Math.floor(heSquart / 100))
-        this.player2Number10.setFrame(Math.floor((heSquart % 100) / 10))
-        this.player2Number1.setFrame(Math.floor(heSquart % 10))
-        if(mySquart != this.player1TempCount){
-            this.player1TempCount = mySquart;
+        this.player2Number100.setFrame(Math.floor(heSquart2 / 100))
+        this.player2Number10.setFrame(Math.floor((heSquart2 % 100) / 10))
+        this.player2Number1.setFrame(Math.floor(heSquart2 % 10))
+        if(mySquart2 != this.player1TempCount){
+            this.player1TempCount = mySquart2;
             this.ding.play();
         }
-        if(heSquart != this.player2TempCount){
-            this.player2TempCount = heSquart;
+        if(heSquart2 != this.player2TempCount){
+            this.player2TempCount = heSquart2;
             this.ding.play();
         }
-        if (mySquart > heSquart) {
+        if (mySquart2 > heSquart2) {
             this.playerFire.x = 280;
             this.playerFire.visible = true;
             this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(0, 0, 570, 1000);
-        } else if (mySquart < heSquart) {
+        } else if (mySquart2 < heSquart2) {
             this.playerFire.x = 1640;
             this.playerFire.visible = true;
             this.playerFire.anims.play('player_fire', true)
@@ -334,7 +335,7 @@ export default class Main2 extends Phaser.Scene {
         this.name.setPosition(this.player1.x - 30, this.player1.y + 80)
 
 
-        // let difference = 925 + (mySquart - heSquart)*10
+        // let difference = 925 + (mySquart2 - heSquart2)*10
         if (difference > 240) {
             difference = 240
         } else if (difference < -240) {
