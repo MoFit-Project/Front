@@ -156,10 +156,8 @@ export default class Main extends Phaser.Scene {
                 {color: "#ffffff", fontSize: "55px", fontFamily: 'dalmoori'}
             )
             .setDepth(1)
-        this.timeBar.visible =false;
+        this.timeBar.visible = false;
         this.timeText.visible = false;
-
-
 
 
         this.punchSound = this.sound.add('punch');
@@ -171,9 +169,9 @@ export default class Main extends Phaser.Scene {
 
         this.waitBgm.play();
 
-        this.backGround_Gameboy = this.add.image(950, 405, 'backGround_Gameboy')
+        this.backGround_Gameboy = this.add.image(950, 480, 'backGround_Gameboy')
             .setOrigin(0.5, 0.5)
-            .setScale(1.35);
+            .setScale(1.6);
         this.backgroundCity = this.add.image(950, 370, 'backgroundCityImage').setScale(1.06, 1.15)
         this.ground = this.add.image(950, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
 
@@ -305,17 +303,17 @@ export default class Main extends Phaser.Scene {
         this.noDisplay.anims.play('beforeStart')
         this.number = this.add.sprite(950, 410, 'numbers').setVisible(false);
         this.player1Number10 = this.add.sprite(280, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player1Number100 = this.add.sprite(this.player1Number10.x-110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player1Number1 = this.add.sprite(this.player1Number10.x+110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number100 = this.add.sprite(this.player1Number10.x - 110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number1 = this.add.sprite(this.player1Number10.x + 110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
         this.player2Number10 = this.add.sprite(1640, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number100 = this.add.sprite(this.player2Number10.x-110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number1 = this.add.sprite(this.player2Number10.x+110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number100 = this.add.sprite(this.player2Number10.x - 110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number1 = this.add.sprite(this.player2Number10.x + 110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
     }
 
 
     update(time, delta) {
         let currentGameTime = (gameTimeTotal - gameTimePassed - 5) / (gameTimeTotal)
-        if (currentGameTime < 0){
+        if (currentGameTime < 0) {
             currentGameTime = 0
         } else if (currentGameTime > 1) {
             currentGameTime = 1
@@ -323,9 +321,6 @@ export default class Main extends Phaser.Scene {
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
         this.timeBar.fillRect(880, 38, 420 * currentGameTime, 55);
-
-
-
 
 
         const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
@@ -351,7 +346,6 @@ export default class Main extends Phaser.Scene {
         }
 
 
-
         if (mySquart != this.player1CountTempSave && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
             this.ding.play();
             this.player1CountTempSave = mySquart;
@@ -372,12 +366,11 @@ export default class Main extends Phaser.Scene {
 
         if (isPhaserGameStart && this.gameHasNotStarted) {
             this.gameHasNotStarted = false;
-            this.timeBar.visible =true;
+            this.timeBar.visible = true;
             this.timeText.visible = true;
             this.noDisplay.destroy();
             this.countDown.call(this);
         }
-
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
