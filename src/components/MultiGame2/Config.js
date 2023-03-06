@@ -143,7 +143,7 @@ export default class Main2 extends Phaser.Scene {
     create() {
         this.playerBackground = this.add.graphics();
 
-        this.timeBar = this.add.graphics();
+        this.timeBar = this.add.graphics().setDepth(1);
 
         this.timeText = this.add
             .text(550, 75,
