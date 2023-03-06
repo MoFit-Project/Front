@@ -34,7 +34,6 @@ export default class Main extends Phaser.Scene {
 
     touch = false;
 
-    inputTimeDelay = 0.5;
     name;
     backGround_Gameboy;
     backgroundCity;
@@ -147,14 +146,14 @@ export default class Main extends Phaser.Scene {
     create() {
         this.playerBackground = this.add.graphics();
 
-        this.timeBar = this.add.graphics().setDepth(1);
+        this.timeBar = this.add.graphics().setDepth(1).setVisible(false);
 
         this.timeText = this.add
             .text(550, 75,
                 "TIME LEFT:",
                 {color: "#ffffff", fontSize: "60px", fontFamily: 'dalmoori'}
             )
-            .setDepth(1)
+            .setDepth(1).setVisible(false)
         // this.timeBar.visible = false;
         // this.timeText.visible = false;
 
@@ -283,7 +282,7 @@ export default class Main extends Phaser.Scene {
         this.noDisplay = this.add.sprite(950, 500, 'displayDisable')
             .setOrigin(0.5, 0.5)
             .setScale(1.6, 2.1)
-            .setVisible(false)
+            .setVisible(true)
             .setDepth(1);
         this.noDisplay.anims.play('beforeStart')
 
@@ -307,7 +306,7 @@ export default class Main extends Phaser.Scene {
 
 
     update(time, delta) {
-        let currentGameTime = (gameTimeTotal - gameTimePassed - 5) / (gameTimeTotal)
+        let currentGameTime = (gameTimeTotal - (gameTimePassed - 5)) / (gameTimeTotal)
         if (currentGameTime < 0) {
             currentGameTime = 0
         } else if (currentGameTime > 1) {
@@ -405,6 +404,7 @@ export default class Main extends Phaser.Scene {
             this.timeBar.visible = true;
             this.timeText.visible = true;
             this.noDisplay.destroy();
+            this.waitBgm.destroy();
             this.countDown.call(this);
         }
 
@@ -453,8 +453,6 @@ export default class Main extends Phaser.Scene {
             this.number.visible = false;
             this.player1InputTime = 0;
             this.player2InputTime = 0;
-
-            this.waitBgm.destroy();
             this.fightBgm.play()
             return;
         }
