@@ -363,7 +363,6 @@ export default class Main2 extends Phaser.Scene {
             this.number.visible = false;
             this.noDisplay.destroy();
             this.waitBgm2.destroy();
-            this.inGameBgm.play()
             return;
         }
         this.bee.play();

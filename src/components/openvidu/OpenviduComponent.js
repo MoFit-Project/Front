@@ -585,7 +585,7 @@ export default function OpenViduComponent({
                 {publisher !== undefined ? (
                     <div
                     id="main-video"
-                    style={{ position: "absolute", top: "30px", bottom:"140px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}
+                    style={{ position: "absolute", top: "0px", bottom:"140px", left: "0px", right: "1370px" ,width: "500px", height: "800px" }}
                     >
                     <OvVideo
                         streamManager={publisher}
