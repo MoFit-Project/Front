@@ -350,8 +350,8 @@ export default function OpenViduComponent({
       			targetBtnReady.style.display = "none";
 	  			const targetBtnStart = document.getElementById("buttonGameStart");
       			targetBtnStart.style.display = "none";
-				// const targetBtnLeave = document.getElementById("buttonLeaveRoom");
-				// targetBtnLeave.style.display = "none";
+				const targetBtnLeave = document.getElementById("buttonLeaveRoom");
+				targetBtnLeave.style.display = "none";
 
                 const targetStringRoomTitle = document.getElementById("room-title");
 				targetStringRoomTitle.style.display = "none";
