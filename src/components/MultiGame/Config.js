@@ -278,7 +278,7 @@ export default class Main extends Phaser.Scene {
         this.noDisplay.anims.play('beforeStart')
 
 
-        this.number = this.add.sprite(950, 410, 'numbers').setVisible(false).setDepth(1);
+        this.number = this.add.sprite(950, 500, 'numbers').setVisible(false).setDepth(1);
 
 
         this.backGround_Gameboy = this.add.image(950, 500, 'backGround_Gameboy')
@@ -323,7 +323,7 @@ export default class Main extends Phaser.Scene {
         //     this.player2InputTime = time;
         // }
 
-        
+
 
         if (mySquart > heSquart) {
             this.playerBackground.clear();
@@ -451,7 +451,7 @@ export default class Main extends Phaser.Scene {
         }
         this.bee.play();
         this.number.destroy();
-        this.number = this.add.sprite(950, 410, 'numbers').setFrame(this.countdown);
+        this.number = this.add.sprite(950, 500, 'numbers').setFrame(this.countdown);
         this.tweens.add({
             targets: this.number,
             duration: 1000, // 애니메이션 지속 시간
