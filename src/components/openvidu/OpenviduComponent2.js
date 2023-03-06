@@ -33,7 +33,7 @@ export let isPhaserGameStart2 = false;
 export let gameTimePassed2 = 0;
 export let gameTimeTotal2;
 
-const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame/Index"), {
+const DynamicComponentWithNoSSR = dynamic(() => import("../MultiGame2/Index"), {
     ssr: false,
 });
 

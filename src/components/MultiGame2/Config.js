@@ -4,7 +4,7 @@ import {
     gameTimePassed2,
     gameTimeTotal2,
     mySquart2,
-    heSquart2, isPhaserGameStart
+    heSquart2
 } from "../openvidu/OpenviduComponent2";
 import {gameTimePassed, gameTimeTotal} from "@/components/openvidu/OpenviduComponent";
 
