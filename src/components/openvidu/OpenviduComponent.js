@@ -80,7 +80,6 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
-
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
