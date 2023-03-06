@@ -22,7 +22,7 @@ export default function Index() {
 
       // width: window.innerWidth * window.devicePixelRatio,
       // height: window.innerHeight * window.devicePixelRatio,
-      backgroundColor: '#ffffff',
+      backgroundColor: '#000000',
       scale: {
         // mode: Phaser.Scale.CENTER_BOTH,
         // autoCenter:Phaser.Scale.CENTER_BOTH,
