@@ -403,7 +403,7 @@ export default function OpenViduComponent({
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "500x800", // 비율 정하기 The resolution of your video
+                            resolution: "445x800", // 비율 정하기 The resolution of your video
                             frameRate: 30, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
@@ -624,10 +624,10 @@ export default function OpenViduComponent({
 			
 			<p id="room-title" className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
 			<p id="stringVS" className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}>VS</p>
-			<span className="user-name" style={{ position: "absolute", top: "700px", left: "100px" }}>{userName}</span>
-			<span className="user-name" style={{ position: "absolute", top: "700px", right: "140px" }}>{rightUserName}</span>
+			<span className="user-name" style={{ position: "absolute", top: "800px", left: "100px" }}>{userName}</span>
+			<span className="user-name" style={{ position: "absolute", top: "800px", right: "140px" }}>{rightUserName}</span>
             <button
-                style={{ position: "absolute", top: "830px", left: "830px" }}
+                style={{ position: "absolute", top: "400px", left: "700px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -635,7 +635,7 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "absolute", top: "830px", left: "830px" }}
+                style={{ position: "absolute", top: "400px", left: "700px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
@@ -643,12 +643,12 @@ export default function OpenViduComponent({
                 <span>준비</span>
             </button>
 			<button
-                style={{ position: "absolute", top: "830px", bottom:"30px", right: "30px", left: "1150px", width: "250px", height: "100px", fontSize: "50px", color: "white", backgroundColor: "red", borderRadius: "20px" }}
+                style={{ position: "absolute", top: "680px", bottom:"30px", right: "30px", left: "1150px", width: "150px", height: "60px", fontSize: "30px", color: "white", backgroundColor: "red", borderRadius: "20px" }}
                 className="buttonLeaveRoom"
                 id="buttonLeaveRoom"
                 onClick={callLeaveSession}
             >
-                방나가기
+                나가기
             </button>
         </div>
 
@@ -733,26 +733,26 @@ export default function OpenViduComponent({
                 }
                 
 				.buttonGameStart {
-					font-size: 40px;
+					font-size: 80px;
 					color: white;
-					background-color: red;
-					width: 250px;
-					height: 100px;
+					// background-color: red;
+					// width: 500px;
+					// height: 200px;
 					border-radius: 20px; 
 					// border: 3px solid black;
 				}
 				.buttonGameStart {
-					background: linear-gradient(0deg, rgba(244, 123, 123, 1) 0%, rgba(238, 47, 47, 1) 100%);
-					font-size: 50px;
+					background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+					font-size: 170px;
 					color: white;
-					width: 250px;
-					height: 100px;
+					width: 500px;
+					height: 200px;
 					  line-height: 42px;
 					  padding: 0;
 					  border: none;
 					}
 					.buttonGameStart span {
-						line-height: 100px;
+						line-height: 190px;
 					  position: relative;
 					  display: block;
 					  width: 100%;
@@ -764,7 +764,7 @@ export default function OpenViduComponent({
 					  content: "";
 					  right: 0;
 					  bottom: 0;
-					  background: rgba(238, 47, 47, 1);
+					  background: rgba(54, 142, 6, 1);
 					  box-shadow:
 					   -7px -7px 20px 0px rgba(255,255,255,.9),
 					   -4px -4px 5px 0px rgba(255,255,255,.9),
@@ -781,7 +781,7 @@ export default function OpenViduComponent({
 					  height: 2px;
 					}
 					.buttonGameStart:hover{
-					  color: rgba(238, 47, 47, 1);
+					  color: rgba(54, 142, 6, 1);
 					//   background: transparent;
                         background: white;
 					}
@@ -797,7 +797,7 @@ export default function OpenViduComponent({
 					  content: "";
 					  left: 0;
 					  top: 0;
-					  background: rgba(238, 47, 47, 1);
+					  background: rgba(54, 142, 6, 1);
 					  box-shadow:
 					   -7px -7px 20px 0px rgba(255,255,255,.9),
 					   -4px -4px 5px 0px rgba(255,255,255,.9),
@@ -823,24 +823,24 @@ export default function OpenViduComponent({
 					.buttonGameReady {
 						font-size: 40px;
 						color: white;
-						background-color: red;
-						width: 250px;
-						height: 100px;
+						// background-color: red;
+						// width: 250px;
+						// height: 100px;
 						border-radius: 20px; 
 						// border: 3px solid black;
 					}
 					.buttonGameReady {
-						background: linear-gradient(0deg, rgba(244, 123, 123, 1) 0%, rgba(238, 47, 47, 1) 100%);
-						font-size: 50px;
+						background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+						font-size: 170px;
 						color: white;
-						width: 250px;
-						height: 100px;
+						width: 500px;
+						height: 200px;
 						  line-height: 42px;
 						  padding: 0;
 						  border: none;
 						}
 						.buttonGameReady span {
-							line-height: 100px;
+							line-height: 190px;
 						  position: relative;
 						  display: block;
 						  width: 100%;
@@ -852,7 +852,7 @@ export default function OpenViduComponent({
 						  content: "";
 						  right: 0;
 						  bottom: 0;
-						  background: rgba(238, 47, 47, 1);
+						  background: rgba(54, 142, 6, 1);
 						  box-shadow:
 						   -7px -7px 20px 0px rgba(255,255,255,.9),
 						   -4px -4px 5px 0px rgba(255,255,255,.9),
@@ -869,7 +869,7 @@ export default function OpenViduComponent({
 						  height: 2px;
 						}
 						.buttonGameReady:hover{
-						  color: rgba(238, 47, 47, 1);
+						  color: rgba(54, 142, 6, 1);
 						//   background: transparent;
                             background: white;
 						}
@@ -885,7 +885,7 @@ export default function OpenViduComponent({
 						  content: "";
 						  left: 0;
 						  top: 0;
-						  background: rgba(238, 47, 47, 1);
+						  background: rgba(54, 142, 6, 1);
 						  box-shadow:
 						   -7px -7px 20px 0px rgba(255,255,255,.9),
 						   -4px -4px 5px 0px rgba(255,255,255,.9),
@@ -918,7 +918,7 @@ export default function OpenViduComponent({
 				// 	border: none;
 				// 	border-radius: 50px; 
 				// 	background: rgb(255,27,0);
-				//   	background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(238, 47, 47, 1) 100%);
+				//   	background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(54, 142, 6, 1) 100%);
 				// }
 				// .buttonGameStart:hover {
 				// 	color: #f0094a;
