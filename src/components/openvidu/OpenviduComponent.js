@@ -140,6 +140,7 @@ export default function OpenViduComponent({
 	const [isModalClose, setIsModalClose] = useState(false);
 
     const [isIWinning, setIsIWinning] = useState("");
+    const [isRWinning, setIsRWinning] = useState("");
 
   let isClicked = false;
   let isAllReady = true;
@@ -284,22 +285,28 @@ export default function OpenViduComponent({
                     isLeftPlayerThrow = true;
                     mySquart += 1;
                     console.log("my count : " + mySquart);
+                    setIsIWinning("Squat !!!");
                     setTimeout(function () {
                         isLeftPlayerThrow = false;
+                        setIsIWinning("");
                     }, 300);
                 } else {
                     isRightPlayerThrow = true;
                     heSquart += 1;
                     console.log("he count : " + heSquart);
+                    setIsRWinning("Squat !!!")
                     setTimeout(function () {
                         isRightPlayerThrow = false;
+                        setIsRWinning("")
                     }, 300);
                 }
-                if(mySquart >= heSquart) {
-                    setIsIWinning("WINNING");
-                } else {
-                    setIsIWinning("");
-                }
+                // if(mySquart >= heSquart) {
+                //     setIsIWinning("Squat !!!");
+                //     setIsRWinning("");
+                // } else {
+                //     setIsIWinning("");
+                //     setIsRWinning("Squat !!!")
+                // }
             });
 
             mySession.on("signal:jumpingJacks", (event) => {
@@ -337,6 +344,9 @@ export default function OpenViduComponent({
       			targetBtnStart.style.display = "none";
 				// const targetBtnLeave = document.getElementById("buttonLeaveRoom");
 				// targetBtnLeave.style.display = "none";
+
+                const targetStringRoomTitle = document.getElementById("room-title");
+				targetStringRoomTitle.style.display = "none";
 
 				const targetStringVS = document.getElementById("stringVS");
 				targetStringVS.style.display = "block";
@@ -604,12 +614,12 @@ export default function OpenViduComponent({
         
             {loading ? <DynamicComponentWithNoSSR /> : null}
 			
-			<p className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
+			<p id="room-title" className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
 			<p id="stringVS" className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}>VS</p>
-			<span className="user-name" style={{ position: "absolute", top: "810px", left: "570px" }}>{userName}</span>
-			<span className="user-name" style={{ position: "absolute", top: "810px", right: "570px" }}>{rightUserName}</span>
+			<span className="user-name" style={{ position: "absolute", top: "700px", left: "100px" }}>{userName}</span>
+			<span className="user-name" style={{ position: "absolute", top: "700px", right: "140px" }}>{rightUserName}</span>
             <button
-                style={{ position: "absolute", top: "820px", left: "850px" }}
+                style={{ position: "absolute", top: "830px", left: "830px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -617,7 +627,7 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "absolute", top: "820px", left: "850px" }}
+                style={{ position: "absolute", top: "830px", left: "830px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
@@ -625,7 +635,7 @@ export default function OpenViduComponent({
                 <span>준비</span>
             </button>
 			<button
-                style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "1600px", width: "250px", height: "100px", fontSize: "50px", color: "white", backgroundColor: "red", borderRadius: "20px" }}
+                style={{ position: "absolute", top: "830px", bottom:"30px", right: "30px", left: "1150px", width: "250px", height: "100px", fontSize: "50px", color: "white", backgroundColor: "red", borderRadius: "20px" }}
                 className="buttonLeaveRoom"
                 id="buttonLeaveRoom"
                 onClick={callLeaveSession}
@@ -638,7 +648,7 @@ export default function OpenViduComponent({
           {subscribers.map((sub, i) => (
             <div
               key={i}
-              style={{ position: "absolute", top: "30px", bottom:"170px", right: "30px", left: "1370px", width: "500px", height: "800px" }}
+              style={{ position: "absolute", top: "0px", bottom:"200px", right: "0px", left: "1400px", width: "500px", height: "800px" }}
             >
               <SubVideo streamManager={sub} />
             </div>
@@ -646,7 +656,8 @@ export default function OpenViduComponent({
         </div>
       </div>
 
-      <p style={{ position: "absolute", top: "30px", bottom:"140px", left: "30px", right: "1370px" ,width: "500px", height: "800px" }}>{isIWinning}</p>
+      <p className="leftWinning" style={{ position: "absolute", top: "600px", left: "100px", width: "400px", height: "200px" }}>{isIWinning}</p>
+      <p className="leftWinning" style={{ position: "absolute", top: "600px", left: "1500px", width: "400px", height: "200px" }}>{isRWinning}</p>
 
 	  		{/* <div className="nav-bar flex justify-center align-center" style={{ position: "absolute", top: "800px", bottom:"30px", right: "30px", left: "1400px", width: "300px", height: "100px" }}>
         		<div className="contents-box flex flex-inline justify-center align-center">
@@ -691,7 +702,7 @@ export default function OpenViduComponent({
 				.user-name {
 					display: flex;
 					justify-content: center;
-					font-size: 60px;
+					font-size: 150px;
 					background-color: ;
 				}
 
@@ -706,6 +717,11 @@ export default function OpenViduComponent({
                     width: 660px;
                     height: 50px;
                     border-radius: 10px; 
+                }
+
+                .leftWinning {
+                    color: red;
+                    font-size: 80px;
                 }
                 
 				.buttonGameStart {
@@ -758,7 +774,8 @@ export default function OpenViduComponent({
 					}
 					.buttonGameStart:hover{
 					  color: rgba(238, 47, 47, 1);
-					  background: transparent;
+					//   background: transparent;
+                        background: white;
 					}
 					.buttonGameStart:hover:before {
 					  height: 100%;
@@ -845,7 +862,8 @@ export default function OpenViduComponent({
 						}
 						.buttonGameReady:hover{
 						  color: rgba(238, 47, 47, 1);
-						  background: transparent;
+						//   background: transparent;
+                            background: white;
 						}
 						.buttonGameReady:hover:before {
 						  height: 100%;
