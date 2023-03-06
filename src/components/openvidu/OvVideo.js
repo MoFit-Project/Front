@@ -5,7 +5,7 @@ import {
 	leftCalculateAngle,
 	rightCalculateAngle,
 	calculateAngle,
-} from "../../public/detector.js";
+} from "../../../public/detector.js";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
 import {
