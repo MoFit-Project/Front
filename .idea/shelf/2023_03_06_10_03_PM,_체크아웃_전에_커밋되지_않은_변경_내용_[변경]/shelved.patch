@@ -1,0 +1,66 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"a01e5aff-28db-4ebc-8599-b18b979c5088\" name=\"변경\" comment=\"feat : 로그인 로직 롤백\">\n      <change beforePath=\"$PROJECT_DIR$/src/components/MultiGame/Config.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/components/MultiGame/Config.js\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/components/MultiGame2/Config.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/components/MultiGame2/Config.js\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"JavaScript File\" />\n        <option value=\"CSS File\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"HighlightingSettingsPerFile\">\n    <setting file=\"file://$PROJECT_DIR$/src/components/MultiGame/Index.js\" root0=\"SKIP_INSPECTION\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2MAmwD7BIRfzE9To9VOyjnl6N1q\" />\n  <component name=\"ProjectLevelVcsManager\">\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\n  </component>\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"WebServerToolWindowFactoryState\": \"false\",\n    \"last_opened_file_path\": \"/Users/woe3/Documents/GitHub/Front/public/assets/sound\",\n    \"list.type.of.created.stylesheet\": \"CSS\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.standard\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.standard\": \"\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"settings.editor.selected.configurable\": \"editing.templates\",\n    \"ts.external.directory.path\": \"/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/public/assets/sound\" />\n      <recent name=\"$PROJECT_DIR$/public/assets\" />\n      <recent name=\"$PROJECT_DIR$/public\" />\n      <recent name=\"$PROJECT_DIR$/public/assets/multigame2\" />\n      <recent name=\"$PROJECT_DIR$/public/assets/characters\" />\n    </key>\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/public\" />\n      <recent name=\"$PROJECT_DIR$/public/assets/mulitgame2\" />\n      <recent name=\"$PROJECT_DIR$/public/assets/characters2\" />\n      <recent name=\"$PROJECT_DIR$/src/components/MultiGame2\" />\n      <recent name=\"$PROJECT_DIR$/public/assets\" />\n    </key>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\n      <changelist id=\"a01e5aff-28db-4ebc-8599-b18b979c5088\" name=\"변경\" comment=\"\" />\n      <created>1677218997842</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1677218997842</updated>\n      <workItem from=\"1677218998982\" duration=\"2697000\" />\n      <workItem from=\"1677223018002\" duration=\"14702000\" />\n      <workItem from=\"1677347038757\" duration=\"175000\" />\n      <workItem from=\"1677347221959\" duration=\"144000\" />\n      <workItem from=\"1677347373528\" duration=\"3556000\" />\n      <workItem from=\"1677393833193\" duration=\"6898000\" />\n      <workItem from=\"1677564465706\" duration=\"1767000\" />\n      <workItem from=\"1677566629772\" duration=\"19625000\" />\n      <workItem from=\"1677645821806\" duration=\"1910000\" />\n      <workItem from=\"1677681358285\" duration=\"8256000\" />\n      <workItem from=\"1677705494730\" duration=\"333000\" />\n      <workItem from=\"1677705832379\" duration=\"7882000\" />\n      <workItem from=\"1677746031692\" duration=\"5940000\" />\n      <workItem from=\"1677790135146\" duration=\"26671000\" />\n      <workItem from=\"1677907124404\" duration=\"8416000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"feat : JWT 쿠기 유/무로 페이지 접근제어 추가\">\n      <created>1677227365915</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677227365915</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"feat : JWT 쿠기 삭제 함수 추가\">\n      <created>1677236429771</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677236429771</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"feat : 로그아웃 버튼 활성화\">\n      <created>1677236464500</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677236464500</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"feat : npm nookie 추가\">\n      <created>1677236488586</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677236488586</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"5\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"feat : JWT 쿠기 유/무로 페이지 접근제어 추가\" />\n    <MESSAGE value=\"feat : JWT 쿠기 삭제 함수 추가\" />\n    <MESSAGE value=\"feat : 로그아웃 버튼 활성화\" />\n    <MESSAGE value=\"feat : npm nookie 추가\" />\n    <MESSAGE value=\"feat : 로그인 로직 롤백\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"feat : 로그인 로직 롤백\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 006315d8a6de4f22a9d9bd1a5b235d9a638ade77)
++++ b/.idea/workspace.xml	(date 1678107308824)
+@@ -4,10 +4,7 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="feat : 로그인 로직 롤백">
+-      <change beforePath="$PROJECT_DIR$/src/components/MultiGame/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame/Config.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MultiGame2/Config.js" afterDir="false" />
+-    </list>
++    <list default="true" id="a01e5aff-28db-4ebc-8599-b18b979c5088" name="변경" comment="" />
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -43,25 +40,25 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "last_opened_file_path": "/Users/woe3/Documents/GitHub/Front/public/assets/sound",
+-    "list.type.of.created.stylesheet": "CSS",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.standard": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.standard": "",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "settings.editor.selected.configurable": "editing.templates",
+-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;last_opened_file_path&quot;: &quot;/Users/woe3/Documents/GitHub/Front/public/assets/sound&quot;,
++    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;editing.templates&quot;,
++    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+       <recent name="$PROJECT_DIR$/public/assets/sound" />

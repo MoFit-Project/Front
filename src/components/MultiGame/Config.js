@@ -3,12 +3,13 @@ import {
     isPhaserGameStart,
     gameTimePassed,
     gameTimeTotal,
-    mySquart,
-    heSquart
+    // mySquart,
+    // heSquart
 } from "../openvidu/OpenviduComponent";
 import {gameTimePassed2} from "@/components/openvidu/OpenviduComponent";
 
-
+let mySquart = 0;
+let heSquart = 0;
 //통신
 
 
@@ -17,12 +18,14 @@ export default class Main extends Phaser.Scene {
     loadingText;
     player1;
     player2;
+    player1Hurt;
+    player2Hurt;
     player1Attack = false;
     player2Attack = false;
     player1Attacked = false;
     player2Attacked = false;
-    player1InputTime;
-    player2InputTime;
+    player1InputTime = 0;
+    player2InputTime = 0;
     player1Press = false;
     player2Press = false;
 
@@ -126,11 +129,7 @@ export default class Main extends Phaser.Scene {
             '../assets/numbers.png',
             {frameWidth: 130, frameHeight: 150}
         )
-        this.load.spritesheet(
-            "fire",
-            '../assets/fire.png',
-            {frameWidth: 192, frameHeight: 32}
-        )
+
         this.load.image('backGround_Gameboy', '../assets/gameboy.png')
         this.load.image('backgroundCityImage', '../assets/backgroundCity.png')
         this.load.image('ground', '../assets/ground.webp')
@@ -151,13 +150,13 @@ export default class Main extends Phaser.Scene {
         this.timeBar = this.add.graphics().setDepth(1);
 
         this.timeText = this.add
-            .text(600, 40,
+            .text(550, 75,
                 "TIME LEFT:",
-                {color: "#ffffff", fontSize: "55px", fontFamily: 'dalmoori'}
+                {color: "#ffffff", fontSize: "60px", fontFamily: 'dalmoori'}
             )
             .setDepth(1)
-        this.timeBar.visible = false;
-        this.timeText.visible = false;
+        // this.timeBar.visible = false;
+        // this.timeText.visible = false;
 
 
         this.punchSound = this.sound.add('punch');
@@ -169,34 +168,32 @@ export default class Main extends Phaser.Scene {
 
         this.waitBgm.play();
 
-        this.backGround_Gameboy = this.add.image(950, 480, 'backGround_Gameboy')
-            .setOrigin(0.5, 0.5)
-            .setScale(1.6);
-        this.backgroundCity = this.add.image(950, 370, 'backgroundCityImage').setScale(1.06, 1.15)
-        this.ground = this.add.image(950, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
+
+        this.backgroundCity = this.add.image(950, 450, 'backgroundCityImage').setScale(1.3, 2)
+        this.ground = this.add.image(950, 730, 'ground').setScale(1.1, 0.6);
 
 
-        this.player2 = this.physics.add.sprite(1090, 430, 'player2')
-            .setScale(5)
+        this.player2 = this.physics.add.sprite(950, 710, 'player2')
+            .setOrigin(0.5,1)
+            .setScale(8)
             .toggleFlipX();
-        this.player1 = this.physics.add.sprite(820, 430, 'player1').setScale(5);
+        this.player1 = this.physics.add.sprite(950, 710, 'player1').setScale(8).setOrigin(0.5,1);
+        this.player2Hurt = this.physics.add.sprite(950, 710, 'player2')
+            .setOrigin(0.5,1)
+            .setScale(8)
+            .toggleFlipX()
+            .setVisible(false);
+        this.player1Hurt = this.physics.add.sprite(950, 710, 'player1').setScale(8).setOrigin(0.5,1).setVisible(false);
         this.name = this.add
-            .text(this.player1.x - 80, this.player1.y - 80,
+            .text(this.player1.x-120, this.player1.y+10,
                 "PLAYER",
-                {color: "#000000", fontSize: "20px"}
+                {color: "#ffd400", fontSize: "30px", fontFamily: 'dalmoori'}
             )
         //player1
         this.anims.create({
             key: 'player1_idle',
             frames: this.anims.generateFrameNumbers('player1', {start: 56, end: 59}),
             frameRate: 10,
-            repeat: 0,
-        });
-
-        this.anims.create({
-            key: 'player1_run',
-            frames: this.anims.generateFrameNumbers('player1', {start: 80, end: 85}),
-            frameRate: 20,
             repeat: 0,
         });
 
@@ -228,8 +225,9 @@ export default class Main extends Phaser.Scene {
         this.anims.create({
             key: 'player1_hurt',
             frames: this.anims.generateFrameNumbers('player1', {start: 48, end: 49}),
-            frameRate: 10,
-            repeat: 3,
+            frameRate: 20,
+            repeat: 0,
+            hideOnComplete:true
         });
         //player2
         this.anims.create({
@@ -239,12 +237,6 @@ export default class Main extends Phaser.Scene {
             repeat: 0,
         });
 
-        this.anims.create({
-            key: 'player2_run',
-            frames: this.anims.generateFrameNumbers('player2', {start: 80, end: 85}),
-            frameRate: 20,
-            repeat: 0,
-        });
 
 
         this.anims.create({
@@ -274,40 +266,43 @@ export default class Main extends Phaser.Scene {
         this.anims.create({
             key: 'player2_hurt',
             frames: this.anims.generateFrameNumbers('player2', {start: 48, end: 49}),
-            frameRate: 10,
-            repeat: 3,
+            frameRate: 20,
+            repeat: 0,
+            hideOnComplete:true
         });
-        this.noDisplay = this.add.sprite(950, 410, 'displayDisable')
-            .setOrigin(0.5, 0.5)
-            .setScale(1.31, 1.75);
+
+
+
+
         this.anims.create({
             key: 'beforeStart',
             frames: this.anims.generateFrameNumbers('displayDisable', {start: 0, end: 1}),
             frameRate: 20,
             repeat: -1,
         });
-
-        this.playerFire = this.add.sprite(280, 930, 'fire')
+        this.noDisplay = this.add.sprite(950, 500, 'displayDisable')
             .setOrigin(0.5, 0.5)
-            .setScale(1.8, 3)
-            .setDepth(1)
-            .setVisible(false);
-
-        this.anims.create({
-            key: 'player_fire',
-            frames: this.anims.generateFrameNumbers('fire', {start: 0, end: 3}),
-            frameRate: 15,
-            repeat: 0,
-        });
-
+            .setScale(1.6, 2.1)
+            .setVisible(false)
+            .setDepth(1);
         this.noDisplay.anims.play('beforeStart')
-        this.number = this.add.sprite(950, 410, 'numbers').setVisible(false);
-        this.player1Number10 = this.add.sprite(280, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player1Number100 = this.add.sprite(this.player1Number10.x - 110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player1Number1 = this.add.sprite(this.player1Number10.x + 110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number10 = this.add.sprite(1640, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number100 = this.add.sprite(this.player2Number10.x - 110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number1 = this.add.sprite(this.player2Number10.x + 110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+
+
+        this.number = this.add.sprite(950, 410, 'numbers').setVisible(false).setDepth(1);
+
+
+        this.backGround_Gameboy = this.add.image(950, 500, 'backGround_Gameboy')
+            .setOrigin(0.5, 0.5)
+            .setScale(1.58);
+
+        this.player1Number10 = this.add.sprite(740, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.player1Number100 = this.add.sprite(this.player1Number10.x - 90, this.player1Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.player1Number1 = this.add.sprite(this.player1Number10.x + 90, this.player1Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.player2Number10 = this.add.sprite(1160, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.player2Number100 = this.add.sprite(this.player2Number10.x - 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.player2Number1 = this.add.sprite(this.player2Number10.x + 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+
+
     }
 
 
@@ -320,7 +315,7 @@ export default class Main extends Phaser.Scene {
         }
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
-        this.timeBar.fillRect(880, 38, 420 * currentGameTime, 55);
+        this.timeBar.fillRect(860, 77, 480 * currentGameTime, 60);
 
 
         const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
@@ -329,98 +324,38 @@ export default class Main extends Phaser.Scene {
 
 
         const cursors = this.input.keyboard.createCursorKeys();
+        if (cursors.down.isDown && (time - this.player1InputTime) > 500){
+            mySquart += 1
+            this.player1InputTime = time;
+        }
+        if (cursors.right.isDown && (time - this.player2InputTime) > 500){
+            heSquart += 1
+            this.player2InputTime = time;
+
+        }
         if (mySquart > heSquart) {
-            this.playerFire.x = 280;
-            this.playerFire.visible = true;
-            this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(0, 0, 570, 1000);
         } else if (mySquart < heSquart) {
-            this.playerFire.x = 1640;
-            this.playerFire.visible = true;
-            this.playerFire.anims.play('player_fire', true)
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
             this.playerBackground.fillRect(1330, 0, 570, 1000);
         }
 
 
-        if (mySquart != this.player1CountTempSave && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
+        if (mySquart != this.player1CountTempSave) {
             this.ding.play();
             this.player1CountTempSave = mySquart;
-            this.player1InputTime = time;
-            this.player1Press = true;
-        } else {
-            this.player1Press = false;
-        }
-        if (heSquart != this.player2CountTempSave && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-            this.ding.play();
-            this.player2CountTempSave = heSquart;
-            this.player2InputTime = time;
-            this.player2Press = true;
-        } else {
-            this.player2Press = false;
-        }
+            this.effect(this.player1Number1)
+            this.effect(this.player1Number10)
+            this.effect(this.player1Number100)
 
+            this.player1Number100.setFrame(Math.floor(mySquart / 100))
+            this.player1Number10.setFrame(Math.floor((mySquart % 100) / 10))
+            this.player1Number1.setFrame(Math.floor(mySquart % 10))
 
-        if (isPhaserGameStart && this.gameHasNotStarted) {
-            this.gameHasNotStarted = false;
-            this.timeBar.visible = true;
-            this.timeText.visible = true;
-            this.noDisplay.destroy();
-            this.countDown.call(this);
-        }
-
-
-        this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
-
-        if (this.player1.x < 750) {
-            this.player1.x = 750
-        }
-        if (this.player2.x > 1170) {
-            this.player2.x = 1170
-        }
-
-        if (this.player2Attacked) {
-            this.player2.body.velocity.x -= 50;
-            this.player2.anims.play('player2_hurt', false)
-            if (this.player2.body.velocity.x < 0) {
-                this.player2Attacked = false;
-            }
-        }
-        if (this.player1Attacked) {
-            this.player1.body.velocity.x += 50;
-            this.player1.anims.play('player1_hurt', false)
-            if (this.player1.body.velocity.x > 0) {
-                this.player1Attacked = false;
-            }
-        }
-
-        if (this.player2.x - this.player1.x < 0) {
-            this.player2.setVelocity(0);
-            this.player1.setVelocity(0);
-            this.player1.x = this.player2.x - 1
-            this.player2.x = this.player1.x + 1
-
-
-        }
-        if (this.player2.x - this.player1.x < 40) {
-            this.touch = true;
-            this.attackDetector();
-        } else {
-            this.touch = false
-        }
-        this.player1.on("animationcomplete", () => {
-            this.player1.anims.play('player1_idle', true);
-        });
-        this.player2.on("animationcomplete", () => {
-            this.player2.anims.play('player2_idle', true);
-        });
-
-        //player1 이동
-        if (this.player1Press && this.touch) {
-            this.player1Attack = true;
+            // 내가 공격
             this.punchSound.play();
             const number = Math.random()
             if (number < 0.25) {
@@ -432,84 +367,84 @@ export default class Main extends Phaser.Scene {
             } else {
                 this.player1.anims.play('player1_attack4', true);
             }
-        } else if (this.player1Press && !this.touch) {
-            this.player1.body.velocity.x = 300;
-            this.player1.anims.play('player1_run', true);
-        } else {
-            if (this.player1.body.velocity.x > 0 && !this.player1Attacked) {
-                this.player1.body.velocity.x -= 10;
-            } else if (!this.player1Attacked) {
-                this.player1.body.velocity.x = 0
-            }
-            this.player1Attack = false;
+            this.player2Hurt.visible = true
+
+            this.player2Hurt.anims.play('player2_hurt', true)
         }
-        // player2
-        if (this.player2Press && this.touch) {
-            this.player2Attack = true;
+        if (heSquart != this.player2CountTempSave) {
+            this.player2CountTempSave = heSquart;
+            this.effect(this.player2Number1)
+            this.effect(this.player2Number10)
+            this.effect(this.player2Number100)
+
+            this.player2Number100.setFrame(Math.floor(heSquart / 100))
+            this.player2Number10.setFrame(Math.floor((heSquart % 100) / 10))
+            this.player2Number1.setFrame(Math.floor(heSquart % 10))
+
+            // 상대편 공격
             this.punchSound.play();
             const number = Math.random();
             if (number < 0.25) {
-                this.player2.anims.play('player2_attack2', true);
-            } else if (number < 0.5) {
                 this.player2.anims.play('player2_attack1', true);
+            } else if (number < 0.5) {
+                this.player2.anims.play('player2_attack2', true);
             } else if (number < 0.75) {
                 this.player2.anims.play('player2_attack3', true);
             } else {
                 this.player2.anims.play('player2_attack4', true);
 
             }
+            this.player1Hurt.visible = true
+            this.player1Hurt.anims.play('player1_hurt', true)
 
-        } else if (this.player2Press && !this.touch) {
-            this.player2.body.velocity.x = -300;
-            this.player2.anims.play('player2_run', true);
-        } else {
-            if (this.player2.body.velocity.x < 0 && !this.player2Attacked) {
-                this.player2.body.velocity.x += 10;
-            } else if (!this.player2Attacked) {
-                this.player2.body.velocity.x = 0
-            }
-            this.player2Attack = false;
         }
 
-        this.player1Number100.setFrame(Math.floor(mySquart / 100))
-        this.player1Number10.setFrame(Math.floor((mySquart % 100) / 10))
-        this.player1Number1.setFrame(Math.floor(mySquart % 10))
+        // 게임 시작 신호를 받았을 때
+        if (isPhaserGameStart && this.gameHasNotStarted) {
+            this.gameHasNotStarted = false;
+            this.timeBar.visible = true;
+            this.timeText.visible = true;
+            this.noDisplay.destroy();
+            this.countDown.call(this);
+        }
 
-        this.player2Number100.setFrame(Math.floor(heSquart / 100))
-        this.player2Number10.setFrame(Math.floor((heSquart % 100) / 10))
-        this.player2Number1.setFrame(Math.floor(heSquart % 10))
 
-        // 이것은 키보드로하는 테스트 용입니다.
-        // if (cursors.right.isDown && (time - this.player1InputTime) > this.inputTimeDelay * 1000) {
-        //     this.player1InputTime = time;
-        //     this.player1Press = true;
-        // } else {
-        //     this.player1Press = false;
-        // }
-        // if (cursors.left.isDown && (time - this.player2InputTime) > this.inputTimeDelay * 1000) {
-        //     this.player2InputTime = time;
-        //     this.player2Press = true;
-        // } else {
-        //     this.player2Press = false;
-        // }
+
+        this.player1.on("animationcomplete", () => {
+            this.player1.anims.play('player1_idle', true);
+        });
+        this.player2.on("animationcomplete", () => {
+            this.player2.anims.play('player2_idle', true);
+        });
+        let difference = mySquart - heSquart
+        if (difference > 10){
+            difference = 10
+        } else if (difference < -10) {
+            difference = -10
+        }
+        this.player1.scale = 8 + (difference * 0.5)
+        this.player1Hurt.scale = this.player1.scale
+        this.player2.scale = 8 - (difference * 0.5)
+        this.player2Hurt.scale = this.player2.scale
+
+
+
+
+
 
 
     }
-
-
-    attackDetector() {
-        if (this.player1Attack && this.player2Attack) {
-            return
-        } else if (this.player1Attack && !this.player2Attack) {
-            //player1 attack!
-            this.player2Attacked = true;
-            this.player2.body.velocity.x = 700;
-        } else if (!this.player1Attack && this.player2Attack) {
-            // player2 attack
-            this.player1Attacked = true;
-            this.player1.body.velocity.x = -700;
-
-        }
+    effect(i) {
+        this.tweens.add({
+            targets: i,
+            duration: 300, // 애니메이션 지속 시간
+            scale: 2,
+            alpha:0,
+            repeat: 0,
+            onComplete: function (tween, targets) {
+                targets[0].setScale(1).setAlpha(1);
+            },
+        });
     }
 
     countDown() {

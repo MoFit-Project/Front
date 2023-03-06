@@ -656,7 +656,7 @@ export default function OpenViduComponent({
           {subscribers.map((sub, i) => (
             <div
               key={i}
-              style={{ position: "absolute", top: "0px", bottom:"200px", right: "0px", left: "1400px", width: "500px", height: "800px" }}
+              style={{ position: "absolute", top: "0px", bottom:"140px", right: "0px", left: "1370px", width: "500px", height: "800px" }}
             >
               <SubVideo streamManager={sub} />
             </div>
