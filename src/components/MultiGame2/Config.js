@@ -191,7 +191,7 @@ export default class Main2 extends Phaser.Scene {
         this.anims.create({
             key: 'player1_run',
             frames: this.anims.generateFrameNumbers('player1', {start: 0, end: 5}),
-            frameRate: 30,
+            frameRate: 29,
             repeat: 0,
         });
 
@@ -199,7 +199,7 @@ export default class Main2 extends Phaser.Scene {
         this.anims.create({
             key: 'player1_dust',
             frames: this.anims.generateFrameNumbers('player1', {start: 6, end: 11}),
-            frameRate: 30,
+            frameRate: 28,
             repeat: 0,
         });
 
@@ -207,14 +207,14 @@ export default class Main2 extends Phaser.Scene {
         this.anims.create({
             key: 'player2_run',
             frames: this.anims.generateFrameNumbers('player2', {start: 0, end: 5}),
-            frameRate: 30,
+            frameRate: 29,
             repeat: 0,
         });
 
         this.anims.create({
             key: 'player2_dust',
             frames: this.anims.generateFrameNumbers('player2', {start: 6, end: 11}),
-            frameRate: 30,
+            frameRate: 28,
             repeat: 0,
         });
 
@@ -325,10 +325,10 @@ export default class Main2 extends Phaser.Scene {
         this.player1Run.x = 925 + difference*25
         this.player2.x = 925 - difference*25
         this.player2Run.x = 925 - difference*25
-        this.anims.get('player1_run').frameRate = 30 + difference*2
-        this.anims.get('player1_dust').frameRate = 30 + difference*2
-        this.anims.get('player2_run').frameRate = 30 - difference*2
-        this.anims.get('player2_dust').frameRate = 30 - difference*2
+        this.anims.get('player1_run').frameRate = 29 + difference*2
+        this.anims.get('player1_dust').frameRate = 28 + difference*2
+        this.anims.get('player2_run').frameRate = 29 - difference*2
+        this.anims.get('player2_dust').frameRate = 28 - difference*2
 
         if ((time - this.backgroundChangeTime) > this.inputTimeDelay * 1000) {
             this.backgroundChangeTime = time;
