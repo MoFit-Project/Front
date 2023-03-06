@@ -148,13 +148,14 @@ export default class Main extends Phaser.Scene {
     create() {
         this.playerBackground = this.add.graphics();
 
-        this.timeBar = this.add.graphics();
+        this.timeBar = this.add.graphics().setDepth(1);
 
         this.timeText = this.add
-            .text(580, 930,
+            .text(600, 40,
                 "TIME LEFT:",
-                {color: "#000000", fontSize: "61px", fontFamily: 'dalmoori'}
+                {color: "#ffffff", fontSize: "55px", fontFamily: 'dalmoori'}
             )
+            .setDepth(1)
         this.timeBar.visible =false;
         this.timeText.visible = false;
 
@@ -303,23 +304,30 @@ export default class Main extends Phaser.Scene {
 
         this.noDisplay.anims.play('beforeStart')
         this.number = this.add.sprite(950, 410, 'numbers').setVisible(false);
-        this.player1Number100 = this.add.sprite(170, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
         this.player1Number10 = this.add.sprite(280, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player1Number1 = this.add.sprite(390, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number100 = this.add.sprite(1530, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number100 = this.add.sprite(this.player1Number10.x-110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player1Number1 = this.add.sprite(this.player1Number10.x+110, this.player1Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
         this.player2Number10 = this.add.sprite(1640, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
-        this.player2Number1 = this.add.sprite(1750, 910, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number100 = this.add.sprite(this.player2Number10.x-110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
+        this.player2Number1 = this.add.sprite(this.player2Number10.x+110, this.player2Number10.y, 'numbers').setScale(1.2).setOrigin(0.5, 0.5);
     }
 
 
     update(time, delta) {
-        let currentGameTime = gameTimePassed - 5
+        let currentGameTime = (gameTimeTotal - gameTimePassed - 5) / (gameTimeTotal)
         if (currentGameTime < 0){
             currentGameTime = 0
+        } else if (currentGameTime > 1) {
+            currentGameTime = 1
         }
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
-        this.timeBar.fillRect(890, 929, 430 * ((gameTimeTotal - currentGameTime) / (gameTimeTotal)), 59);
+        this.timeBar.fillRect(880, 38, 420 * currentGameTime, 55);
+
+
+
+
+
         const r = Math.floor(Math.sin(Date.now() / 1000) * 127 + 128);
         const g = Math.floor(Math.sin(Date.now() / 2000) * 127 + 128);
         const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);
@@ -366,18 +374,10 @@ export default class Main extends Phaser.Scene {
             this.gameHasNotStarted = false;
             this.timeBar.visible =true;
             this.timeText.visible = true;
+            this.noDisplay.destroy();
             this.countDown.call(this);
         }
-        if (!this.fightBgm.isPlaying && isPhaserGameStart) {
-            this.fightBgm.play()
-        }
-        if (!this.waitBgm.isPlaying && this.gameHasNotStarted) {
-            this.waitBgm.play()
-        }
 
-        //테스트용 코드
-        this.player1InputTime = 0;
-        this.player2InputTime = 0;
 
 
         this.name.setPosition(this.player1.x - 80, this.player1.y - 80)
@@ -525,7 +525,7 @@ export default class Main extends Phaser.Scene {
             this.number.visible = false;
             this.player1InputTime = 0;
             this.player2InputTime = 0;
-            this.noDisplay.destroy();
+
             this.waitBgm.destroy();
             this.fightBgm.play()
             return;
