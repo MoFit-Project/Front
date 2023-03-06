@@ -1,4 +1,5 @@
 import OpenViduComponent from "../../components/openvidu/OpenviduComponent";
+import OpenViduComponent2 from "../../components/openvidu/OpenviduComponent2";
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
@@ -53,13 +54,12 @@ export default function GameRoom() {
                         display: ${loading ? 'none' : 'block'}; 
                     }
                     .loading{
-                        display: flex;
+                        display: ${loading ? 'flex' : 'none'};
                         justify-content: center;
                         align-items: center;
                         background-color: black;
                         width: 100vw;
-                        height: 100vh; 
-                        visibility: ${loading ? 'visible' : 'hidden'};
+                        height: 100vh;
                     }
 
                 `}</style>

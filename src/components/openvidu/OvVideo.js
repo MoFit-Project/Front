@@ -267,7 +267,7 @@ export default function OvVideo({
 	return (
 		<div className="video-container">
 			{/* <span className="user-name">{userName}</span> */}
-			<video autoPlay={true} ref={videoRef} />
+			<video autoPlay={true} ref={videoRef} style={{width: "500px", height: "800px"}}/>
 
 			<style jsx>{`
 				.video-container{
