@@ -249,10 +249,21 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 					}
 
 					.confirm-btn{
+						padding: 5px 10px 5px 10px;
+						color: white;rgb(10, 54, 10)
+						border: 2px solid green;
+						background-color: green;
+						border-radius: 10px;
+						box-shadow: 1px 1px 1px 1px rgb(4, 49, 4);
 					}
 
 					.cancel-btn{
-						
+						padding: 5px 10px 5px 10px;
+						color: white;rgb(10, 54, 10)
+						border: 2px solid red;
+						background-color: red;
+						border-radius: 10px;
+						box-shadow: 1px 1px 1px 1px #A50000;
 					}
 					
 					

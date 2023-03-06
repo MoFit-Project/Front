@@ -8,17 +8,7 @@ export default function Test() {
 
     return (
         <>
-            <div className="loading">
-                <Loading/>
-            </div>
-            <style jsx>{`
-                .loading{
-                    background-color: black;
-                    width: 100vw;
-                    height: 100vh; /* 화면 전체를 커버하도록 설정 */
-                    visibility: visible;
-                }
-            `}</style>
+            <CreateRoomModal isOpen={true} isClose={false} />
         </>
     );
 }

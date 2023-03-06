@@ -8,7 +8,6 @@ import {
 } from "../../../public/detector.js";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
-import * as tf from "@tensorflow/tfjs-core";
 import {
 	sendSignalThrow,
 	sendSignalJumpingJacks,
