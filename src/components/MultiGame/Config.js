@@ -3,13 +3,10 @@ import {
     isPhaserGameStart,
     gameTimePassed,
     gameTimeTotal,
-    // mySquart,
-    // heSquart
+    mySquart,
+    heSquart
 } from "../openvidu/OpenviduComponent";
-import {gameTimePassed2} from "@/components/openvidu/OpenviduComponent";
 
-let mySquart = 0;
-let heSquart = 0;
 //통신
 
 
@@ -20,21 +17,14 @@ export default class Main extends Phaser.Scene {
     player2;
     player1Hurt;
     player2Hurt;
-    player1Attack = false;
-    player2Attack = false;
-    player1Attacked = false;
-    player2Attacked = false;
     player1InputTime = 0;
     player2InputTime = 0;
-    player1Press = false;
-    player2Press = false;
 
     player1CountTempSave = 0;
     player2CountTempSave = 0;
 
     touch = false;
 
-    inputTimeDelay = 0.5;
     name;
     backGround_Gameboy;
     backgroundCity;
@@ -147,14 +137,14 @@ export default class Main extends Phaser.Scene {
     create() {
         this.playerBackground = this.add.graphics();
 
-        this.timeBar = this.add.graphics().setDepth(1);
+        this.timeBar = this.add.graphics().setDepth(1).setVisible(false);
 
         this.timeText = this.add
             .text(550, 75,
                 "TIME LEFT:",
                 {color: "#ffffff", fontSize: "60px", fontFamily: 'dalmoori'}
             )
-            .setDepth(1)
+            .setDepth(1).setVisible(false)
         // this.timeBar.visible = false;
         // this.timeText.visible = false;
 
@@ -283,12 +273,12 @@ export default class Main extends Phaser.Scene {
         this.noDisplay = this.add.sprite(950, 500, 'displayDisable')
             .setOrigin(0.5, 0.5)
             .setScale(1.6, 2.1)
-            .setVisible(false)
+            .setVisible(true)
             .setDepth(1);
         this.noDisplay.anims.play('beforeStart')
 
 
-        this.number = this.add.sprite(950, 410, 'numbers').setVisible(false).setDepth(1);
+        this.number = this.add.sprite(950, 500, 'numbers').setVisible(false).setDepth(1);
 
 
         this.backGround_Gameboy = this.add.image(950, 500, 'backGround_Gameboy')
@@ -307,7 +297,7 @@ export default class Main extends Phaser.Scene {
 
 
     update(time, delta) {
-        let currentGameTime = (gameTimeTotal - gameTimePassed - 5) / (gameTimeTotal)
+        let currentGameTime = (gameTimeTotal - (gameTimePassed - 5)) / (gameTimeTotal)
         if (currentGameTime < 0) {
             currentGameTime = 0
         } else if (currentGameTime > 1) {
@@ -323,16 +313,18 @@ export default class Main extends Phaser.Scene {
         const b = Math.floor(Math.sin(Date.now() / 3000) * 127 + 128);
 
 
-        const cursors = this.input.keyboard.createCursorKeys();
-        if (cursors.down.isDown && (time - this.player1InputTime) > 500){
-            mySquart += 1
-            this.player1InputTime = time;
-        }
-        if (cursors.right.isDown && (time - this.player2InputTime) > 500){
-            heSquart += 1
-            this.player2InputTime = time;
+        // const cursors = this.input.keyboard.createCursorKeys();
+        // if (cursors.down.isDown && (time - this.player1InputTime) > 500){
+        //     mySquart += 1
+        //     this.player1InputTime = time;
+        // }
+        // if (cursors.right.isDown && (time - this.player2InputTime) > 500){
+        //     heSquart += 1
+        //     this.player2InputTime = time;
+        // }
 
-        }
+
+
         if (mySquart > heSquart) {
             this.playerBackground.clear();
             this.playerBackground.fillStyle(Phaser.Display.Color.GetColor(r, g, b));
@@ -405,6 +397,7 @@ export default class Main extends Phaser.Scene {
             this.timeBar.visible = true;
             this.timeText.visible = true;
             this.noDisplay.destroy();
+            this.waitBgm.destroy();
             this.countDown.call(this);
         }
 
@@ -453,14 +446,12 @@ export default class Main extends Phaser.Scene {
             this.number.visible = false;
             this.player1InputTime = 0;
             this.player2InputTime = 0;
-
-            this.waitBgm.destroy();
             this.fightBgm.play()
             return;
         }
         this.bee.play();
         this.number.destroy();
-        this.number = this.add.sprite(950, 410, 'numbers').setFrame(this.countdown);
+        this.number = this.add.sprite(950, 500, 'numbers').setFrame(this.countdown);
         this.tweens.add({
             targets: this.number,
             duration: 1000, // 애니메이션 지속 시간

@@ -80,7 +80,6 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
-
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -623,7 +622,7 @@ export default function OpenViduComponent({
             {loading ? <DynamicComponentWithNoSSR /> : null}
 			
 			<p id="room-title" className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
-			<p id="stringVS" className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}>VS</p>
+			<p id="stringVS" className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}></p>
 			<span className="user-name" style={{ position: "absolute", top: "800px", left: "100px", color: "yellow" }}>{userName}</span>
 			<span className="user-name" style={{ position: "absolute", top: "800px", right: "140px", color: "yellow" }}>{rightUserName}</span>
             <button
@@ -656,7 +655,7 @@ export default function OpenViduComponent({
           {subscribers.map((sub, i) => (
             <div
               key={i}
-              style={{ position: "absolute", top: "0px", bottom:"140px", right: "0px", left: "1370px", width: "500px", height: "800px" }}
+              style={{ position: "absolute", top: "0px", bottom:"140px", right: "0px", left: "1400px", width: "500px", height: "800px" }}
             >
               <SubVideo streamManager={sub} />
             </div>
