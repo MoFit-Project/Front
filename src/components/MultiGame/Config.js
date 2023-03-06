@@ -153,7 +153,7 @@ export default class Main extends Phaser.Scene {
         this.timeText = this.add
             .text(580, 930,
                 "TIME LEFT:",
-                {color: "#000000", fontSize: "61px", fontFamily: 'dalmoori'}
+                {color: "#ffffff", fontSize: "61px", fontFamily: 'dalmoori'}
             )
         this.timeBar.visible =false;
         this.timeText.visible = false;
@@ -170,9 +170,9 @@ export default class Main extends Phaser.Scene {
 
         this.waitBgm.play();
 
-        this.backGround_Gameboy = this.add.image(950, 405, 'backGround_Gameboy')
+        this.backGround_Gameboy = this.add.image(950, 480, 'backGround_Gameboy')
             .setOrigin(0.5, 0.5)
-            .setScale(1.35);
+            .setScale(1.6);
         this.backgroundCity = this.add.image(950, 370, 'backgroundCityImage').setScale(1.06, 1.15)
         this.ground = this.add.image(950, 593, 'ground').setScale(1.06, 1.4).setScale(0.85, 1)
 
