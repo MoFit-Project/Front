@@ -13,7 +13,12 @@ const Home = () => {
     useEffect(() => {
         setLoading(true)
     }, []);
-
+    const a = () => {
+        if (typeof window !== 'undefined') {
+            const gameState = JSON.parse(localStorage.getItem('gameState'));
+            console.log(gameState);
+        }
+    };
     return (
         <div>
             <Head>

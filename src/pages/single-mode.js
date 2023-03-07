@@ -1,8 +1,12 @@
 import Loading from '../components/Loading'
 import SingleWebcam from '../components/SingleWebcam'
 import { useState } from 'react';
+import dynamic from "next/dynamic";
 
-
+const DynamicComponentWithNoSSR = dynamic(
+    () => import('../components/SingleGame/Index'),
+    { ssr: false }
+)
 
 export default function SingleMode() {
 
@@ -17,7 +21,11 @@ export default function SingleMode() {
 
             <div className="webcam-container">
                 <SingleWebcam setIsLoad={setIsLoad} startDetect={startDetect} />
-                <button onClick={()=>setStartDetect(true)}> 디텍트 시작</button>
+                {/* <button onClick={()=>setStartDetect(true)}> 디텍트 시작</button> */}
+            </div>
+            
+            <div className="singlegame">
+                <DynamicComponentWithNoSSR />
             </div>
             
             <style jsx>{`
@@ -31,6 +39,11 @@ export default function SingleMode() {
                 }
                 .webcam-container{
                     display: ${isLoad ? 'none' : 'block'};
+                    position: absolute;
+                    // border: thick solid black;
+                }
+                .singlegame{
+                    position: absolute;
                 }
 
                 `}</style>

@@ -23,7 +23,7 @@ export default function Result(props) {
     //   console.error(error);
     //   // 에러 처리를 여기에 작성
     // }
-    props.setIsLoseModalOpen(false);
+    // props.setIsLoseModalOpen(false);
     props.setIsModalClose(true);
   }
 
