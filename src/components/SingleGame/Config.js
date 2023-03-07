@@ -1,24 +1,23 @@
 import "phaser";
-import {useEffect} from "react";
-import {heSquart2} from "@/components/openvidu/OpenviduComponent2";
 
+let singleGameMovenetInput;
 export default class Main3 extends Phaser.Scene {
     player;
     runCount = 0;
     dust;
-    inputTime = 0;
     inputCount = [];
     bg;
-    state = 1;
+    state = 10;
     human;
-    gameInputBoolean = false;
-    isPhaserHasStarted = true;
-    gameState = 1;
+    isPhaserHasStarted = false;
+    inputState = false;
+    gameState = 5;
     bubble_human;
     bubble_dog;
     heart;
     number;
     countdown = 5;
+    stageCount = 6;
     playerNumber10000;
     playerNumber1000;
     playerNumber100;
@@ -27,9 +26,16 @@ export default class Main3 extends Phaser.Scene {
     playerNumber1;
     bee;
     start;
-    gameEnd = false;
+    recordTime = 0;
     text_human;
     dogHouse;
+    singleGameMovenetInputTempSave = 0;
+    startTime = 0;
+    exerciseText;
+    stage2Exercise = 10;
+    stage3Exercise = 10;
+    stage4Exercise = 10;
+    saveStartTime = false;
 
     constructor() {
         super();
@@ -157,24 +163,96 @@ export default class Main3 extends Phaser.Scene {
             .toggleFlipX()
             .setAlpha(0)
         // 텍스트
+        this.exerciseText = this.add.text(1300, 850, "스쿼트 X 10",
+            {color: "#000000", fontSize: "130px", fontFamily: 'dalmoori'})
+            .setDepth(1)
+            .setOrigin(0.5, 0.5)
+            .setVisible(false);
 
 
         // 변수 내보내기
-        localStorage.setItem("gameState", JSON.stringify(this.gameState));
-        localStorage.setItem("inputTime", JSON.stringify(this.inputTime));
-        localStorage.setItem("gameInputBoolean", JSON.stringify(this.gameInputBoolean));
-        localStorage.setItem("gameEnd", JSON.stringify(this.gameEnd));
-
+        localStorage.setItem("recordTime", JSON.stringify(0));
 
     }
 
 
     update(time, delta) {
         const cursors = this.input.keyboard.createCursorKeys();
-        if (cursors.space.isDown && (time - this.inputTime) > 333) {
-            this.inputTime = time
-            this.inputCount.push(time);
+
+        // if (this.singleGameMovenetInputTempSave != singleGameMovenetInput) {
+        //     this.singleGameMovenetInputTempSave = singleGameMovenetInput;
+        //
+        //     if (this.gameState === 1) {
+        //         this.inputCount.push(time);
+        //     } else if (this.gameState === 5 && !this.isPhaserHasStarted) {
+        //         this.countDown.call(this)
+        //         this.state = 0;
+        //         this.isPhaserHasStarted = true;
+        //         this.gameState = 1;
+        //         this.startTime = time;
+        //
+        //     } else if (this.stage2 && this.state === 2) {
+        //         this.stage2Exercise -= 1
+        //     }
+        //     if (this.stage2Exercise < 1) {
+        //         this.human.visible = false;
+        //         this.state = 3
+        //         this.gameState = 1
+        //         this.stage2 = false;
+        //     }
+        // }
+        if(!this.saveStartTime && this.state === 1){
+            this.startTime = time;
+            this.saveStartTime = true;
         }
+
+        if (cursors.space.isDown && this.gameState > 0) {
+
+            if (this.gameState === 1) {
+                this.inputCount.push(time);
+            } else if (this.gameState === 5 && !this.isPhaserHasStarted) {
+                this.isPhaserHasStarted = true;
+                this.exerciseText.setText('준비하세요.').setVisible(true);
+                this.countDown.call(this)
+
+
+            } else if (this.gameState === 2) {
+                this.stageCount = 6;
+                this.stage2Exercise -= 1
+                this.exerciseText.setText(`스쿼트! X ${this.stage2Exercise}`)
+                if(this.stage2Exercise < 1) {
+                    this.state = 3
+                    this.gameState = 1
+                    this.exerciseText.setText('제자리 달리기!')
+                    this.sky.setTexture(`${this.state}`)
+                    this.human.setAlpha(0);
+                }
+            }else if (this.gameState === 3) {
+                this.stageCount = 6;
+                this.stage3Exercise -= 1
+                this.exerciseText.setText(`점핑잭! X ${this.stage3Exercise}`)
+                if(this.stage3Exercise < 1) {
+                    this.state = 4
+                    this.gameState = 1
+                    this.exerciseText.setText('제자리 달리기!')
+                    this.sky.setTexture(`${this.state}`)
+                    this.human.setAlpha(0);
+                }
+            }else if (this.gameState === 4) {
+                this.stageCount = 6;
+                this.stage4Exercise -= 1
+                this.exerciseText.setText(`윈드밀! X ${this.stage4Exercise}`)
+                if(this.stage4Exercise < 1) {
+                    this.state = 5
+                    this.gameState = 1
+                    this.exerciseText.setText('제자리 달리기!')
+                    this.sky.setTexture(`${this.state}`)
+                    this.human.setAlpha(0);
+                }
+            }
+        }
+
+
         let speed = this.inputCount.length;
 
 
@@ -189,7 +267,6 @@ export default class Main3 extends Phaser.Scene {
                 this.dust.visible = true;
             } else {
                 this.dust.visible = false;
-
             }
             this.runCount += speed;
             this.anims.get('player_dust').frameRate = 10 + (speed * 4)
@@ -204,24 +281,61 @@ export default class Main3 extends Phaser.Scene {
 
             this.player.anims.play('player_idle', true)
         }
-
-
-        this.playerNumber10000.setFrame(Math.floor((time % 1000000) / 100000))
-        this.playerNumber1000.setFrame(Math.floor((time % 100000) / 10000))
-        this.playerNumber100.setFrame(Math.floor((time % 10000) / 1000))
-        this.playerNumber10.setFrame(Math.floor((time % 1000) / 100))
-        this.playerNumber1.setFrame(Math.floor(time % 100) / 10)
+        if (this.startTime > 0) {
+            this.recordTime = time - this.startTime
+        }
+        this.playerNumber10000.setFrame(Math.floor((this.recordTime % 1000000) / 100000))
+        this.playerNumber1000.setFrame(Math.floor((this.recordTime % 100000) / 10000))
+        this.playerNumber100.setFrame(Math.floor((this.recordTime % 10000) / 1000))
+        this.playerNumber10.setFrame(Math.floor((this.recordTime % 1000) / 100))
+        this.playerNumber1.setFrame(Math.floor(this.recordTime % 100) / 10)
 
         // 스테이지 변경
         if (this.state === 1 && this.runCount > 1000) {
             this.state += 1
             this.runCount = 0
-            this.inputCount = []
-            this.dust.visible = false;
             this.sky.setTexture(`${this.state}`)
-            this.mission()
 
-        } else if (this.state === 5 && this.runCount > 1000) {
+        } else if (this.state === 2 && this.runCount > 1000) {
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
+            this.mission()
+            this.stageCountDown.call(this)
+            this.exerciseText.setText('스쿼트 준비!').setVisible(true);
+
+
+
+        } else if (this.state === 3 && this.runCount > 1000) {
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
+            this.mission()
+            this.stageCountDown.call(this)
+            this.exerciseText.setText('점핑잭 준비!').setVisible(true);
+
+
+
+        }else if (this.state === 4 && this.runCount > 1000) {
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
+            this.mission()
+            this.stageCountDown.call(this)
+            this.exerciseText.setText('윈드밀 준비!').setVisible(true);
+
+
+
+        }else if (this.state === 5 && this.runCount > 1000) {
+            localStorage.setItem("recordTime", JSON.stringify(this.recordTime));
+            this.startTime = -1
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
             this.tweens.add({
                 targets: this.dogHouse,
                 duration: 1000, // 애니메이션 지속 시간
@@ -231,18 +345,10 @@ export default class Main3 extends Phaser.Scene {
             });
 
 
-        } else if (this.state > 1 && this.runCount > 1000) {
-            this.state += 1
-            this.runCount = 0
-            this.inputCount = []
-            this.dust.visible = false;
-            this.sky.setTexture(`${this.state}`)
-            this.mission()
         }
 
 
-        // 시작 할 때 카운트 다운
-        this.countDown.call(this)
+        localStorage.setItem("gameState", JSON.stringify(this.gameState));
 
 
     }
@@ -253,30 +359,20 @@ export default class Main3 extends Phaser.Scene {
             duration: 300, // 애니메이션 지속 시간
             alpha: 1,
             repeat: 0,
-            onComplete: this.humanTalk()
         });
 
     }
 
-    humanTalk() {
-        this.bubble_human.setVisible(true);
-        if (this.state === 2) {
-            this.text_human.setText('스쿼트!')
-        } else if (this.state === 3) {
-            this.text_human.setText('운동3!')
-        } else if (this.state === 4) {
-            this.text_human.setText('운동4!')
-        } else if (this.state === 3) {
-            this.text_human.setText('계속 달려!')
-        }
-        this.text_human.setVisible(true);
-    }
 
     countDown() {
         if (this.countdown === 0) {
             this.start.play();
             this.number.visible = false;
             this.number.destroy();
+            this.state = 1;
+            this.gameState = 1;
+            this.exerciseText.setText('제자리 달리기!').setVisible(true);
+
             return;
         }
         this.bee.play();
@@ -297,5 +393,35 @@ export default class Main3 extends Phaser.Scene {
     gameEnds() {
         this.bubble_dog.visible = true;
         this.heart.visible = true;
+    }
+
+    stageCountDown() {
+        if (this.stageCount === 0) {
+            this.exerciseText.visible = true;
+            if (this.state === 2) {
+                this.exerciseText.setText(`스쿼트 X ${this.stage2Exercise}`)
+            } else if (this.state === 3) {
+                this.exerciseText.setText(`점핑잭 X ${this.stage3Exercise}`)
+            } else if (this.state === 4) {
+                this.exerciseText.setText(`윈드밀 X ${this.stage4Exercise}`)
+            }
+            this.bubble_human.setVisible(false);
+            this.text_human.visible = false;
+            this.gameState = this.state;
+            return;
+        }
+        if (this.stageCount === 6) {
+            this.text_human.visible = false;
+            this.bubble_human.setVisible(true);
+            this.stageCount--;
+
+        }
+        if (this.stageCount < 6) {
+            this.text_human.visible = true;
+
+            this.text_human.setText(`${this.stageCount}`)
+            this.stageCount--;
+        }
+        this.time.delayedCall(1000, this.stageCountDown, [], this);
     }
 }
