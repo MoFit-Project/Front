@@ -82,7 +82,7 @@ export default function Login() {
             <title>MOFIT 로그인</title>
                 <Background>
             <div className="max-w-md mt-10 w-full login-modal">
-                <h1 className="text-6xl font-bold text-center text-blue-800">Mofit</h1>
+                <h1 className="text-8xl font-bold text-center text-blue-800">MOFIT</h1>
                 <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <input

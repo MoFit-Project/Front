@@ -81,7 +81,7 @@ export default function Ranking() {
         .ranking-container{
           
           background-color: transparent;
-          width: 750px;
+          width: 780px;
           border: none;
           padding: 5px;
           
@@ -102,7 +102,7 @@ export default function Ranking() {
           margin-top: 5px;
           table-layout: auto;
           padding: 1px;
-          height: 611px;
+          height: 780px;
           box-shadow: 1px 1px 3px 3px #053B58;
           overflow: auto;
         }
@@ -173,6 +173,9 @@ export default function Ranking() {
         .table-title-row{
         }
         .table-data-row{
+        }
+        ::-webkit-scrollbar {
+          display: none;
         }
 
 

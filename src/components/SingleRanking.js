@@ -43,7 +43,7 @@ export default function Ranking() {
                   <tr className="table-title">
                     <td className="table-title-row">랭킹</td>
                     <td className="table-title-row">아이디</td>
-                    <td className="table-title-row">점수</td>
+                    <td className="table-title-row">시간</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,7 @@ export default function Ranking() {
                         {index >= 3 && index + 1}
                       </td>
                       <td className="table-data-row">{item.id}</td>
-                      <td className="table-data-row">{item.score} 점</td>
+                      <td className="table-data-row">{item.win} 초</td>
                     </tr>
                   ))}
                 </tbody>
@@ -81,7 +81,7 @@ export default function Ranking() {
         .ranking-container{
           
           background-color: transparent;
-          width: 750px;
+          width: 780px;
           border: none;
           padding: 5px;
           
@@ -102,7 +102,7 @@ export default function Ranking() {
           margin-top: 5px;
           table-layout: auto;
           padding: 1px;
-          height: 611px;
+          height: 780px;
           box-shadow: 1px 1px 3px 3px #053B58;
           overflow: auto;
         }
@@ -174,7 +174,9 @@ export default function Ranking() {
         }
         .table-data-row{
         }
-
+        ::-webkit-scrollbar {
+          display: none;
+        }
 
       `}</style>
       </>
