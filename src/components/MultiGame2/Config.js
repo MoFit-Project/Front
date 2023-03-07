@@ -77,36 +77,15 @@ export default class Main2 extends Phaser.Scene {
 
 
         // 플레이어 캐릭터 생성
-        let char = ["pink.png", 'owlet.png', 'dude.png']
-        const num3 = Math.random()
-        let random1;
-        if (num3 < 0.33) {
-            random1 = char[0]
-            char.splice(0, 1)
-        } else if (num3 < 0.66) {
-            random1 = char[1]
-            char.splice(1, 1)
 
-        } else {
-            random1 = char[2]
-            char.splice(2, 1)
-
-        }
-        const num2 = Math.random()
-        let random2;
-        if (num2 < 0.5) {
-            random2 = char[0]
-        } else {
-            random2 = char[1]
-        }
         this.load.spritesheet(
             "player1",
-            `../assets/characters2/${random1}`,
+            '../assets/characters2/pink.png',
             {frameWidth: 32, frameHeight: 32}
         )
         this.load.spritesheet(
             "player2",
-            `../assets/characters2/${random2}`,
+            '../assets/characters2/dude.png',
             {frameWidth: 32, frameHeight: 32}
         )
         this.load.spritesheet(
@@ -247,12 +226,12 @@ export default class Main2 extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setScale(1.58);
 
-        this.player1Number10 = this.add.sprite(740, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.player1Number100 = this.add.sprite(this.player1Number10.x - 90, this.player1Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.player1Number1 = this.add.sprite(this.player1Number10.x + 90, this.player1Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.player2Number10 = this.add.sprite(1160, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.player2Number100 = this.add.sprite(this.player2Number10.x - 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.player2Number1 = this.add.sprite(this.player2Number10.x + 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.player1Number10 = this.add.sprite(740, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0xecc9fb);
+        this.player1Number100 = this.add.sprite(this.player1Number10.x - 90, this.player1Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0xecc9fb);
+        this.player1Number1 = this.add.sprite(this.player1Number10.x + 90, this.player1Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0xecc9fb);
+        this.player2Number10 = this.add.sprite(1160, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
+        this.player2Number100 = this.add.sprite(this.player2Number10.x - 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
+        this.player2Number1 = this.add.sprite(this.player2Number10.x + 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
 
 
     }
