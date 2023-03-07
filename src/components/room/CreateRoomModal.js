@@ -138,27 +138,28 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 				style={{
 					overlay: {
 						position: 'fixed',
-						top: 0,
+						top: 250,
 						left: 0,
 						right: 0,
 						bottom: 0,
-						backgroundColor: 'rgba(255, 255, 255, 0.75)'
+						backgroundColor: '',
+						
 					},
 					content: {
-						margin: '0px auto',
+						margin: '30px auto',
 						position: 'absolute',
-						top: '40px',
+						top: '50px',
 						left: '40px',
 						right: '40px',
 						bottom: '40px',
 						border: '1px solid #000',
-						background: '#fff',
+						background: '#FBFFB1',
 						overflow: 'auto',
 						borderRadius: '4px',
 						outline: 'none',
 						padding: '20px',
-						width: '480px',
-						height: '380px',
+						width: '600px',
+						height: '400px',
 						boxShadow: '1px 1px 1px 1px black',
 						display: 'flex',
 						flexDirection: 'column'
@@ -226,9 +227,12 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 						font-size:32px;
 						padding: 10px;
 						margin-bottom: 10px;
+						margin-top:15px;
 					}
 					.mode-selector{
 						padding: 5px;
+						border: 2px solid black;
+						border-radius: 8px;
 					}
 					.text-contents{
 						font-size: 20px;
@@ -240,7 +244,8 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 						padding: 2px;
 					}
 					.button-component{
-						margin-top: 30px; 
+						margin-top: 50px; 
+						margin-right: 20px;
 					}
 
 					.modal-contents{
@@ -273,6 +278,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 						box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 						padding: 20px;
 						width: 10px;
+						
 					}
 				
 				`}</style>

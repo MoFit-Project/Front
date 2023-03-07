@@ -158,30 +158,30 @@ export default function RoomList() {
 
           <div className="tb-container flex-col items-center flex">
 
-            <div className="mt-6 w-8/12 flex ">
+            <div className="mt-6 w-11/12 flex ">
               <table className="w-full" style={{ overflow: 'auto' }} >
                 <thead>
-                  <tr className="text-white">
-                    <th className="w-1/4 py-2 px-4">방 제목</th>
-                    <th className="w-1/4 py-2 px-4">참여 인원</th>
+                  <tr className="text-white text-6xl">
+                    <th className="w-2/4 py-2 px-4">방 제목</th>
                     <th className="w-1/4 py-2 px-4">모드</th>
-                    <th className="w-1/4 py-2 px-4">액션</th>
+                    <th className="w-1/4 py-2 px-4">상태</th>
+                    <th className="w-1/4 py-2 px-4"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {roomList?.map((room) => (
                     <tr
                       key={room.roomId}
-                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-3xl"
                     >
                       <td className="py-2 px-4 text-center font-bold">
                         {room.roomId}
                       </td>
                       <td className="py-2 px-4 text-center font-bold">
-                        {room.participant}/2
+                        {room.mode}
                       </td>
                       <td className="py-2 px-4 text-center font-bold">
-                        {room.mode}
+                        {room.participant}/2
                       </td>
                       <td className="py-2 px-4">
                         {room.status === "START" || room.participant === 2 ? (

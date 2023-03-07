@@ -41,9 +41,9 @@ export default function GameRoom() {
         <>
             <title>MOFIT 게임룸</title>
             <div className='curtain'>
-                <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
+                <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
                     setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
-                </OpenViduComponent>
+                </OpenViduComponent2>
             </div>
 
             <div className="loading">
