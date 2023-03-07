@@ -74,14 +74,14 @@ export default function Ranking() {
         .ranking-container{
           
           background-color: transparent;
-          width: 750px;
+          width: 950px;
           border: none;
           padding: 5px;
           
           height: 680px;
         }
         .ranking-title{
-          font-size: 40px;
+          font-size: 60px;
           color:white;
           font-weight: bold;
          
@@ -160,14 +160,16 @@ export default function Ranking() {
           color: white;
           width: 125px;
           height: 45px;
-          margin-left: 440px;
-          margin-top: 10px;
+          margin-left: 560px;
+          margin-top: 15px;
         }
         .table-title-row{
         }
         .table-data-row{
         }
-
+        ::-webkit-scrollbar {
+          display: none;
+        }
 
       `}</style>
       </div>

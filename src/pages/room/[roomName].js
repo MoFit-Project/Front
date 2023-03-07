@@ -43,6 +43,7 @@ export default function GameRoom() {
         <>
             <title>MOFIT 게임룸</title>
             <div className='curtain'>
+
                 {roomGameModeName === '스쿼트' && roomGameModeName ? 
                 <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
                     setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
@@ -53,6 +54,7 @@ export default function GameRoom() {
                 {/* <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
                     setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
                 </OpenViduComponent2> */}
+
             </div>
 
             <div className="loading">

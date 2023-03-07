@@ -18,14 +18,14 @@ export default function Home() {
                         <div className="text-center">
                             <Link href={'/single-mode'}>
                                 <button
-                                    className="w-full text-white mb-6 font-bold text-3xl px-4 rounded-full focus:outline-none focus:shadow-outline btn-1 btn-10"
+                                    className="w-full py-10 text-white mb-6 font-bold text-3xl px-8 rounded-full focus:outline-none focus:shadow-outline btn-1 btn-10"
                                 >
                                     싱글 플레이
                                 </button>
                             </Link>
                             <Link href={'/room'}>
                                 <button
-                                    className="w-full py-7 text-white mt-6 font-bold text-3xl px-4 rounded-full focus:outline-none focus:shadow-outline btn-1 btn-10"
+                                    className="w-full py-10 text-white mt-6 font-bold text-3xl px-8 rounded-full focus:outline-none focus:shadow-outline btn-1 btn-10"
                                 >
                                     멀티 플레이
                                 </button>
