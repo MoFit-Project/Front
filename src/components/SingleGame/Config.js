@@ -11,9 +11,12 @@ export default class Main3 extends Phaser.Scene {
     bg;
     state = 1;
     human;
-    mode = 'run';
-    gameState = 1000;
+    gameInputBoolean = false;
+    isPhaserHasStarted = true;
+    gameState = 1;
     bubble_human;
+    bubble_dog;
+    heart;
     number;
     countdown = 5;
     playerNumber10000;
@@ -24,6 +27,9 @@ export default class Main3 extends Phaser.Scene {
     playerNumber1;
     bee;
     start;
+    gameEnd = false;
+    text_human;
+    dogHouse;
 
     constructor() {
         super();
@@ -55,12 +61,15 @@ export default class Main3 extends Phaser.Scene {
         this.load.image('bg', '../assets/singlegame/singleBg.png')
         this.load.image('human', '../assets/singlegame/human.png')
         this.load.image('bubble', '../assets/singlegame/bubble.png')
+        this.load.image('dogHouse', '../assets/singlegame/dogHouse.png')
+        this.load.image('heart', '../assets/singlegame/heart.png')
 
         //배경
         this.load.image('1', '../assets/singlegame/bg/1.png')
         this.load.image('2', '../assets/singlegame/bg/2.png')
         this.load.image('3', '../assets/singlegame/bg/3.png')
         this.load.image('4', '../assets/singlegame/bg/4.png')
+        this.load.image('5', '../assets/singlegame/bg/5.png')
 
         this.load.spritesheet(
             "numbers",
@@ -89,12 +98,20 @@ export default class Main3 extends Phaser.Scene {
         this.human = this.physics.add.image(1500, 590, 'human')
             .setOrigin(0.5, 1)
             .setScale(1)
-            .setAlpha(1)
+            .setAlpha(0)
         this.bubble_human = this.add.image(1330, 280, 'bubble')
             .setOrigin(0.5, 0.5)
             .setScale(0.5)
             .toggleFlipX()
-            .setVisible(false);
+            .setVisible(false)
+        this.bubble_dog = this.add.image(1280, 300, 'bubble')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.5)
+            .setVisible(false)
+        this.heart = this.add.image(1280, 270, 'heart')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.15)
+            .setVisible(false)
         this.player = this.physics.add.sprite(1150, 580, 'player')
             .setOrigin(0.5, 1)
             .setScale(6);
@@ -124,15 +141,30 @@ export default class Main3 extends Phaser.Scene {
 
         this.number = this.add.sprite(200, 200, 'numbers').setVisible(false).setDepth(1);
         this.playerNumber10 = this.add.sprite(1510, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.playerNumberDot = this.add.sprite(this.playerNumber10.x -57, this.playerNumber10.y+40, 'numbers').setScale(0.2).setOrigin(0.5, 0.5).setTint(0x000000);
+        this.playerNumberDot = this.add.sprite(this.playerNumber10.x - 57, this.playerNumber10.y + 40, 'numbers').setScale(0.2).setOrigin(0.5, 0.5).setTint(0x000000);
         this.playerNumber100 = this.add.sprite(this.playerNumber10.x - 120, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber1000 = this.add.sprite(this.playerNumber10.x - 210, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber1 = this.add.sprite(this.playerNumber10.x + 90, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber10000 = this.add.sprite(this.playerNumber10.x - 300, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.text_human = this.add.text(1340, 250, "스쿼트!",
+            {color: "#000000", fontSize: "50px", fontFamily: 'dalmoori'})
+            .setDepth(1)
+            .setOrigin(0.5, 0.5)
+            .setVisible(false)
+        this.dogHouse = this.add.image(1500, 500, 'dogHouse')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.6)
+            .toggleFlipX()
+            .setAlpha(0)
+        // 텍스트
 
 
         // 변수 내보내기
         localStorage.setItem("gameState", JSON.stringify(this.gameState));
+        localStorage.setItem("inputTime", JSON.stringify(this.inputTime));
+        localStorage.setItem("gameInputBoolean", JSON.stringify(this.gameInputBoolean));
+        localStorage.setItem("gameEnd", JSON.stringify(this.gameEnd));
+
 
     }
 
@@ -174,8 +206,14 @@ export default class Main3 extends Phaser.Scene {
         }
 
 
+        this.playerNumber10000.setFrame(Math.floor((time % 1000000) / 100000))
+        this.playerNumber1000.setFrame(Math.floor((time % 100000) / 10000))
+        this.playerNumber100.setFrame(Math.floor((time % 10000) / 1000))
+        this.playerNumber10.setFrame(Math.floor((time % 1000) / 100))
+        this.playerNumber1.setFrame(Math.floor(time % 100) / 10)
+
         // 스테이지 변경
-        if (this.state === 1 && this.runCount > 600) {
+        if (this.state === 1 && this.runCount > 1000) {
             this.state += 1
             this.runCount = 0
             this.inputCount = []
@@ -183,7 +221,17 @@ export default class Main3 extends Phaser.Scene {
             this.sky.setTexture(`${this.state}`)
             this.mission()
 
-        } else if (this.state > 1 && this.runCount > 300) {
+        } else if (this.state === 5 && this.runCount > 1000) {
+            this.tweens.add({
+                targets: this.dogHouse,
+                duration: 1000, // 애니메이션 지속 시간
+                alpha: 1,
+                repeat: 0,
+                onComplete: this.gameEnds()
+            });
+
+
+        } else if (this.state > 1 && this.runCount > 1000) {
             this.state += 1
             this.runCount = 0
             this.inputCount = []
@@ -191,13 +239,6 @@ export default class Main3 extends Phaser.Scene {
             this.sky.setTexture(`${this.state}`)
             this.mission()
         }
-
-        this.playerNumber10000.setFrame(Math.floor((time%1000000)/ 100000))
-        this.playerNumber1000.setFrame(Math.floor((time%100000)/ 10000))
-        this.playerNumber100.setFrame(Math.floor((time%10000)/ 1000))
-        this.playerNumber10.setFrame(Math.floor((time % 1000) / 100))
-        this.playerNumber1.setFrame(Math.floor(time % 100)/10)
-
 
 
         // 시작 할 때 카운트 다운
@@ -212,15 +253,23 @@ export default class Main3 extends Phaser.Scene {
             duration: 300, // 애니메이션 지속 시간
             alpha: 1,
             repeat: 0,
-
+            onComplete: this.humanTalk()
         });
-        this.tweens.add({
-            targets: this.bubble_human,
-            duration: 300, // 애니메이션 지속 시간
-            alpha: 1,
-            repeat: 0,
 
-        });
+    }
+
+    humanTalk() {
+        this.bubble_human.setVisible(true);
+        if (this.state === 2) {
+            this.text_human.setText('스쿼트!')
+        } else if (this.state === 3) {
+            this.text_human.setText('운동3!')
+        } else if (this.state === 4) {
+            this.text_human.setText('운동4!')
+        } else if (this.state === 3) {
+            this.text_human.setText('계속 달려!')
+        }
+        this.text_human.setVisible(true);
     }
 
     countDown() {
@@ -243,5 +292,10 @@ export default class Main3 extends Phaser.Scene {
         this.countdown--;
 
         this.time.delayedCall(1000, this.countDown, [], this);
+    }
+
+    gameEnds() {
+        this.bubble_dog.visible = true;
+        this.heart.visible = true;
     }
 }

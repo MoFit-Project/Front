@@ -28,9 +28,6 @@ const Home = () => {
 
             <div key={Math.random()} id="game"></div>
             {loading ? <DynamicComponentWithNoSSR /> : null}
-            <button onClick={a}>
-                hihi
-            </button>
         </div>
     );
 };
