@@ -124,7 +124,7 @@ export default function Ranking() {
           color: yellow;
           text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
           height:10px;
-          font-size: 25px;
+          font-size: 50px;
           box-shadow: 2px 2px 3px 3px #053B58;
           box-shadow: -1px -1px 3px 1px #053B58;
           
@@ -132,8 +132,8 @@ export default function Ranking() {
         .table-data{
           color: white;
           text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-          font-size: 20px;
-          height: 50px
+          font-size: 45px;
+          height: 60px
           
         }
         // .btn-1 {

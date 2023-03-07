@@ -204,12 +204,12 @@ export default function RoomList() {
 
               <div className="fixed right-64 top-3/4 mt-20">
                 <button
-                  className="w-18 h-18 text-white rounded-full flex items-center justify-center ml-auto shadow-xl btn-1"
+                  className="w-28 h-28 text-white rounded-full flex items-center justify-center ml-auto shadow-xl btn-1"
                   onClick={handleOpenModal}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-14 w-14"
+                    className="h-28 w-28"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
