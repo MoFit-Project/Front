@@ -38,7 +38,8 @@ export default class Main3 extends Phaser.Scene {
     jumpingJack;
     run;
     squat;
-
+    singleBGM;
+    ding;
 
     constructor() {
         super();
@@ -104,6 +105,8 @@ export default class Main3 extends Phaser.Scene {
 
         this.load.audio('bee', ['../assets/sound/bee.mp3'])
         this.load.audio('start', ['../assets/sound/start.mp3'])
+        this.load.audio('singleBGM', ['../assets/sound/singleBGM.mp3'])
+        this.load.audio('ding', ['../assets/sound/ding.mp3'])
 
 
     }
@@ -111,6 +114,7 @@ export default class Main3 extends Phaser.Scene {
     create() {
         this.bee = this.sound.add('bee');
         this.start = this.sound.add('start');
+        this.ding = this.sound.add('ding');
 
         this.bg = this.add.image(700, 0, 'bg').setOrigin(0, 0).setScale(1.55, 2).setDepth(1)
 
@@ -193,6 +197,7 @@ export default class Main3 extends Phaser.Scene {
             repeat: -1,
         });
 
+        this.singleBGM = this.sound.add('singleBGM');
 
         this.number = this.add.sprite(1300, 350, 'numbers').setVisible(false).setDepth(1);
         this.playerNumber10 = this.add.sprite(1600, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
@@ -241,6 +246,7 @@ export default class Main3 extends Phaser.Scene {
                 this.inputCount.push(time);
             } else if (this.gameState === 5 && !this.isPhaserHasStarted) {
                 this.isPhaserHasStarted = true;
+                this.singleBGM.play();
                 this.exerciseText.setText('준비하세요.').setVisible(true);
                 this.countDown.call(this)
 
@@ -322,6 +328,7 @@ export default class Main3 extends Phaser.Scene {
             this.runCount = 0;
             this.inputCount = [];
             this.dust.visible = false;
+            this.ding.play()
             this.mission()
             this.stageCountDown.call(this)
             this.run.setVisible(false);
@@ -335,6 +342,7 @@ export default class Main3 extends Phaser.Scene {
             this.runCount = 0;
             this.inputCount = [];
             this.dust.visible = false;
+            this.ding.play()
             this.mission()
             this.stageCountDown.call(this)
             this.run.setVisible(false);
