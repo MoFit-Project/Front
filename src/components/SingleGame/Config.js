@@ -1,24 +1,23 @@
 import "phaser";
-import {useEffect} from "react";
-import {heSquart2} from "@/components/openvidu/OpenviduComponent2";
-
+import { singleGameMovenetInput } from "../SingleWebcam";
+// let singleGameMovenetInput;
 export default class Main3 extends Phaser.Scene {
     player;
     runCount = 0;
     dust;
-    inputTime = 0;
     inputCount = [];
     bg;
-    state = 1;
+    state = 10;
     human;
-    gameInputBoolean = false;
-    isPhaserHasStarted = true;
-    gameState = 1;
+    isPhaserHasStarted = false;
+    inputState = false;
+    gameState = 5;
     bubble_human;
     bubble_dog;
     heart;
     number;
     countdown = 5;
+    stageCount = 6;
     playerNumber10000;
     playerNumber1000;
     playerNumber100;
@@ -27,9 +26,20 @@ export default class Main3 extends Phaser.Scene {
     playerNumber1;
     bee;
     start;
-    gameEnd = false;
+    recordTime = 0;
     text_human;
     dogHouse;
+    singleGameMovenetInputTempSave = 0;
+    startTime = 0;
+    exerciseText;
+    stage2Exercise = 1;
+    stage3Exercise = 1;
+    saveStartTime = false;
+    jumpingJack;
+    run;
+    squat;
+    singleBGM;
+    ding;
 
     constructor() {
         super();
@@ -58,6 +68,21 @@ export default class Main3 extends Phaser.Scene {
             '../assets/singlegame/dust.png',
             {frameWidth: 48, frameHeight: 48}
         )
+        this.load.spritesheet(
+            "jumpingJack",
+            '../assets/singlegame/jumpingJack.png',
+            {frameWidth: 354, frameHeight: 354}
+        )
+        this.load.spritesheet(
+            "run",
+            '../assets/singlegame/run.png',
+            {frameWidth: 370, frameHeight: 370}
+        )
+        this.load.spritesheet(
+            "squat",
+            '../assets/singlegame/squat.png',
+            {frameWidth: 350, frameHeight: 350}
+        )
         this.load.image('bg', '../assets/singlegame/singleBg.png')
         this.load.image('human', '../assets/singlegame/human.png')
         this.load.image('bubble', '../assets/singlegame/bubble.png')
@@ -80,6 +105,8 @@ export default class Main3 extends Phaser.Scene {
 
         this.load.audio('bee', ['../assets/sound/bee.mp3'])
         this.load.audio('start', ['../assets/sound/start.mp3'])
+        this.load.audio('singleBGM', ['../assets/sound/singleBGM.mp3'])
+        this.load.audio('ding', ['../assets/sound/ding.mp3'])
 
 
     }
@@ -87,6 +114,7 @@ export default class Main3 extends Phaser.Scene {
     create() {
         this.bee = this.sound.add('bee');
         this.start = this.sound.add('start');
+        this.ding = this.sound.add('ding');
 
         this.bg = this.add.image(700, 0, 'bg').setOrigin(0, 0).setScale(1.55, 2).setDepth(1)
 
@@ -119,6 +147,19 @@ export default class Main3 extends Phaser.Scene {
             .setOrigin(0.5, 1)
             .setScale(6)
             .setVisible(false);
+        this.jumpingJack = this.add.sprite(850, 850, 'jumpingJack')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.9)
+            .setVisible(false);
+        this.squat = this.add.sprite(850, 850, 'squat')
+            .setOrigin(0.5, 0.5)
+            .setScale(1)
+            .setVisible(false);
+        this.run = this.add.sprite(850, 850, 'run')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.9)
+            .setVisible(false);
+
         this.anims.create({
             key: 'player_run',
             frames: this.anims.generateFrameNumbers('player', {start: 6, end: 11}),
@@ -137,14 +178,32 @@ export default class Main3 extends Phaser.Scene {
             frameRate: 5,
             repeat: 0,
         });
+        this.anims.create({
+            key: 'runGuide',
+            frames: this.anims.generateFrameNumbers('run', {start: 0, end: 6}),
+            frameRate: 6,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'jumpingJackGuide',
+            frames: this.anims.generateFrameNumbers('jumpingJack', {start: 0, end: 3}),
+            frameRate: 4,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'squatGuide',
+            frames: this.anims.generateFrameNumbers('squat', {start: 0, end: 1}),
+            frameRate: 2,
+            repeat: -1,
+        });
 
+        this.singleBGM = this.sound.add('singleBGM');
 
-        this.number = this.add.sprite(200, 200, 'numbers').setVisible(false).setDepth(1);
-        this.playerNumber10 = this.add.sprite(1510, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.number = this.add.sprite(1300, 350, 'numbers').setVisible(false).setDepth(1);
+        this.playerNumber10 = this.add.sprite(1600, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumberDot = this.add.sprite(this.playerNumber10.x - 57, this.playerNumber10.y + 40, 'numbers').setScale(0.2).setOrigin(0.5, 0.5).setTint(0x000000);
         this.playerNumber100 = this.add.sprite(this.playerNumber10.x - 120, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber1000 = this.add.sprite(this.playerNumber10.x - 210, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.playerNumber1 = this.add.sprite(this.playerNumber10.x + 90, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber10000 = this.add.sprite(this.playerNumber10.x - 300, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.text_human = this.add.text(1340, 250, "스쿼트!",
             {color: "#000000", fontSize: "50px", fontFamily: 'dalmoori'})
@@ -157,24 +216,72 @@ export default class Main3 extends Phaser.Scene {
             .toggleFlipX()
             .setAlpha(0)
         // 텍스트
+        this.exerciseText = this.add.text(1360, 850, "스쿼트 X 10",
+            {color: "#000000", fontSize: "130px", fontFamily: 'dalmoori'})
+            .setDepth(1)
+            .setOrigin(0.5, 0.5)
+            .setVisible(false);
 
+        this.jumpingJack.anims.play('jumpingJackGuide')
+        this.squat.anims.play('squatGuide')
+        this.run.anims.play('runGuide')
 
         // 변수 내보내기
-        localStorage.setItem("gameState", JSON.stringify(this.gameState));
-        localStorage.setItem("inputTime", JSON.stringify(this.inputTime));
-        localStorage.setItem("gameInputBoolean", JSON.stringify(this.gameInputBoolean));
-        localStorage.setItem("gameEnd", JSON.stringify(this.gameEnd));
-
+        localStorage.setItem("recordTime", JSON.stringify(0));
 
     }
 
 
     update(time, delta) {
         const cursors = this.input.keyboard.createCursorKeys();
-        if (cursors.space.isDown && (time - this.inputTime) > 333) {
-            this.inputTime = time
-            this.inputCount.push(time);
+
+        if(!this.saveStartTime && this.state === 1){
+            this.startTime = time;
+            this.saveStartTime = true;
         }
+        
+        // cursors.space.isDown
+        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
+            this.singleGameMovenetInputTempSave = singleGameMovenetInput;
+            if (this.gameState === 1) {
+                this.inputCount.push(time);
+            } else if (this.gameState === 5 && !this.isPhaserHasStarted) {
+                this.isPhaserHasStarted = true;
+                this.singleBGM.play();
+                this.exerciseText.setText('준비하세요.').setVisible(true);
+                this.countDown.call(this)
+
+
+            } else if (this.gameState === 2) {
+                this.stageCount = 6;
+                this.stage2Exercise -= 1
+                this.exerciseText.setText(`스쿼트! X ${this.stage2Exercise}`)
+                if(this.stage2Exercise < 1) {
+                    this.squat.setVisible(false);
+                    this.state = 3
+                    this.gameState = 1
+                    this.run.setVisible(true);
+                    this.exerciseText.setText('제자리 달리기!')
+                    this.sky.setTexture(`${this.state}`)
+                    this.human.setAlpha(0);
+                }
+            }else if (this.gameState === 3) {
+                this.stageCount = 6;
+                this.stage3Exercise -= 1
+                this.exerciseText.setText(`점핑잭! X ${this.stage3Exercise}`)
+                if(this.stage3Exercise < 1) {
+                    this.jumpingJack.setVisible(false);
+                    this.state = 4
+                    this.gameState = 1
+                    this.run.setVisible(true);
+                    this.exerciseText.setText('제자리 달리기!')
+                    this.sky.setTexture(`${this.state}`)
+                    this.human.setAlpha(0);
+                }
+            }
+        }
+
+
         let speed = this.inputCount.length;
 
 
@@ -189,7 +296,6 @@ export default class Main3 extends Phaser.Scene {
                 this.dust.visible = true;
             } else {
                 this.dust.visible = false;
-
             }
             this.runCount += speed;
             this.anims.get('player_dust').frameRate = 10 + (speed * 4)
@@ -204,24 +310,54 @@ export default class Main3 extends Phaser.Scene {
 
             this.player.anims.play('player_idle', true)
         }
-
-
-        this.playerNumber10000.setFrame(Math.floor((time % 1000000) / 100000))
-        this.playerNumber1000.setFrame(Math.floor((time % 100000) / 10000))
-        this.playerNumber100.setFrame(Math.floor((time % 10000) / 1000))
-        this.playerNumber10.setFrame(Math.floor((time % 1000) / 100))
-        this.playerNumber1.setFrame(Math.floor(time % 100) / 10)
+        if (this.startTime > 0) {
+            this.recordTime = time - this.startTime
+        }
+        this.playerNumber10000.setFrame(Math.floor((this.recordTime % 1000000) / 100000))
+        this.playerNumber1000.setFrame(Math.floor((this.recordTime % 100000) / 10000))
+        this.playerNumber100.setFrame(Math.floor((this.recordTime % 10000) / 1000))
+        this.playerNumber10.setFrame(Math.floor((this.recordTime % 1000) / 100))
 
         // 스테이지 변경
-        if (this.state === 1 && this.runCount > 1000) {
+        if (this.state === 1 && this.runCount > 3000) {
             this.state += 1
             this.runCount = 0
-            this.inputCount = []
-            this.dust.visible = false;
             this.sky.setTexture(`${this.state}`)
-            this.mission()
 
-        } else if (this.state === 5 && this.runCount > 1000) {
+        } else if (this.state === 2 && this.runCount > 2000) {
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
+            this.ding.play()
+            this.mission()
+            this.stageCountDown.call(this)
+            this.run.setVisible(false);
+            this.squat.setVisible(true);
+            this.exerciseText.setText('스쿼트 준비!').setVisible(true);
+
+
+
+        } else if (this.state === 3 && this.runCount > 2000) {
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
+            this.ding.play()
+            this.mission()
+            this.stageCountDown.call(this)
+            this.run.setVisible(false);
+            this.jumpingJack.setVisible(true);
+            this.exerciseText.setText('점핑잭 준비!').setVisible(true);
+
+
+        }else if (this.state === 4 && this.runCount > 2000) {
+            localStorage.setItem("recordTime", JSON.stringify(this.recordTime));
+            this.startTime = -1
+            this.gameState = 0;
+            this.runCount = 0;
+            this.inputCount = [];
+            this.dust.visible = false;
             this.tweens.add({
                 targets: this.dogHouse,
                 duration: 1000, // 애니메이션 지속 시간
@@ -229,20 +365,14 @@ export default class Main3 extends Phaser.Scene {
                 repeat: 0,
                 onComplete: this.gameEnds()
             });
+            this.run.setVisible(false);
+            this.exerciseText.setVisible(false)
 
 
-        } else if (this.state > 1 && this.runCount > 1000) {
-            this.state += 1
-            this.runCount = 0
-            this.inputCount = []
-            this.dust.visible = false;
-            this.sky.setTexture(`${this.state}`)
-            this.mission()
         }
 
 
-        // 시작 할 때 카운트 다운
-        this.countDown.call(this)
+        localStorage.setItem("gameState", JSON.stringify(this.gameState));
 
 
     }
@@ -253,35 +383,26 @@ export default class Main3 extends Phaser.Scene {
             duration: 300, // 애니메이션 지속 시간
             alpha: 1,
             repeat: 0,
-            onComplete: this.humanTalk()
         });
 
     }
 
-    humanTalk() {
-        this.bubble_human.setVisible(true);
-        if (this.state === 2) {
-            this.text_human.setText('스쿼트!')
-        } else if (this.state === 3) {
-            this.text_human.setText('운동3!')
-        } else if (this.state === 4) {
-            this.text_human.setText('운동4!')
-        } else if (this.state === 3) {
-            this.text_human.setText('계속 달려!')
-        }
-        this.text_human.setVisible(true);
-    }
 
     countDown() {
         if (this.countdown === 0) {
             this.start.play();
             this.number.visible = false;
             this.number.destroy();
+            this.state = 1;
+            this.gameState = 1;
+            this.run.setVisible(true);
+            this.exerciseText.setText('제자리 달리기!').setVisible(true);
+
             return;
         }
         this.bee.play();
         this.number.destroy();
-        this.number = this.add.sprite(100, 100, 'numbers').setFrame(this.countdown);
+        this.number = this.add.sprite(1300, 350, 'numbers').setFrame(this.countdown);
         this.tweens.add({
             targets: this.number,
             duration: 1000, // 애니메이션 지속 시간
@@ -297,5 +418,33 @@ export default class Main3 extends Phaser.Scene {
     gameEnds() {
         this.bubble_dog.visible = true;
         this.heart.visible = true;
+    }
+
+    stageCountDown() {
+        if (this.stageCount === 0) {
+            this.exerciseText.visible = true;
+            if (this.state === 2) {
+                this.exerciseText.setText(`스쿼트 X ${this.stage2Exercise}`)
+            } else if (this.state === 3) {
+                this.exerciseText.setText(`점핑잭 X ${this.stage3Exercise}`)
+            }
+            this.bubble_human.setVisible(false);
+            this.text_human.visible = false;
+            this.gameState = this.state;
+            return;
+        }
+        if (this.stageCount === 6) {
+            this.text_human.visible = false;
+            this.bubble_human.setVisible(true);
+            this.stageCount--;
+
+        }
+        if (this.stageCount < 6) {
+            this.text_human.visible = true;
+
+            this.text_human.setText(`${this.stageCount}`)
+            this.stageCount--;
+        }
+        this.time.delayedCall(1000, this.stageCountDown, [], this);
     }
 }
