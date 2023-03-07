@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { useRecoilState } from 'recoil';
 import { isRoomHostState } from "../../recoil/states";
+import { gameModeName } from "../../recoil/gameModeName";
 import dynamic from 'next/dynamic'
 import Loading from '../../components/Loading'
 
@@ -22,6 +23,7 @@ export default function GameRoom() {
     const [isMovenetLoaded, setIsMovenetLoaded] = useState(false);
     const [isOpenViduLoaded, setIsOpenViduLoaded] = useState(false);
     const [isPhaserLoaded, setIsPhaserLoaded] = useState(true);
+	const [roomGameModeName, setRoomGameModeName] = useRecoilState(gameModeName);
 
     const [ username, setUsername ] = useState("");
 
@@ -41,9 +43,16 @@ export default function GameRoom() {
         <>
             <title>MOFIT 게임룸</title>
             <div className='curtain'>
-                <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
+                {roomGameModeName === '스쿼트' && roomGameModeName ? 
+                <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
                     setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
-                </OpenViduComponent2>
+                </OpenViduComponent> : 
+                <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
+                setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
+                </OpenViduComponent2>}
+                {/* <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
+                    setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
+                </OpenViduComponent2> */}
             </div>
 
             <div className="loading">
