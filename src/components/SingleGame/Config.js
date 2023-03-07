@@ -1,6 +1,6 @@
 import "phaser";
-
-let singleGameMovenetInput;
+import { singleGameMovenetInput } from "../SingleWebcam";
+// let singleGameMovenetInput;
 export default class Main3 extends Phaser.Scene {
     player;
     runCount = 0;
@@ -205,8 +205,8 @@ export default class Main3 extends Phaser.Scene {
             this.saveStartTime = true;
         }
 
-        if (cursors.space.isDown && this.gameState > 0) {
-
+        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
+            this.singleGameMovenetInputTempSave = singleGameMovenetInput;
             if (this.gameState === 1) {
                 this.inputCount.push(time);
             } else if (this.gameState === 5 && !this.isPhaserHasStarted) {

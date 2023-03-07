@@ -20,8 +20,8 @@ export default function SingleMode() {
             </div>
 
             <div className="webcam-container">
+                <button onClick={()=>setStartDetect(true)}> 디텍트 시작</button>
                 <SingleWebcam setIsLoad={setIsLoad} startDetect={startDetect} />
-                {/* <button onClick={()=>setStartDetect(true)}> 디텍트 시작</button> */}
             </div>
             
             <div className="singlegame">
