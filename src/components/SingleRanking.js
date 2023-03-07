@@ -56,7 +56,7 @@ export default function Ranking() {
                         {index >= 3 && index + 1}
                       </td>
                       <td className="table-data-row">{item.id}</td>
-                      <td className="table-data-row">{item.win} 점</td>
+                      <td className="table-data-row">{item.score} 점</td>
                     </tr>
                   ))}
                 </tbody>

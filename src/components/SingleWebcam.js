@@ -11,6 +11,8 @@ import {
     windMillDetect,
     sprint
 } from 'public/scripts/squatDetecotr.js';
+import SingleGameResult from "../components/SingleGameResult";
+import { useRouter } from "next/router";
 
 export let singleGameMovenetInput = 0;
 export let runL = 0;
@@ -20,17 +22,32 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
     const videoRef = useRef();
     const movenetDetector = useRef(null);
 
+    const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+    const [isModalClose, setIsModalClose] = useState(false);
+    const [scores, setScores] = useState(0);
+
     const animeIdRef = useRef(null);
     let isSquat = false;
     let isJumpingJack = false;
     let isWindMill = false;
     let lastlyIsRun = 0;
 
+    let isOnceCall = 0;
+
+    const router = useRouter();
+
+    useEffect(() => {
+		if (isModalClose) {
+            console.log("끝남 @@@@@@@@@@@@@@");
+			router.push("/");
+		}
+	}, [isModalClose]);
+
 
     useEffect(() => {
         setupCamera();  // init cam
         initDetector(); // init detector
-
+        detectSquat();
         return () => {
             console.log('dismounted');
             movenetDetector.current.dispose();
@@ -44,7 +61,7 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
     useEffect(() => {
         if (startDetect) {
             console.log("start detect!");
-            detectSquat();
+            // detectSquat();
         }
     }, [startDetect]);
 
@@ -100,8 +117,8 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
 
                 const pose = await movenetDetector.current.estimatePoses(video);
 
-                // console.log("localStorage gameState : " + JSON.parse(localStorage.getItem('gameState')));
-                // console.log("localStorage time : " + JSON.parse(localStorage.getItem('recordTime')));
+                console.log("localStorage gameState : " + JSON.parse(localStorage.getItem('gameState')));
+                console.log("localStorage time : " + JSON.parse(localStorage.getItem('recordTime')));
 
                 if (pose && pose.length > 0) {
                     // 스쿼트
@@ -137,6 +154,12 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
                         lastlyIsRun = isRun;
                         console.log("lastlyIsRun : " + singleGameMovenetInput);
                     }
+
+                    if ((JSON.parse(localStorage.getItem('recordTime')) !== 0) && !isOnceCall) {
+                        setScores(Math.floor(localStorage.getItem('recordTime')/10)/100);
+                        // console.log(scores);
+                        setIsCompleteModalOpen(true);
+                    }
                 }
             } catch (e) {
                 movenetDetector.current.dispose();
@@ -147,7 +170,9 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
     }
 
     return (
+        <>
         <video ref={videoRef} style={{ width: "700px", height: "1000px" }}></video>
-        
+        {isCompleteModalOpen && <SingleGameResult scores={scores} setIsModalClose={setIsModalClose}/>}
+        </>
     )
 }

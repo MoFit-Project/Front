@@ -239,8 +239,9 @@ export default class Main3 extends Phaser.Scene {
             this.startTime = time;
             this.saveStartTime = true;
         }
-        // this.singleGameMovenetInputTempSave != singleGameMovenetInput
-        if (cursors.space.isDown && this.gameState > 0) {
+        
+        // cursors.space.isDown
+        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
             this.singleGameMovenetInputTempSave = singleGameMovenetInput;
             if (this.gameState === 1) {
                 this.inputCount.push(time);
