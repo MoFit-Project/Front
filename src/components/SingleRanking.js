@@ -43,7 +43,7 @@ export default function Ranking() {
                   <tr className="table-title">
                     <td className="table-title-row">랭킹</td>
                     <td className="table-title-row">아이디</td>
-                    <td className="table-title-row">점수</td>
+                    <td className="table-title-row">시간</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,7 @@ export default function Ranking() {
                         {index >= 3 && index + 1}
                       </td>
                       <td className="table-data-row">{item.id}</td>
-                      <td className="table-data-row">{item.win} 점</td>
+                      <td className="table-data-row">{item.win} 초</td>
                     </tr>
                   ))}
                 </tbody>
