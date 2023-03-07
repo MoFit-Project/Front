@@ -65,8 +65,8 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: false,
             video: {
-                width: 700,
-                height: 1000
+                width: 500,
+                height: 1100
             },
         });
 
@@ -119,7 +119,7 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
     }
 
     return (
-        <video ref={videoRef}></video>
+        <video ref={videoRef} style={{ width: "700px", height: "1000px" }}></video>
         
     )
 }

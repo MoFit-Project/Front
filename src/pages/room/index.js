@@ -9,6 +9,7 @@ import { refreshToken } from "public/refreshToken";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
+import { gameModeName } from "../../recoil/gameModeName";
 import Swal from 'sweetalert2'
 import { inroomState } from "../../recoil/imroomState";
 import Loading from "../../components/Loading"
@@ -26,6 +27,7 @@ export default function RoomList() {
   const [isLoading, setIsLoading] = useState(false);
   const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
   const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
+	const [roomGameModeName, setRoomGameModeName] = useRecoilState(gameModeName);
 
   const userIdRef = useRef('');
 
@@ -57,6 +59,7 @@ export default function RoomList() {
         headers: { Authorization: `Bearer ${assessToken}` },
       });
       setInRoomState(2);
+      setRoomGameModeName(response.data.mode);
       // TODO: 리스폰스로 넘어오는 값 response.data.mode/response.data.sessionId으로 라우팅
       router.push(`/room/${response.data.sessionId}`);
     } catch (error) {

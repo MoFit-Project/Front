@@ -7,6 +7,7 @@ import { isRoomHostState } from "../../recoil/states";
 import { gamePlayTime } from "../../recoil/gamePlayTime";
 import { currSessionId } from "../../recoil/currSessionId";
 import { inroomState } from "../../recoil/imroomState";
+import { gameModeName } from "../../recoil/gameModeName";
 import { refreshToken } from "public/refreshToken";
 import Swal from 'sweetalert2'
 import Modal from 'react-modal';
@@ -25,6 +26,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 	const [currSession, setCurrSessionId] = useRecoilState(currSessionId);
 	const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 	const [timeOfGamePlay, setTimeOfGamePlay] = useRecoilState(gamePlayTime);
+	const [roomGameModeName, setRoomGameModeName] = useRecoilState(gameModeName);
 
 	const userIdRef = useRef('');
 
@@ -101,6 +103,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 				},
 			);
 			setInRoomState(1);
+			setRoomGameModeName(gameMode);
 			onClose();
 			router.push(`/room/${response.data}`);
 		} catch (error) {
