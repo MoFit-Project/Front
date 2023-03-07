@@ -32,10 +32,13 @@ export default class Main3 extends Phaser.Scene {
     singleGameMovenetInputTempSave = 0;
     startTime = 0;
     exerciseText;
-    stage2Exercise = 10;
-    stage3Exercise = 10;
-    stage4Exercise = 10;
+    stage2Exercise = 1;
+    stage3Exercise = 1;
     saveStartTime = false;
+    jumpingJack;
+    run;
+    squat;
+
 
     constructor() {
         super();
@@ -63,6 +66,21 @@ export default class Main3 extends Phaser.Scene {
             "dust",
             '../assets/singlegame/dust.png',
             {frameWidth: 48, frameHeight: 48}
+        )
+        this.load.spritesheet(
+            "jumpingJack",
+            '../assets/singlegame/jumpingJack.png',
+            {frameWidth: 354, frameHeight: 354}
+        )
+        this.load.spritesheet(
+            "run",
+            '../assets/singlegame/run.png',
+            {frameWidth: 370, frameHeight: 370}
+        )
+        this.load.spritesheet(
+            "squat",
+            '../assets/singlegame/squat.png',
+            {frameWidth: 350, frameHeight: 350}
         )
         this.load.image('bg', '../assets/singlegame/singleBg.png')
         this.load.image('human', '../assets/singlegame/human.png')
@@ -125,6 +143,19 @@ export default class Main3 extends Phaser.Scene {
             .setOrigin(0.5, 1)
             .setScale(6)
             .setVisible(false);
+        this.jumpingJack = this.add.sprite(850, 850, 'jumpingJack')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.9)
+            .setVisible(false);
+        this.squat = this.add.sprite(850, 850, 'squat')
+            .setOrigin(0.5, 0.5)
+            .setScale(1)
+            .setVisible(false);
+        this.run = this.add.sprite(850, 850, 'run')
+            .setOrigin(0.5, 0.5)
+            .setScale(0.9)
+            .setVisible(false);
+
         this.anims.create({
             key: 'player_run',
             frames: this.anims.generateFrameNumbers('player', {start: 6, end: 11}),
@@ -143,9 +174,27 @@ export default class Main3 extends Phaser.Scene {
             frameRate: 5,
             repeat: 0,
         });
+        this.anims.create({
+            key: 'runGuide',
+            frames: this.anims.generateFrameNumbers('run', {start: 0, end: 6}),
+            frameRate: 6,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'jumpingJackGuide',
+            frames: this.anims.generateFrameNumbers('jumpingJack', {start: 0, end: 3}),
+            frameRate: 4,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'squatGuide',
+            frames: this.anims.generateFrameNumbers('squat', {start: 0, end: 1}),
+            frameRate: 2,
+            repeat: -1,
+        });
 
 
-        this.number = this.add.sprite(200, 200, 'numbers').setVisible(false).setDepth(1);
+        this.number = this.add.sprite(1300, 350, 'numbers').setVisible(false).setDepth(1);
         this.playerNumber10 = this.add.sprite(1600, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumberDot = this.add.sprite(this.playerNumber10.x - 57, this.playerNumber10.y + 40, 'numbers').setScale(0.2).setOrigin(0.5, 0.5).setTint(0x000000);
         this.playerNumber100 = this.add.sprite(this.playerNumber10.x - 120, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
@@ -162,12 +211,15 @@ export default class Main3 extends Phaser.Scene {
             .toggleFlipX()
             .setAlpha(0)
         // 텍스트
-        this.exerciseText = this.add.text(1300, 850, "스쿼트 X 10",
+        this.exerciseText = this.add.text(1360, 850, "스쿼트 X 10",
             {color: "#000000", fontSize: "130px", fontFamily: 'dalmoori'})
             .setDepth(1)
             .setOrigin(0.5, 0.5)
             .setVisible(false);
 
+        this.jumpingJack.anims.play('jumpingJackGuide')
+        this.squat.anims.play('squatGuide')
+        this.run.anims.play('runGuide')
 
         // 변수 내보내기
         localStorage.setItem("recordTime", JSON.stringify(0));
@@ -178,34 +230,12 @@ export default class Main3 extends Phaser.Scene {
     update(time, delta) {
         const cursors = this.input.keyboard.createCursorKeys();
 
-        // if (this.singleGameMovenetInputTempSave != singleGameMovenetInput) {
-        //     this.singleGameMovenetInputTempSave = singleGameMovenetInput;
-        //
-        //     if (this.gameState === 1) {
-        //         this.inputCount.push(time);
-        //     } else if (this.gameState === 5 && !this.isPhaserHasStarted) {
-        //         this.countDown.call(this)
-        //         this.state = 0;
-        //         this.isPhaserHasStarted = true;
-        //         this.gameState = 1;
-        //         this.startTime = time;
-        //
-        //     } else if (this.stage2 && this.state === 2) {
-        //         this.stage2Exercise -= 1
-        //     }
-        //     if (this.stage2Exercise < 1) {
-        //         this.human.visible = false;
-        //         this.state = 3
-        //         this.gameState = 1
-        //         this.stage2 = false;
-        //     }
-        // }
         if(!this.saveStartTime && this.state === 1){
             this.startTime = time;
             this.saveStartTime = true;
         }
-
-        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
+        // this.singleGameMovenetInputTempSave != singleGameMovenetInput
+        if (cursors.space.isDown && this.gameState > 0) {
             this.singleGameMovenetInputTempSave = singleGameMovenetInput;
             if (this.gameState === 1) {
                 this.inputCount.push(time);
@@ -220,8 +250,10 @@ export default class Main3 extends Phaser.Scene {
                 this.stage2Exercise -= 1
                 this.exerciseText.setText(`스쿼트! X ${this.stage2Exercise}`)
                 if(this.stage2Exercise < 1) {
+                    this.squat.setVisible(false);
                     this.state = 3
                     this.gameState = 1
+                    this.run.setVisible(true);
                     this.exerciseText.setText('제자리 달리기!')
                     this.sky.setTexture(`${this.state}`)
                     this.human.setAlpha(0);
@@ -231,19 +263,10 @@ export default class Main3 extends Phaser.Scene {
                 this.stage3Exercise -= 1
                 this.exerciseText.setText(`점핑잭! X ${this.stage3Exercise}`)
                 if(this.stage3Exercise < 1) {
+                    this.jumpingJack.setVisible(false);
                     this.state = 4
                     this.gameState = 1
-                    this.exerciseText.setText('제자리 달리기!')
-                    this.sky.setTexture(`${this.state}`)
-                    this.human.setAlpha(0);
-                }
-            }else if (this.gameState === 4) {
-                this.stageCount = 6;
-                this.stage4Exercise -= 1
-                this.exerciseText.setText(`윈드밀! X ${this.stage4Exercise}`)
-                if(this.stage4Exercise < 1) {
-                    this.state = 5
-                    this.gameState = 1
+                    this.run.setVisible(true);
                     this.exerciseText.setText('제자리 달리기!')
                     this.sky.setTexture(`${this.state}`)
                     this.human.setAlpha(0);
@@ -289,45 +312,37 @@ export default class Main3 extends Phaser.Scene {
         this.playerNumber10.setFrame(Math.floor((this.recordTime % 1000) / 100))
 
         // 스테이지 변경
-        if (this.state === 1 && this.runCount > 1000) {
+        if (this.state === 1 && this.runCount > 3000) {
             this.state += 1
             this.runCount = 0
             this.sky.setTexture(`${this.state}`)
 
-        } else if (this.state === 2 && this.runCount > 1000) {
+        } else if (this.state === 2 && this.runCount > 2000) {
             this.gameState = 0;
             this.runCount = 0;
             this.inputCount = [];
             this.dust.visible = false;
             this.mission()
             this.stageCountDown.call(this)
+            this.run.setVisible(false);
+            this.squat.setVisible(true);
             this.exerciseText.setText('스쿼트 준비!').setVisible(true);
 
 
 
-        } else if (this.state === 3 && this.runCount > 1000) {
+        } else if (this.state === 3 && this.runCount > 2000) {
             this.gameState = 0;
             this.runCount = 0;
             this.inputCount = [];
             this.dust.visible = false;
             this.mission()
             this.stageCountDown.call(this)
+            this.run.setVisible(false);
+            this.jumpingJack.setVisible(true);
             this.exerciseText.setText('점핑잭 준비!').setVisible(true);
 
 
-
-        }else if (this.state === 4 && this.runCount > 1000) {
-            this.gameState = 0;
-            this.runCount = 0;
-            this.inputCount = [];
-            this.dust.visible = false;
-            this.mission()
-            this.stageCountDown.call(this)
-            this.exerciseText.setText('윈드밀 준비!').setVisible(true);
-
-
-
-        }else if (this.state === 5 && this.runCount > 1000) {
+        }else if (this.state === 4 && this.runCount > 2000) {
             localStorage.setItem("recordTime", JSON.stringify(this.recordTime));
             this.startTime = -1
             this.gameState = 0;
@@ -341,6 +356,8 @@ export default class Main3 extends Phaser.Scene {
                 repeat: 0,
                 onComplete: this.gameEnds()
             });
+            this.run.setVisible(false);
+            this.exerciseText.setVisible(false)
 
 
         }
@@ -369,13 +386,14 @@ export default class Main3 extends Phaser.Scene {
             this.number.destroy();
             this.state = 1;
             this.gameState = 1;
+            this.run.setVisible(true);
             this.exerciseText.setText('제자리 달리기!').setVisible(true);
 
             return;
         }
         this.bee.play();
         this.number.destroy();
-        this.number = this.add.sprite(100, 100, 'numbers').setFrame(this.countdown);
+        this.number = this.add.sprite(1300, 350, 'numbers').setFrame(this.countdown);
         this.tweens.add({
             targets: this.number,
             duration: 1000, // 애니메이션 지속 시간
@@ -400,8 +418,6 @@ export default class Main3 extends Phaser.Scene {
                 this.exerciseText.setText(`스쿼트 X ${this.stage2Exercise}`)
             } else if (this.state === 3) {
                 this.exerciseText.setText(`점핑잭 X ${this.stage3Exercise}`)
-            } else if (this.state === 4) {
-                this.exerciseText.setText(`윈드밀 X ${this.stage4Exercise}`)
             }
             this.bubble_human.setVisible(false);
             this.text_human.visible = false;
