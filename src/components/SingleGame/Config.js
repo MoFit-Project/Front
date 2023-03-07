@@ -146,11 +146,10 @@ export default class Main3 extends Phaser.Scene {
 
 
         this.number = this.add.sprite(200, 200, 'numbers').setVisible(false).setDepth(1);
-        this.playerNumber10 = this.add.sprite(1510, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        this.playerNumber10 = this.add.sprite(1600, 120, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumberDot = this.add.sprite(this.playerNumber10.x - 57, this.playerNumber10.y + 40, 'numbers').setScale(0.2).setOrigin(0.5, 0.5).setTint(0x000000);
         this.playerNumber100 = this.add.sprite(this.playerNumber10.x - 120, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber1000 = this.add.sprite(this.playerNumber10.x - 210, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
-        this.playerNumber1 = this.add.sprite(this.playerNumber10.x + 90, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.playerNumber10000 = this.add.sprite(this.playerNumber10.x - 300, this.playerNumber10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.text_human = this.add.text(1340, 250, "스쿼트!",
             {color: "#000000", fontSize: "50px", fontFamily: 'dalmoori'})
@@ -288,7 +287,6 @@ export default class Main3 extends Phaser.Scene {
         this.playerNumber1000.setFrame(Math.floor((this.recordTime % 100000) / 10000))
         this.playerNumber100.setFrame(Math.floor((this.recordTime % 10000) / 1000))
         this.playerNumber10.setFrame(Math.floor((this.recordTime % 1000) / 100))
-        this.playerNumber1.setFrame(Math.floor(this.recordTime % 100) / 10)
 
         // 스테이지 변경
         if (this.state === 1 && this.runCount > 1000) {
