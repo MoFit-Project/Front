@@ -381,7 +381,7 @@ export default function OpenViduComponent({
       		mySession.on("signal:otherPlayerReady", (event) => {
 				isAllReady = true;
 				isOtherPlayerReady = true;
-				setRightUserName(event.data);
+				// setRightUserName(event.data);
 				console.log("OtherPlayerReady !!!" + rightUserName);
 
 				const targetBtnStart = document.getElementById("buttonGameStart");
@@ -505,7 +505,7 @@ export default function OpenViduComponent({
     }
 
   const gameStart = async () => {
-	if (isAllReady) {
+	if (isOtherPlayerReady) {
     	const roomId = currSession;
     	const assessToken = Cookies.get("token");
     	try {
@@ -621,7 +621,7 @@ export default function OpenViduComponent({
         
             {loading ? <DynamicComponentWithNoSSR /> : null}
 			
-			<p id="room-title" className="session-title" style={{ position: "absolute", top: "-20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
+			<p id="room-title" className="session-title" style={{ position: "absolute", top: "20px", left: "950px", fontSize: "60px" }}>{currSession}</p>
 			<p id="stringVS" className="stringVS" style={{ position: "absolute", top: "820px", bottom:"30px", right: "30px", left: "930px", width: "250px", height: "100px", fontSize: "60px" }}></p>
 			<span className="user-name" style={{ position: "absolute", top: "800px", left: "100px", color: "yellow" }}>{userName}</span>
 			<span className="user-name" style={{ position: "absolute", top: "800px", right: "140px", color: "yellow" }}>{rightUserName}</span>
