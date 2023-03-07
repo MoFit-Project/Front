@@ -152,15 +152,15 @@ export default function Ranking() {
             background-color: #0014FF;
             transition:all 0.1s;
             border-bottom:5px solid #050141;
-            font-size: 18px;
+            font-size: 28px;
             border-radius: 10px;
         }
 
         .change-btn {
           color: white;
-          width: 125px;
-          height: 45px;
-          margin-left: 560px;
+          width: 150px;
+          height: 70px;
+          margin-left: 540px;
           margin-top: 15px;
         }
         .table-title-row{

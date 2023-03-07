@@ -9,11 +9,17 @@ import LoginButton from "@/components/login/LoginButton";
 export default function SignupForm() {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+    const [isSignUpFail, setIsSignUpFail] = useState(false);
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        if (id.trim() === "" || password.trim() === "") { // 아이디나 비밀번호가 공백인 경우
+            setIsSignUpFail(true); // isSignUpFail 상태를 true로 업데이트합니다.
+            return; // 함수 실행을 중지합니다.
+        }
 
         try {
             await axios.post(API_URL + "/register", {
@@ -61,6 +67,9 @@ export default function SignupForm() {
                             onChange={(event) => setPassword(event.target.value)}
                         />
                     </div>
+                    {isSignUpFail && (
+                        <span className="text-red-600 text-sm">아이디와 비밀번호를 입력해주세요.</span>
+                    )}
                     <div className="text-center">
                         < button
                             className=" w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
