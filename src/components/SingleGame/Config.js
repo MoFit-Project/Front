@@ -115,10 +115,10 @@ export default class Main3 extends Phaser.Scene {
     }
 
     create() {
-        this.bee = this.sound.add('bee');
-        this.start = this.sound.add('start');
-        this.ding = this.sound.add('ding');
-        this.diriring = this.sound.add('diriring');
+        this.bee = this.sound.add('bee').setVolume(2);
+        this.start = this.sound.add('start').setVolume(3);
+        this.ding = this.sound.add('ding').setVolume(2);
+        this.diriring = this.sound.add('diriring').setVolume(2);
 
         this.bg = this.add.image(700, 0, 'bg').setOrigin(0, 0).setScale(1.55, 2).setDepth(1)
 

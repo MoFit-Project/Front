@@ -153,12 +153,12 @@ export default class Main extends Phaser.Scene {
         // this.timeText.visible = false;
 
 
-        this.punchSound = this.sound.add('punch');
+        this.punchSound = this.sound.add('punch').setVolume(2);
         this.fightBgm = this.sound.add('fight');
         this.waitBgm = this.sound.add('wait');
-        this.bee = this.sound.add('bee');
-        this.ding = this.sound.add('ding');
-        this.start = this.sound.add('start');
+        this.bee = this.sound.add('bee').setVolume(2);
+        this.ding = this.sound.add('ding').setVolume(2);
+        this.start = this.sound.add('start').setVolume(3);
 
         this.waitBgm.play();
 
