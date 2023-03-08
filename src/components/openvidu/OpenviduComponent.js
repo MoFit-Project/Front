@@ -8,6 +8,7 @@ import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
 import { inroomState } from "../../recoil/imroomState";
 import { gamePlayTime } from "../../recoil/gamePlayTime";
+// import { motionStart } from "../../recoil/motionStart";
 import SubVideo from "./SubVideo";
 import Loading from "../Loading";
 import dynamic from "next/dynamic";
@@ -18,7 +19,7 @@ import { enterRoomSessionId } from "@/pages/room";
 import Swal from "sweetalert2"; 
 import MultiGameResultWin from "../MultiGameResult";
 import MultiGameResultLose from "../MultiGameResultLose";
-
+// import { isMotionStart } from "../openvidu/OvVideo";
 
 export let isLeftPlayerThrow = false;
 export let isLeftPlayerMoveGuildLine = false;
@@ -143,6 +144,9 @@ export default function OpenViduComponent({
     const [isIWinning, setIsIWinning] = useState("");
     const [isRWinning, setIsRWinning] = useState("");
 
+    // const [isMotionStart, setIsMotionStart] = useRecoilState(motionStart);
+    const [isMotionStart, setIsMotionStart] = useState(false);
+
   let isClicked = false;
   let isAllReady = true;
   let isRoomOutBtnClicked = false
@@ -187,6 +191,18 @@ export default function OpenViduComponent({
 			leaveSession();
 		}
 	}, [isModalClose]);
+
+    useEffect(() => {
+        if (isMotionStart) {
+            if (myInRoomState === 1) {
+                console.log("@@@@@@@@@@@@@@@@@  start !!!  " + isMotionStart);
+                gameStart();
+            } else if (myInRoomState === 2) {
+                console.log("@@@@@@@@@@@@@@@@@  ready !!!  " + isMotionStart);
+                gameReady();
+            }
+        }
+    }, [isMotionStart]);
 
     const onbeforeunload = (event) => {
         leaveSession();
@@ -343,6 +359,9 @@ export default function OpenViduComponent({
                 // Phaser 시작
                 isPhaserGameStart = true;
 				setIsMoveNetStart(true);
+                // setTimeout(function () {
+                //     setIsMoveNetStart(true);
+                // }, 5000);
                 console.log("isPhaserGameStart : " + isPhaserGameStart);
 
 				const targetBtnReady = document.getElementById("buttonGameReady");
@@ -611,6 +630,7 @@ export default function OpenViduComponent({
                         setIsOpenViduLoaded={setIsOpenViduLoaded}
                         setIsMovenetLoaded={setIsMovenetLoaded}
 						isMoveNetStart={isMoveNetStart}
+                        setIsMotionStart={setIsMotionStart}
                     />
                     </div>
                 ) : (
