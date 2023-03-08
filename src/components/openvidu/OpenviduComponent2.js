@@ -81,6 +81,7 @@ export default function OpenViduComponent({
     setIsOpenViduLoaded
 }) {
     localStorage.setItem("refresh", "1");
+    localStorage.setItem("readyToStart", "notReady");
 
 
     const [loading, setLoading] = useState(false);
@@ -348,7 +349,6 @@ export default function OpenViduComponent({
                 // 추후 삭제 예정
                 // alert("방장이 방나감");
                 console.log(event.from);
-                sendSurverLeaveSession();
                 leaveSession();
 
                 if (myInRoomState === 2) {
@@ -401,6 +401,7 @@ export default function OpenViduComponent({
       		mySession.on("signal:otherPlayerReady", (event) => {
 				isAllReady = true;
 				isOtherPlayerReady = true;
+                localStorage.setItem("readyToStart", "ready");
 				// setRightUserName(event.data);
 				console.log("PlayerReady !!!" + rightUserName);
 

@@ -14,6 +14,7 @@ import {
 	sendSignalJumpingJacks,
 } from "../openvidu/OpenviduComponent";
 // export let isMotionStart = false;
+let start = false;
 export default function OvVideo({
 	streamManager,
 	userName,
@@ -310,9 +311,10 @@ export default function OvVideo({
 							leftShoulderAngle < 240 && 
 							rightShoulderAngle > 120
 						) {
-							
-							if((JSON.parse(localStorage.getItem('phaserStart')) === 0)){
+							const key = localStorage.getItem('readyToStart')
+							if(key === 'ready' && start === false){
 								setIsMotionStart(true);
+								start = true;
 							}
 							// setIsMotionStart(true);
 							// isMotionStart = true;
