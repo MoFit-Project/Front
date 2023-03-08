@@ -49,6 +49,8 @@ export default class Main2 extends Phaser.Scene {
     waitBgm2;
     countdown = 5;
     phaserStart = 0;
+    guideText;
+    circle;
 
 
     constructor() {
@@ -114,6 +116,7 @@ export default class Main2 extends Phaser.Scene {
         this.load.audio('inGameBgm', ['../assets/sound/inGameBgm.mp3'])
         this.load.audio('waitBgm2', ['../assets/sound/waitBgm2.mp3'])
         this.load.audio('start', ['../assets/sound/start.mp3'])
+        this.load.image('circle', '../assets/circle.png')
 
 
 
@@ -234,6 +237,13 @@ export default class Main2 extends Phaser.Scene {
         this.player2Number100 = this.add.sprite(this.player2Number10.x - 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
         this.player2Number1 = this.add.sprite(this.player2Number10.x + 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
         localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
+        this.circle = this.add.image(1250, 420, 'circle').setScale(1).setDepth(1)
+        this.guideText = this.add
+            .text(600, 230,
+                "버튼을 클릭하거나,\n\n머리 위로 동그라미를\n\n만드세요.",
+                {color: "#000000", fontSize: "60px", fontFamily: 'dalmoori'}
+            )
+            .setDepth(1)
 
 
     }
@@ -277,6 +287,8 @@ export default class Main2 extends Phaser.Scene {
 
 
         if (isPhaserGameStart2 && this.gameHasNotStarted) {
+            this.circle.destroy();
+            this.guideText.destroy();
             this.gameHasNotStarted = false;
             this.timeBar.visible = true;
             this.timeText.visible = true;
