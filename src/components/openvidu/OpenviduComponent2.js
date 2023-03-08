@@ -80,9 +80,10 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
-    localStorage.setItem("refresh", "1");
-    localStorage.setItem("readyToStart", "notReady");
-
+    useEffect(() => {
+        localStorage.setItem("refresh", "1");
+        localStorage.setItem("readyToStart", "notReady");
+    }, []);
 
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
