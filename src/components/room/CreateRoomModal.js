@@ -149,7 +149,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 						
 					},
 					content: {
-						margin: '30px auto',
+						margin: '25px auto',
 						position: 'absolute',
 						top: '50px',
 						left: '40px',
@@ -162,25 +162,25 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 						outline: 'none',
 						padding: '20px',
 						width: '600px',
-						height: '400px',
+						height: '531px',
 						boxShadow: '1px 1px 1px 1px black',
 						display: 'flex',
-						flexDirection: 'column'
-
+						flexDirection: 'column',
+						marginBottom: '25px'
 					}
 				}}
 			>
 
-				<h1 className='head'>방 만들기</h1>
-				<div className='modal-contents room-title-box'>
-					<label>
+				<div className='head text-6xl mb-8 ml-7 mt-6'>방 만들기</div>
+				<div className='modal-contents room-title-box text-2xl mt-7 mb-4'>
+					<label className="text-3xl ml-7">
 						방 제목:
-						<input className="title-input text-contents" type="text" value={roomName} onChange={handleRoomNameChange} />
+						<input className="title-input text-contents " type="text" value={roomName} onChange={handleRoomNameChange} />
 					</label>
 
 				</div>
 				<div className='modal-contents'>
-					<label>
+					<label className="text-3xl ml-7">
 						게임 모드:
 						<select className="mode-selector" value={gameMode} onChange={handleGameModeChange}>
 							<option value="default">모드 선택</option>
@@ -190,7 +190,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 					</label>
 				</div>
 				<div className='modal-contents'>
-					<label>
+					<label className="text-3xl ml-7">
 						게임 시간:
 						<input type="range" min="30" max="180" step="10" value={gameTime} onChange={handleGameTimeChange} />
 						{gameTime}초
@@ -209,9 +209,9 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 				)}
 				<div className='modal-contents button-component flex justify-end'>
 
-					<div>
-						<button className="mr-5 confirm-btn" onClick={handleSubmit}>확인</button>
-						<button className="cancel-btn" onClick={() => {
+					<div className="">
+						<button className="mr-5 confirm-btn text-4xl" onClick={handleSubmit}>확인</button>
+						<button className="cancel-btn text-4xl" onClick={() => {
 							onClose();
 							setRoomName('');
 							setIsRoomNameEmpty(false);
@@ -243,17 +243,17 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 					.title-input{
 						border: 2px solid black;
 						border-radius: 5px;
-						width: 80%;
+						width: 70%;
 						padding: 2px;
 					}
 					.button-component{
-						margin-top: 50px; 
+						margin-top: 40px; 
 						margin-right: 20px;
 					}
 
 					.modal-contents{
 						font-size: 20px;
-						margin-bottom: 15px;
+						margin-bottom: 32px;
 					}
 
 					.confirm-btn{
