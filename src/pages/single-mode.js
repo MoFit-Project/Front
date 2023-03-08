@@ -2,6 +2,7 @@ import Loading from '../components/Loading'
 import SingleWebcam from '../components/SingleWebcam'
 import { useState } from 'react';
 import dynamic from "next/dynamic";
+import LayoutAuthenticated from "../components/LayoutAuthticated";
 
 const DynamicComponentWithNoSSR = dynamic(
     () => import('../components/SingleGame/Index'),
@@ -14,6 +15,7 @@ export default function SingleMode() {
     const [startDetect, setStartDetect] = useState(false);
     return (
         <>
+            <LayoutAuthenticated>
             <title>MOFIT 게임룸</title>
             <div className="loading">
                 <Loading/>
@@ -47,6 +49,7 @@ export default function SingleMode() {
                 }
 
                 `}</style>
+            </LayoutAuthenticated>
         </>
 
     )
