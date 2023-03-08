@@ -32,8 +32,8 @@ export default class Main3 extends Phaser.Scene {
     singleGameMovenetInputTempSave = 0;
     startTime = 0;
     exerciseText;
-    stage2Exercise = 1;
-    stage3Exercise = 1;
+    stage2Exercise = 10;
+    stage3Exercise = 20;
     saveStartTime = false;
     jumpingJack;
     run;
@@ -239,9 +239,9 @@ export default class Main3 extends Phaser.Scene {
             this.startTime = time;
             this.saveStartTime = true;
         }
-        
-        // cursors.space.isDown
-        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
+        // this.singleGameMovenetInputTempSave != singleGameMovenetInput
+
+        if (cursors.space.isDown && this.gameState > 0) {
             this.singleGameMovenetInputTempSave = singleGameMovenetInput;
             if (this.gameState === 1) {
                 this.inputCount.push(time);
