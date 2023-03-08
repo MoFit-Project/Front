@@ -48,6 +48,7 @@ export default class Main2 extends Phaser.Scene {
     inGameBgm;
     waitBgm2;
     countdown = 5;
+    phaserStart = false;
 
 
     constructor() {
@@ -232,6 +233,7 @@ export default class Main2 extends Phaser.Scene {
         this.player2Number10 = this.add.sprite(1160, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
         this.player2Number100 = this.add.sprite(this.player2Number10.x - 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
         this.player2Number1 = this.add.sprite(this.player2Number10.x + 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5).setTint(0x0bc7ed);
+        localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
 
 
     }
@@ -335,6 +337,8 @@ export default class Main2 extends Phaser.Scene {
         countDown()
         {
             if (this.countdown === 0) {
+                this.phaserStart = true;
+                localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
                 this.start.play();
                 this.number.visible = false;
                 this.number.destroy();
