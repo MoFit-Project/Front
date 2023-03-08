@@ -40,6 +40,7 @@ export default class Main3 extends Phaser.Scene {
     squat;
     singleBGM;
     ding;
+    diriring;
 
     constructor() {
         super();
@@ -107,6 +108,7 @@ export default class Main3 extends Phaser.Scene {
         this.load.audio('start', ['../assets/sound/start.mp3'])
         this.load.audio('singleBGM', ['../assets/sound/singleBGM.mp3'])
         this.load.audio('ding', ['../assets/sound/ding.mp3'])
+        this.load.audio('diriring', ['../assets/sound/diriring.mp3'])
 
 
     }
@@ -115,6 +117,7 @@ export default class Main3 extends Phaser.Scene {
         this.bee = this.sound.add('bee');
         this.start = this.sound.add('start');
         this.ding = this.sound.add('ding');
+        this.diriring = this.sound.add('diriring');
 
         this.bg = this.add.image(700, 0, 'bg').setOrigin(0, 0).setScale(1.55, 2).setDepth(1)
 
@@ -257,6 +260,7 @@ export default class Main3 extends Phaser.Scene {
                 this.stage2Exercise -= 1
                 this.exerciseText.setText(`스쿼트! X ${this.stage2Exercise}`)
                 if(this.stage2Exercise < 1) {
+                    this.diriring.play();
                     this.squat.setVisible(false);
                     this.state = 3
                     this.gameState = 1
@@ -270,6 +274,7 @@ export default class Main3 extends Phaser.Scene {
                 this.stage3Exercise -= 1
                 this.exerciseText.setText(`점핑잭! X ${this.stage3Exercise}`)
                 if(this.stage3Exercise < 1) {
+                    this.diriring.play();
                     this.jumpingJack.setVisible(false);
                     this.state = 4
                     this.gameState = 1
