@@ -4,9 +4,9 @@ export default function LoginButton() {
 
     return (
 
-        <div className="text-center">
+        <div className="text-center text-14xl">
             < button
-                className=" w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className=" w-full text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
             >
                 로그인
@@ -22,7 +22,7 @@ export default function LoginButton() {
                         background-color: #0014FF;
                         transition:all 0.1s;
                         border-bottom:5px solid #050141;
-                        font-size: 18px;
+                        font-size: 50px;
                     }
                 `}</style>
         </div >
