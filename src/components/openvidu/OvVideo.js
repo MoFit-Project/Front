@@ -314,7 +314,7 @@ export default function OvVideo({
 						) {
 							const key = localStorage.getItem('readyToStart')
 							const host = localStorage.getItem('host')
-							if(key === 'ready' && start === false && host === true){
+							if(key === 'ready' && start === false && host === 'true'){
 								setIsMotionStart(true);
 								start = true;
 							} else if (host === 'false' && notHostReady === false) {
