@@ -48,7 +48,7 @@ export default class Main extends Phaser.Scene {
     timeText;
 
     playerBackground;
-    phaserStart = false;
+    phaserStart = 0;
 
     constructor() {
         super();
@@ -443,7 +443,7 @@ export default class Main extends Phaser.Scene {
 
     countDown() {
         if (this.countdown === 0) {
-            this.phaserStart = true;
+            this.phaserStart = 1;
             localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
 
             this.start.play();

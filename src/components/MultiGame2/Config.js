@@ -48,7 +48,7 @@ export default class Main2 extends Phaser.Scene {
     inGameBgm;
     waitBgm2;
     countdown = 5;
-    phaserStart = false;
+    phaserStart = 0;
 
 
     constructor() {
@@ -337,7 +337,7 @@ export default class Main2 extends Phaser.Scene {
         countDown()
         {
             if (this.countdown === 0) {
-                this.phaserStart = true;
+                this.phaserStart = 1;
                 localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
                 this.start.play();
                 this.number.visible = false;
