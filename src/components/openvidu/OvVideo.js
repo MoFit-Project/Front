@@ -15,6 +15,7 @@ import {
 } from "../openvidu/OpenviduComponent";
 // export let isMotionStart = false;
 let start = false;
+let notHostReady = false;
 export default function OvVideo({
 	streamManager,
 	userName,
@@ -312,9 +313,13 @@ export default function OvVideo({
 							rightShoulderAngle > 120
 						) {
 							const key = localStorage.getItem('readyToStart')
+							const host = localStorage.getItem('host')
 							if(key === 'ready' && start === false){
 								setIsMotionStart(true);
 								start = true;
+							} else if (host === 'false' && notHostReady === false) {
+								setIsMotionStart(true);
+								notHostReady = true;
 							}
 							// setIsMotionStart(true);
 							// isMotionStart = true;

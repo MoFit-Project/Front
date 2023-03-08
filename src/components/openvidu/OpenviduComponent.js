@@ -165,9 +165,13 @@ export default function OpenViduComponent({
         if (myInRoomState === 1) {
             const targetBtn = document.getElementById("buttonGameReady");
             targetBtn.style.display = "none";
+            localStorage.setItem('host', 'true')
+
         } else if (myInRoomState === 2) {
             const targetBtn = document.getElementById("buttonGameStart");
             targetBtn.style.display = "none";
+            localStorage.setItem('host', 'false')
+
         }
 		const targetStringVS = document.getElementById("stringVS");
 		targetStringVS.style.display = "none";
