@@ -178,7 +178,7 @@ export default function RoomList() {
                       className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-5xl"
                     >
                       <td className="py-1 px-1 text-center font-bold">
-                        {room.sessionId}
+                        {room.roomId}
                       </td>
                       <td className="py-1 px-1 text-center font-bold">
                         {room.mode}
