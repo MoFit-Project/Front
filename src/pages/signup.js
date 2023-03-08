@@ -45,13 +45,13 @@ export default function SignupForm() {
             <title>MOFIT 회원가입</title>
                 <Background>
             <div className="max-w-md mt-10 w-full login-modal">
-                <h1 className="text-6xl font-bold text-center text-blue-800">회원가입</h1>
-                <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+                <h1 className="text-8xl font-bold text-center text-blue-800">회원가입</h1>
+                <form className="rounded px-26 pt-9 pb-24 mb-4" onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <input
                             type="text"
                             id="id"
-                            className="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="text-4xl appearance-none border rounded w-full py-7 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="아이디"
                             value={id}
                             onChange={(event) => setId(event.target.value)}
@@ -61,7 +61,7 @@ export default function SignupForm() {
                         <input
                             type="password"
                             id="password"
-                            className="appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="text-4xl appearance-none border rounded w-full py-7 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="비밀번호"
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
@@ -70,9 +70,10 @@ export default function SignupForm() {
                     {isSignUpFail && (
                         <span className="text-red-600 text-sm">아이디와 비밀번호를 입력해주세요.</span>
                     )}
-                    <div className="text-center">
+                    <div className="text-center text-13xl">
                         < button
-                            className=" w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            className=" w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline
+                            "
                             type="submit"
                         >
                             가입하기
@@ -82,7 +83,7 @@ export default function SignupForm() {
                     </div>
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/login"} legacyBehavior>
-                            <a className="inline-block align-baseline font-bold text-lg text-black-500">
+                            <a className="inline-block align-baseline font-bold mt-5 text-4xl text-black-500">
                                 로그인으로 돌아가기
                             </a>
                         </Link>
@@ -109,8 +110,11 @@ export default function SignupForm() {
                 background-color: #0014FF;
                 transition: all 0.1s;
                 border-bottom: 5px solid #050141;
-                font-size: 18px;
+                font-size: 45px;
               }
+              input {
+                font-family: sans-serif;
+            }
             `}</style>
         </div>
     );

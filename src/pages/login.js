@@ -82,11 +82,11 @@ export default function Login() {
             <title>MOFIT 로그인</title>
                 <Background>
             <div className="max-w-md mt-10 w-full login-modal">
-                <h1 className="text-8xl font-bold text-center text-blue-800">MOFIT</h1>
-                <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                    <div className="mb-3">
+                <h1 className="mb-1 text-9xl font-bold text-center text-blue-800">MOFIT</h1>
+                <form className="rounded px-26 pt-6 pb-28 mb-2 login-form" onSubmit={handleSubmit}>
+                    <div className="mb-2">
                         <input
-                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-7 px-3 text-4xl text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             username="username"
                             type="text"
                             value={username}
@@ -96,7 +96,7 @@ export default function Login() {
                     </div>
                     <div className="mb-6">
                         <input
-                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-7 px-3 text-4xl text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             username="password"
                             type="password"
                             value={password}
@@ -111,7 +111,7 @@ export default function Login() {
                     {/* <SignupButton /> */}
                     <div className="flex justify-end mt-4 mb-4">
                         <Link href={"/signup"} legacyBehavior>
-                            <a className="inline-block align-baseline font-bold text-lg text-black-500">
+                            <a className="inline-block align-baseline font-bold mt-5 text-5xl text-black-500">
                                 회원가입
                             </a>
                         </Link>
@@ -120,13 +120,22 @@ export default function Login() {
             </div>
             </Background>
             <style jsx>{`
-            
+
+
+
             .login-modal{
               position: relative;
               top: -100px;
-              width: 500px;
+              width: 600px;
             
             }
+             
+            input {
+                font-family: sans-serif;
+            }
+            
+            
+            
 
             `}
             </style>

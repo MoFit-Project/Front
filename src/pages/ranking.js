@@ -50,7 +50,7 @@ export default function Ranking() {
               {isSingle ? "싱글 랭킹" : "멀티 랭킹"}
             </button>
           </div>
-          {isSingle ? <MultiRanking/> : <SingleRanking/>}
+          {isSingle ? <SingleRanking/> : <MultiRanking/>}
         </div>
       </div>
       </LayoutAuthenticated>
@@ -126,7 +126,7 @@ export default function Ranking() {
           color: white;
           text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
           font-size: 20px;
-          height: 50px
+          height: 50px;
           
         }
         // .btn-1 {
