@@ -206,7 +206,7 @@ export default function OvVideo({
 						) {
 							jumpingJack = true;
 							console.log("Jumping Jacks detected!");
-							// if (session) sendSignalJumpingJacks(session);
+							if (session) sendSignalJumpingJacks(session);
 							// console.log(jumpingJack);
 						} else if (
 							leftShoulderAngle < 30 &&

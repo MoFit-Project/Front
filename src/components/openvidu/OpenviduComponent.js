@@ -280,13 +280,13 @@ export default function OpenViduComponent({
             });
 
             // On every asynchronous exception...
-            mySession.on("signal:throw", (event) => {
+            mySession.on("signal:jumpingJacks", (event) => {
                 if (event.data === localStorage.getItem("username")) {
                     // alert("I throw !!!");
                     isLeftPlayerThrow = true;
                     mySquart += 1;
                     console.log("my count : " + mySquart);
-                    setIsIWinning("Squat !!!");
+                    setIsIWinning("Junping");
                     setTimeout(function () {
                         isLeftPlayerThrow = false;
                         setIsIWinning("");
@@ -295,7 +295,7 @@ export default function OpenViduComponent({
                     isRightPlayerThrow = true;
                     heSquart += 1;
                     console.log("he count : " + heSquart);
-                    setIsRWinning("Squat !!!")
+                    setIsRWinning("Junping")
                     setTimeout(function () {
                         isRightPlayerThrow = false;
                         setIsRWinning("")
@@ -310,7 +310,7 @@ export default function OpenViduComponent({
                 // }
             });
 
-            mySession.on("signal:jumpingJacks", (event) => {
+            mySession.on("signal:throw", (event) => {
                 if (event.data === localStorage.getItem("username")) {
                     //   console.log("my character jumping jacks !!!");
                     isLeftPlayerMoveGuildLine = true;
@@ -349,8 +349,8 @@ export default function OpenViduComponent({
       			targetBtnReady.style.display = "none";
 	  			const targetBtnStart = document.getElementById("buttonGameStart");
       			targetBtnStart.style.display = "none";
-				// const targetBtnLeave = document.getElementById("buttonLeaveRoom");
-				// targetBtnLeave.style.display = "none";
+				const targetBtnLeave = document.getElementById("buttonLeaveRoom");
+				targetBtnLeave.style.display = "none";
 
                 const targetStringRoomTitle = document.getElementById("room-title");
 				targetStringRoomTitle.style.display = "none";

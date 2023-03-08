@@ -45,12 +45,12 @@ export default function GameRoom() {
             <div className='curtain'>
 
                 {roomGameModeName === '스쿼트' && roomGameModeName ? 
-                <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
-                    setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
-                </OpenViduComponent> : 
                 <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
+                    setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
+                </OpenViduComponent2> : 
+                <OpenViduComponent roomName={roomName} userName={username} jwtToken={token}
                 setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
-                </OpenViduComponent2>}
+                </OpenViduComponent>}
                 {/* <OpenViduComponent2 roomName={roomName} userName={username} jwtToken={token}
                     setIsMovenetLoaded={setIsMovenetLoaded} setIsOpenViduLoaded={setIsOpenViduLoaded}>
                 </OpenViduComponent2> */}
