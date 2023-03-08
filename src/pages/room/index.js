@@ -17,6 +17,14 @@ import Loading from "../../components/Loading"
 
 
 export default function RoomList() {
+  useEffect(() => {
+    const key = localStorage.getItem("refresh");
+    if (key === '1') {
+      window.location.reload()
+      localStorage.setItem("refresh", '0');
+    }
+
+  }, []);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const roomHostContext = createContext({ roomName: "", isHost: false });
   const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);

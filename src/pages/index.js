@@ -2,17 +2,28 @@ import Background from "../components/backgrounds/SelectBackground";
 import LayoutAuthenticated from "../components/LayoutAuthticated";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
+import Head from "next/head";
+import {useEffect} from "react";
 
 export default function Home() {
+    useEffect(() => {
+        const key = localStorage.getItem("refresh");
+        if (key === '1') {
+            window.location.reload()
+            localStorage.setItem("refresh", '0');
+        }
 
+    }, []);
     return (
         <LayoutAuthenticated>
             <Navbar>
             
-            <title>
-                MOFIT 모드 선택
-            </title>
+
             <div className="flex justify-center items-center">
+                <Head>
+                    <title>MOFIT 모드 선택</title>
+                    <link rel="icon" href="/mofit.ico" />
+                </Head>
                 <Background>
                     <div className= "select-modal">
                         <div className="text-center">

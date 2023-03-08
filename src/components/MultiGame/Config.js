@@ -46,9 +46,11 @@ export default class Main extends Phaser.Scene {
     player2Number1;
     timeBar;
     timeText;
-    playerFire;
 
     playerBackground;
+    phaserStart = 0;
+    guideText;
+    circle;
 
     constructor() {
         super();
@@ -123,6 +125,7 @@ export default class Main extends Phaser.Scene {
         this.load.image('backGround_Gameboy', '../assets/gameboy.png')
         this.load.image('backgroundCityImage', '../assets/backgroundCity.png')
         this.load.image('ground', '../assets/ground.webp')
+        this.load.image('circle', '../assets/circle.png')
         this.load.audio('punch', ['../assets/sound/punch.mp3'])
         this.load.audio('fight', ['../assets/sound/fightBGM.mp3'])
         this.load.audio('wait', ['../assets/sound/waitBGM.mp3'])
@@ -135,6 +138,7 @@ export default class Main extends Phaser.Scene {
 
 
     create() {
+
         this.playerBackground = this.add.graphics();
 
         this.timeBar = this.add.graphics().setDepth(1).setVisible(false);
@@ -149,12 +153,12 @@ export default class Main extends Phaser.Scene {
         // this.timeText.visible = false;
 
 
-        this.punchSound = this.sound.add('punch');
+        this.punchSound = this.sound.add('punch').setVolume(5);
         this.fightBgm = this.sound.add('fight');
         this.waitBgm = this.sound.add('wait');
-        this.bee = this.sound.add('bee');
-        this.ding = this.sound.add('ding');
-        this.start = this.sound.add('start');
+        this.bee = this.sound.add('bee').setVolume(5);
+        this.ding = this.sound.add('ding').setVolume(5);
+        this.start = this.sound.add('start').setVolume(10);
 
         this.waitBgm.play();
 
@@ -276,6 +280,13 @@ export default class Main extends Phaser.Scene {
             .setVisible(true)
             .setDepth(1);
         this.noDisplay.anims.play('beforeStart')
+        this.circle = this.add.image(1250, 420, 'circle').setScale(1).setDepth(1)
+        this.guideText = this.add
+            .text(600, 230,
+                "버튼을 클릭하거나,\n\n머리 위로 동그라미를\n\n만드세요.",
+                {color: "#000000", fontSize: "60px", fontFamily: 'dalmoori'}
+            )
+            .setDepth(1)
 
 
         this.number = this.add.sprite(950, 500, 'numbers').setVisible(false).setDepth(1);
@@ -291,6 +302,7 @@ export default class Main extends Phaser.Scene {
         this.player2Number10 = this.add.sprite(1160, 300, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.player2Number100 = this.add.sprite(this.player2Number10.x - 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
         this.player2Number1 = this.add.sprite(this.player2Number10.x + 90, this.player2Number10.y, 'numbers').setScale(1).setOrigin(0.5, 0.5);
+        localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
 
 
     }
@@ -393,6 +405,8 @@ export default class Main extends Phaser.Scene {
 
         // 게임 시작 신호를 받았을 때
         if (isPhaserGameStart && this.gameHasNotStarted) {
+            this.circle.destroy();
+            this.guideText.destroy();
             this.gameHasNotStarted = false;
             this.timeBar.visible = true;
             this.timeText.visible = true;
@@ -442,6 +456,9 @@ export default class Main extends Phaser.Scene {
 
     countDown() {
         if (this.countdown === 0) {
+            this.phaserStart = 1;
+            localStorage.setItem("phaserStart", JSON.stringify(this.phaserStart));
+
             this.start.play();
             this.number.visible = false;
             this.player1InputTime = 0;

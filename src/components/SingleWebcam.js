@@ -6,6 +6,7 @@ import {
 } from "../../public/detector.js";
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import {
+    motionStart,
     squatDetect,
     jumpingJackDetect,
     windMillDetect,
@@ -27,6 +28,7 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
     const [scores, setScores] = useState(0);
 
     const animeIdRef = useRef(null);
+    let isStart = false;
     let isSquat = false;
     let isJumpingJack = false;
     let isWindMill = false;
@@ -118,10 +120,14 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
 
                 const pose = await movenetDetector.current.estimatePoses(video);
 
-                console.log("localStorage gameState : " + JSON.parse(localStorage.getItem('gameState')));
-                console.log("localStorage time : " + JSON.parse(localStorage.getItem('recordTime')));
 
                 if (pose && pose.length > 0) {
+                    // 스쿼트
+                    isStart = motionStart(pose);
+                    if (isStart && (JSON.parse(localStorage.getItem('gameState')) === 5)) {
+                        // console.log("squat" + singleGameMovenetInput);
+                        singleGameMovenetInput += 1;
+                    }
                     // 스쿼트
                     isSquat = squatDetect(pose);
                     if (isSquat && (JSON.parse(localStorage.getItem('gameState')) === 2)) {
@@ -141,10 +147,10 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
                         singleGameMovenetInput += 1;
                     }
                     // 달리기
+                    console.log((JSON.parse(localStorage.getItem('gameState'))))
                     const isRun = sprint(pose);
                     // console.log(isRun);
-                    if ((JSON.parse(localStorage.getItem('gameState')) === 1 ||
-                     JSON.parse(localStorage.getItem('gameState')) === 5) && ( isRun != lastlyIsRun )) {
+                    if ((JSON.parse(localStorage.getItem('gameState')) === 1) && ( isRun != lastlyIsRun )) {
                         if (isRun === 1) {
                             singleGameMovenetInput += 1;
                             // console.log("runL : ");

@@ -162,3 +162,50 @@ export function windMillDetect(pose) {
 
     return returnWindMill;
 }
+
+let circleStart = false;
+export function motionStart(pose) {
+    // 만세
+    if (
+        pose[0].keypoints[10] &&
+        pose[0].keypoints[8] &&
+        pose[0].keypoints[6] &&
+        pose[0].keypoints[12] &&
+        pose[0].keypoints[9] &&
+        pose[0].keypoints[7] &&
+        pose[0].keypoints[5] &&
+        pose[0].keypoints[11] 
+    ) {
+        const rightArmAngle = calculateAngle(
+            pose[0].keypoints[10],
+            pose[0].keypoints[8],
+            pose[0].keypoints[6]
+        );
+        const leftArmAngle = calculateAngle(
+            pose[0].keypoints[9],
+            pose[0].keypoints[7],
+            pose[0].keypoints[5]
+        );
+        const leftShoulderAngle = calculateAngle(
+            pose[0].keypoints[11],
+            pose[0].keypoints[5],
+            pose[0].keypoints[7]
+        );
+        const rightShoulderAngle = calculateAngle(
+            pose[0].keypoints[12],
+            pose[0].keypoints[6],
+            pose[0].keypoints[8]
+        );
+        
+        if (
+            circleStart === false &&
+            leftArmAngle > 240 &&
+            rightArmAngle < 120 &&
+            leftShoulderAngle < 240 && 
+            rightShoulderAngle > 120
+        ) {
+            circleStart = true;
+        } 
+    }
+    return circleStart;
+}

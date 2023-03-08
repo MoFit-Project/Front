@@ -80,6 +80,10 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
+    useEffect(() => {
+        localStorage.setItem("refresh", "1");
+        localStorage.setItem("readyToStart", "notReady");
+    }, []);
 
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -144,6 +148,8 @@ export default function OpenViduComponent({
     const [isIWinning, setIsIWinning] = useState("");
     const [isRWinning, setIsRWinning] = useState("");
 
+    const [isMotionStart, setIsMotionStart] = useState(false);
+
   let isClicked = false;
   let isAllReady = false;
   let isRoomOutBtnClicked = false
@@ -158,9 +164,12 @@ export default function OpenViduComponent({
         if (myInRoomState === 1) {
             const targetBtn = document.getElementById("buttonGameReady");
             targetBtn.style.display = "none";
+            localStorage.setItem('host', 'true')
         } else if (myInRoomState === 2) {
             const targetBtn = document.getElementById("buttonGameStart");
             targetBtn.style.display = "none";
+            localStorage.setItem('host', 'false')
+
         }
 		const targetStringVS = document.getElementById("stringVS");
 		targetStringVS.style.display = "none";
@@ -188,6 +197,19 @@ export default function OpenViduComponent({
 			leaveSession();
 		}
 	}, [isModalClose]);
+
+    useEffect(() => {
+        if (isMotionStart) {
+            if (myInRoomState === 1) {
+                console.log("@@@@@@@@@@@@@@@@@  start !!!  " + isMotionStart);
+                gameStart();
+            } else if (myInRoomState === 2) {
+                console.log("@@@@@@@@@@@@@@@@@  ready !!!  " + isMotionStart);
+                gameReady();
+            }
+        }
+        setIsMotionStart(false);
+    }, [isMotionStart]);
 
     const onbeforeunload = (event) => {
         leaveSession();
@@ -331,13 +353,14 @@ export default function OpenViduComponent({
                 // 추후 삭제 예정
                 // alert("방장이 방나감");
                 console.log(event.from);
-                sendSurverLeaveSession();
                 leaveSession();
 
-                Swal.fire({
-                    title: '방장이 나갔습니다',
-                    icon: 'warning',
-                });
+                if (myInRoomState === 2) {
+                    Swal.fire({
+                        title: '방장이 나갔습니다',
+                        icon: 'warning',
+                    });
+                }
             });
 
             mySession.on("start", (event) => {
@@ -382,6 +405,7 @@ export default function OpenViduComponent({
       		mySession.on("signal:otherPlayerReady", (event) => {
 				isAllReady = true;
 				isOtherPlayerReady = true;
+                localStorage.setItem("readyToStart", "ready");
 				// setRightUserName(event.data);
 				console.log("PlayerReady !!!" + rightUserName);
 
@@ -401,7 +425,7 @@ export default function OpenViduComponent({
                         let publisher = await OV.initPublisherAsync(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
-                            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
                             resolution: "445x800", // 비율 정하기 The resolution of your video
                             frameRate: 30, // The frame rate of your video
@@ -612,6 +636,7 @@ export default function OpenViduComponent({
                         setIsOpenViduLoaded={setIsOpenViduLoaded}
                         setIsMovenetLoaded={setIsMovenetLoaded}
 						isMoveNetStart={isMoveNetStart}
+                        setIsMotionStart={setIsMotionStart}
                     />
                     </div>
                 ) : (

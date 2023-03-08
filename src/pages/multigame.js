@@ -9,10 +9,13 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 const Home = () => {
+
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+
         setLoading(true);
+
     }, []);
 
     return (
