@@ -41,6 +41,7 @@ export default class Main3 extends Phaser.Scene {
     singleBGM;
     ding;
     diriring;
+    goodText;
 
     constructor() {
         super();
@@ -225,6 +226,13 @@ export default class Main3 extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setVisible(false);
 
+        this.goodText = this.add.text(1300, 350, "GOOD!",
+            {color: "#0000FF", fontSize: "120px", fontFamily: 'dalmoori'})
+            .setDepth(1)
+            .setOrigin(0.5, 0.5)
+            .setVisible(false);
+
+
         this.jumpingJack.anims.play('jumpingJackGuide')
         this.squat.anims.play('squatGuide')
         this.run.anims.play('runGuide')
@@ -242,9 +250,9 @@ export default class Main3 extends Phaser.Scene {
             this.startTime = time;
             this.saveStartTime = true;
         }
-
-        // cursors.space.isDown
-        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
+        // this.singleGameMovenetInputTempSave != singleGameMovenetInput
+        //
+        if (cursors.space.isDown && this.gameState > 0) {
             this.singleGameMovenetInputTempSave = singleGameMovenetInput;
             if (this.gameState === 1) {
                 this.inputCount.push(time);
@@ -261,6 +269,15 @@ export default class Main3 extends Phaser.Scene {
                 this.exerciseText.setText(`스쿼트! X ${this.stage2Exercise}`)
                 if(this.stage2Exercise < 1) {
                     this.diriring.play();
+                    this.goodText.setVisible(true)
+                    this.tweens.add({
+                        targets: this.goodText,
+                        duration: 1500,
+                        scale : 3,// 애니메이션 지속 시간
+                        alpha : 0,
+                        repeat: 0,
+                        // onComplete:,
+                    });
                     this.squat.setVisible(false);
                     this.state = 3
                     this.gameState = 1
@@ -275,6 +292,15 @@ export default class Main3 extends Phaser.Scene {
                 this.exerciseText.setText(`점핑잭! X ${this.stage3Exercise}`)
                 if(this.stage3Exercise < 1) {
                     this.diriring.play();
+                    this.goodText.setVisible(true)
+                    this.tweens.add({
+                        targets: this.goodText,
+                        duration: 1500,
+                        scale : 3,// 애니메이션 지속 시간
+                        alpha : 0,
+                        repeat: 0,
+                        // onComplete:,
+                    });
                     this.jumpingJack.setVisible(false);
                     this.state = 4
                     this.gameState = 1
@@ -344,6 +370,7 @@ export default class Main3 extends Phaser.Scene {
 
 
         } else if (this.state === 3 && this.runCount > 2000) {
+            this.goodText.setVisible(false).setAlpha(1).setScale(1);
             this.gameState = 0;
             this.runCount = 0;
             this.inputCount = [];

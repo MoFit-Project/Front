@@ -118,8 +118,6 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
 
                 const pose = await movenetDetector.current.estimatePoses(video);
 
-                console.log("localStorage gameState : " + JSON.parse(localStorage.getItem('gameState')));
-                console.log("localStorage time : " + JSON.parse(localStorage.getItem('recordTime')));
 
                 if (pose && pose.length > 0) {
                     // 스쿼트

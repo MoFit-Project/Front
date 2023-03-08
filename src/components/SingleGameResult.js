@@ -10,11 +10,11 @@ export default function Result(props) {
   const handleClick = async () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const assessToken = Cookies.get("token");
-    console.log("@@@@@@@@@@@" + props.scores);
+    console.log("@@@@@@@@@@@" + props.scores.toString());
     try {
       const response = await axios.post(API_URL + '/result/single', {
         userId: `${localStorage.getItem("username")}`,
-        score: props.scores
+        score: props.scores.toString()
       },
       {
         headers: { Authorization: `Bearer ${assessToken}` }
