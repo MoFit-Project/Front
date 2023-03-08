@@ -19,11 +19,6 @@ export default function NavBar({ children }) {
                   모드선택
                 </a>
               </Link>
-              <Link href={'/mypage'} legacyBehavior>
-                <a className="mt-0 inline-block text-teal-200 hover:text-white mr-14">
-                  마이페이지
-                </a>
-              </Link>
               <Link href={'/ranking'} legacyBehavior>
                 <a className="mt-0 inline-block text-teal-200 hover:text-white mr-14">
                   랭킹
