@@ -96,7 +96,7 @@ export default class Main3 extends Phaser.Scene {
         this.load.image('2', '../assets/singlegame/bg/2.png')
         this.load.image('3', '../assets/singlegame/bg/3.png')
         this.load.image('4', '../assets/singlegame/bg/4.png')
-        this.load.image('5', '../assets/singlegame/bg/5.png')
+
 
         this.load.spritesheet(
             "numbers",
@@ -251,8 +251,8 @@ export default class Main3 extends Phaser.Scene {
             this.saveStartTime = true;
         }
         // this.singleGameMovenetInputTempSave != singleGameMovenetInput
-        //
-        if (cursors.space.isDown && this.gameState > 0) {
+        // cursors.space.isDown
+        if (this.singleGameMovenetInputTempSave != singleGameMovenetInput && this.gameState > 0) {
             this.singleGameMovenetInputTempSave = singleGameMovenetInput;
             if (this.gameState === 1) {
                 this.inputCount.push(time);

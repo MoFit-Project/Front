@@ -202,6 +202,7 @@ export default function OpenViduComponent({
                 gameReady();
             }
         }
+        setIsMotionStart(false);
     }, [isMotionStart]);
 
     const onbeforeunload = (event) => {
@@ -349,10 +350,13 @@ export default function OpenViduComponent({
                 sendSurverLeaveSession();
                 leaveSession();
 
-                Swal.fire({
-                    title: '방장이 나갔습니다',
-                    icon: 'warning',
-                });
+                if (myInRoomState === 2) {
+                    Swal.fire({
+                        title: '방장이 나갔습니다',
+                        icon: 'warning',
+                    });
+                }
+                
             });
 
             mySession.on("start", (event) => {
@@ -419,7 +423,7 @@ export default function OpenViduComponent({
                         let publisher = await OV.initPublisherAsync(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
-                            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
                             resolution: "445x800", // 비율 정하기 The resolution of your video
                             frameRate: 30, // The frame rate of your video

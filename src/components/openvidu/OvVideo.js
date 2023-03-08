@@ -131,7 +131,8 @@ export default function OvVideo({
 
 					// 스쿼트
 					if (
-						(leftHip &&
+						(   (JSON.parse(localStorage.getItem('phaserStart')) === 'true') &&
+							leftHip &&
 							rightHip &&
 							leftKnee &&
 							rightKnee &&
@@ -167,7 +168,7 @@ export default function OvVideo({
 					}
 
 					// 점핑 잭
-					if (
+					if (   (JSON.parse(localStorage.getItem('phaserStart')) === 'true') &&
 						pose[0].keypoints[11] &&
 						pose[0].keypoints[5] &&
 						pose[0].keypoints[7] &&
@@ -298,14 +299,14 @@ export default function OvVideo({
 							pose[0].keypoints[8]
 						);
 						
-						if (
-							circleStart === false &&
+						if ( (JSON.parse(localStorage.getItem('phaserStart')) === 'false') && 
 							leftArmAngle > 240 &&
 							rightArmAngle < 120 &&
 							leftShoulderAngle < 240 && 
 							rightShoulderAngle > 120
 						) {
-							circleStart = true;
+							
+							
 							// setIsMotionStart(true);
 							// isMotionStart = true;
 							setIsMotionStart(true);
@@ -317,6 +318,7 @@ export default function OvVideo({
 						// console.log("right Arm   " + rightArmAngle);
 						// console.log(circleStart);
 						// console.log("@@@@@@@@@@@@@@@@@   " + isMotionStart);
+						console.log("@@@@@@@@@@@@@@@@@@@@@@@" + JSON.parse(localStorage.getItem('phaserStart')));
 					}
 				}
 			} catch (e) {
