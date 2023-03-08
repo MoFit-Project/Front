@@ -131,7 +131,7 @@ export default function OvVideo({
 
 					// 스쿼트
 					if (
-						(   (JSON.parse(localStorage.getItem('phaserStart')) === 'true') &&
+						( 
 							leftHip &&
 							rightHip &&
 							leftKnee &&
@@ -153,12 +153,14 @@ export default function OvVideo({
 							rightKnee,
 							rightAnkle
 						);
-
+							
 						// Detect squat by checking if the average knee angle is below 90 degrees.
 						if (leftHipAngle < 120 && rightHipAngle < 120) {
-							if (session && !isICurrSquartState) {
-								console.log("squat");
-								sendSignalThrow(session);
+							if ((JSON.parse(localStorage.getItem('phaserStart')) === 1)) {
+								if (session && !isICurrSquartState) {
+									console.log("squat");
+									sendSignalThrow(session);
+								}
 							}
 							isICurrSquartState = true;
 						}
@@ -168,7 +170,7 @@ export default function OvVideo({
 					}
 
 					// 점핑 잭
-					if (   (JSON.parse(localStorage.getItem('phaserStart')) === 'true') &&
+					if (
 						pose[0].keypoints[11] &&
 						pose[0].keypoints[5] &&
 						pose[0].keypoints[7] &&
@@ -217,7 +219,11 @@ export default function OvVideo({
 						) {
 							jumpingJack = true;
 							console.log("Jumping Jacks detected!");
-							if (session) sendSignalJumpingJacks(session);
+							if ((JSON.parse(localStorage.getItem('phaserStart')) === 1)) {
+								if (session) {
+									sendSignalJumpingJacks(session);
+								}
+							}
 							// console.log(jumpingJack);
 						} else if (
 							leftShoulderAngle < 30 &&
@@ -299,17 +305,18 @@ export default function OvVideo({
 							pose[0].keypoints[8]
 						);
 						
-						if ( (JSON.parse(localStorage.getItem('phaserStart')) === 'false') && 
-							leftArmAngle > 240 &&
+						if (leftArmAngle > 240 &&
 							rightArmAngle < 120 &&
 							leftShoulderAngle < 240 && 
 							rightShoulderAngle > 120
 						) {
 							
-							
+							if((JSON.parse(localStorage.getItem('phaserStart')) === 0)){
+								setIsMotionStart(true);
+							}
 							// setIsMotionStart(true);
 							// isMotionStart = true;
-							setIsMotionStart(true);
+							
 							// console.log("TRUETRUETRUETRUETRUE   " + isMotionStart);
 						} 
 						// console.log("left Shoulder   " + leftShoulderAngle);
@@ -318,7 +325,7 @@ export default function OvVideo({
 						// console.log("right Arm   " + rightArmAngle);
 						// console.log(circleStart);
 						// console.log("@@@@@@@@@@@@@@@@@   " + isMotionStart);
-						console.log("@@@@@@@@@@@@@@@@@@@@@@@" + JSON.parse(localStorage.getItem('phaserStart')));
+						console.log("@@@@@@111111111@@@@@@" + JSON.parse(localStorage.getItem('phaserStart')));
 					}
 				}
 			} catch (e) {

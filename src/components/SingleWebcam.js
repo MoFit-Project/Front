@@ -125,7 +125,7 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
                     // 스쿼트
                     isStart = motionStart(pose);
                     if (isStart && (JSON.parse(localStorage.getItem('gameState')) === 5)) {
-                        console.log("squat" + singleGameMovenetInput);
+                        // console.log("squat" + singleGameMovenetInput);
                         singleGameMovenetInput += 1;
                     }
                     // 스쿼트
@@ -147,6 +147,7 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
                         singleGameMovenetInput += 1;
                     }
                     // 달리기
+                    console.log((JSON.parse(localStorage.getItem('gameState'))))
                     const isRun = sprint(pose);
                     // console.log(isRun);
                     if ((JSON.parse(localStorage.getItem('gameState')) === 1) && ( isRun != lastlyIsRun )) {
