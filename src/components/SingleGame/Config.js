@@ -115,10 +115,10 @@ export default class Main3 extends Phaser.Scene {
     }
 
     create() {
-        this.bee = this.sound.add('bee').setVolume(2);
-        this.start = this.sound.add('start').setVolume(3);
-        this.ding = this.sound.add('ding').setVolume(2);
-        this.diriring = this.sound.add('diriring').setVolume(2);
+        this.bee = this.sound.add('bee').setVolume(5);
+        this.start = this.sound.add('start').setVolume(10);
+        this.ding = this.sound.add('ding').setVolume(5);
+        this.diriring = this.sound.add('diriring').setVolume(5);
 
         this.bg = this.add.image(700, 0, 'bg').setOrigin(0, 0).setScale(1.55, 2).setDepth(1)
 
@@ -392,7 +392,7 @@ export default class Main3 extends Phaser.Scene {
             this.dust.visible = false;
             this.tweens.add({
                 targets: this.dogHouse,
-                duration: 1000, // 애니메이션 지속 시간
+                duration: 500, // 애니메이션 지속 시간
                 alpha: 1,
                 repeat: 0,
                 onComplete: this.gameEnds()

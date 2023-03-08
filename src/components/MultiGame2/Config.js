@@ -138,11 +138,11 @@ export default class Main2 extends Phaser.Scene {
         this.timeText.visible = false;
 
 
-        this.bee = this.sound.add('bee').setVolume(2);
-        this.ding = this.sound.add('ding').setVolume(2);
+        this.bee = this.sound.add('bee').setVolume(5);
+        this.ding = this.sound.add('ding').setVolume(5);
         this.inGameBgm = this.sound.add('inGameBgm')
         this.waitBgm2 = this.sound.add('waitBgm2')
-        this.start = this.sound.add('start').setVolume(2);
+        this.start = this.sound.add('start').setVolume(10);
         this.waitBgm2.play();
 
         this.sky = this.add.tileSprite(950, 230, 250, 140, '1_game_background')
