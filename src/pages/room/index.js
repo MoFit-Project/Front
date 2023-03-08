@@ -165,34 +165,34 @@ export default function RoomList() {
               <table className="w-full" style={{ overflow: 'auto' }} >
                 <thead>
                   <tr className="text-white text-6xl">
-                    <th className="w-2/4 py-2 px-4">방 제목</th>
-                    <th className="w-1/4 py-2 px-4">모드</th>
-                    <th className="w-1/4 py-2 px-4">상태</th>
-                    <th className="w-1/4 py-2 px-4"></th>
+                    <th className="w-3/12 py-2 px-4">방 제목</th>
+                    <th className="w-3/12 py-2 px-4">모드</th>
+                    <th className="w-3/12 py-2 px-4">인원</th>
+                    <th className="w-2/12 py-2 px-4"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {roomList?.map((room) => (
                     <tr
                       key={room.roomId}
-                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-3xl"
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-5xl"
                     >
-                      <td className="py-2 px-4 text-center font-bold">
+                      <td className="py-1 px-1 text-center font-bold">
                         {room.roomId}
                       </td>
-                      <td className="py-2 px-4 text-center font-bold">
+                      <td className="py-1 px-1 text-center font-bold">
                         {room.mode}
                       </td>
-                      <td className="py-2 px-4 text-center font-bold">
+                      <td className="py-1 px-1 text-center font-bold">
                         {room.participant}/2
                       </td>
-                      <td className="py-2 px-4">
+                      <td className="py-3 px-3 text-32xl">
                         {room.status === "START" || room.participant === 2 ? (
-                          <button className="text-white font-bold py-2 px-4 rounded-md mx-auto block bg-slate-400 w-24 " disabled>
+                          <button className="text-white font-bold py-3 px-4 rounded-md mx-auto block bg-slate-400 w-22 " disabled>
                             {room.status === "START" ? "게임 중" : "가득 참"}
                           </button>
                         ) : (
-                          <button className="text-white font-bold py-2 px-4 rounded-md mx-auto btn-1 block w-24 " onClick={() => { handleRoomEnter(room.roomId); }}>
+                          <button className="text-white font-bold py-4 px-4 rounded-md mx-auto btn-1 block w-22 " onClick={() => { handleRoomEnter(room.roomId); }}>
                             참여하기
                           </button>
                         )}
@@ -243,7 +243,7 @@ export default function RoomList() {
         }
         .tb-container {
           margin: 0px auto;
-          width: 1260px;
+          width: 1500px;
           height: 960px;
         }
 

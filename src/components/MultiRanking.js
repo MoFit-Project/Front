@@ -134,7 +134,7 @@ export default function Ranking() {
           text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
           font-size: 45px;
           height: 60px
-          
+          font-family: sans-serif;
         }
         // .btn-1 {
         //   background: linear-gradient(0deg,
