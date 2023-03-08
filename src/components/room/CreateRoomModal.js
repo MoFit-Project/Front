@@ -185,7 +185,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 						<select className="mode-selector" value={gameMode} onChange={handleGameModeChange}>
 							<option value="default">모드 선택</option>
 							<option value="스쿼트">스쿼트</option>
-							<option value="푸쉬업">푸쉬업</option>
+							<option value="점핑잭">점핑잭</option>
 						</select>
 					</label>
 				</div>

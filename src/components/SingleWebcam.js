@@ -38,6 +38,7 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
 
     useEffect(() => {
 		if (isModalClose) {
+            setIsCompleteModalOpen(false);
             console.log("끝남 @@@@@@@@@@@@@@");
 			router.push("/");
 		}
