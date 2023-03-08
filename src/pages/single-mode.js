@@ -9,7 +9,7 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 export default function SingleMode() {
-
+    localStorage.setItem("refresh", "1");
     const [isLoad, setIsLoad] = useState(true);
     const [startDetect, setStartDetect] = useState(false);
     return (

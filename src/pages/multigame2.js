@@ -9,6 +9,8 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 const Home = () => {
+    localStorage.setItem("refresh", "1");
+    
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
