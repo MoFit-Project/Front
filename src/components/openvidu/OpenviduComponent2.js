@@ -165,6 +165,9 @@ export default function OpenViduComponent({
             const targetBtn = document.getElementById("buttonGameReady");
             targetBtn.style.display = "none";
             localStorage.setItem('host', 'true')
+
+            const targetBtnS = document.getElementById("buttonGameStart");
+            targetBtnS.style.backgroundColor = "gray";
         } else if (myInRoomState === 2) {
             const targetBtn = document.getElementById("buttonGameStart");
             targetBtn.style.display = "none";
@@ -409,8 +412,12 @@ export default function OpenViduComponent({
 				// setRightUserName(event.data);
 				console.log("PlayerReady !!!" + rightUserName);
 
-				const targetBtnStart = document.getElementById("buttonGameStart");
-				targetBtnStart.style.display = "block";
+				// const targetBtnStart = document.getElementById("buttonGameStart");
+				// targetBtnStart.style.display = "block";
+                const targetBtnS = document.getElementById("buttonGameStart");
+                targetBtnS.style.backgroundColor = "red";
+                const targetBtnR = document.getElementById("buttonGameReady");
+                targetBtnR.style.backgroundColor = "green";
 			});
 
             // On every asynchronous exception...
@@ -767,7 +774,7 @@ export default function OpenViduComponent({
 					// border: 3px solid black;
 				}
 				.buttonGameStart {
-					background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+					// background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
 					font-size: 120px;
 					color: white;
 					width: 300px;
@@ -783,67 +790,67 @@ export default function OpenViduComponent({
 					  width: 100%;
 					  height: 100%;
 					}
-					.buttonGameStart:before,
-					.buttonGameStart:after {
-					  position: absolute;
-					  content: "";
-					  right: 0;
-					  bottom: 0;
-					  background: rgba(54, 142, 6, 1);
-					  box-shadow:
-					   -7px -7px 20px 0px rgba(255,255,255,.9),
-					   -4px -4px 5px 0px rgba(255,255,255,.9),
-					   7px 7px 20px 0px rgba(0,0,0,.2),
-					   4px 4px 5px 0px rgba(0,0,0,.3);
-					  transition: all 0.3s ease;
-					}
-					.buttonGameStart:before{
-					   height: 0%;
-					   width: 2px;
-					}
-					.buttonGameStart:after {
-					  width: 0%;
-					  height: 2px;
-					}
-					.buttonGameStart:hover{
-					  color: rgba(54, 142, 6, 1);
-					//   background: transparent;
-                        background: white;
-					}
-					.buttonGameStart:hover:before {
-					  height: 100%;
-					}
-					.buttonGameStart:hover:after {
-					  width: 100%;
-					}
-					.buttonGameStart span:before,
-					.buttonGameStart span:after {
-					  position: absolute;
-					  content: "";
-					  left: 0;
-					  top: 0;
-					  background: rgba(54, 142, 6, 1);
-					  box-shadow:
-					   -7px -7px 20px 0px rgba(255,255,255,.9),
-					   -4px -4px 5px 0px rgba(255,255,255,.9),
-					   7px 7px 20px 0px rgba(0,0,0,.2),
-					   4px 4px 5px 0px rgba(0,0,0,.3);
-					  transition: all 0.3s ease;
-					}
-					.buttonGameStart span:before {
-					  width: 2px;
-					  height: 0%;
-					}
-					.buttonGameStart span:after {
-					  height: 2px;
-					  width: 0%;
-					}
-					.buttonGameStart span:hover:before {
-					  height: 100%;
-					}
-					.buttonGameStart span:hover:after {
-					  width: 100%;
-					}
+					// .buttonGameStart:before,
+					// .buttonGameStart:after {
+					//   position: absolute;
+					//   content: "";
+					//   right: 0;
+					//   bottom: 0;
+					//   background: rgba(54, 142, 6, 1);
+					//   box-shadow:
+					//    -7px -7px 20px 0px rgba(255,255,255,.9),
+					//    -4px -4px 5px 0px rgba(255,255,255,.9),
+					//    7px 7px 20px 0px rgba(0,0,0,.2),
+					//    4px 4px 5px 0px rgba(0,0,0,.3);
+					//   transition: all 0.3s ease;
+					// }
+					// .buttonGameStart:before{
+					//    height: 0%;
+					//    width: 2px;
+					// }
+					// .buttonGameStart:after {
+					//   width: 0%;
+					//   height: 2px;
+					// }
+					// .buttonGameStart:hover{
+					//   color: rgba(54, 142, 6, 1);
+					// //   background: transparent;
+                    //     background: white;
+					// }
+					// .buttonGameStart:hover:before {
+					//   height: 100%;
+					// }
+					// .buttonGameStart:hover:after {
+					//   width: 100%;
+					// }
+					// .buttonGameStart span:before,
+					// .buttonGameStart span:after {
+					//   position: absolute;
+					//   content: "";
+					//   left: 0;
+					//   top: 0;
+					//   background: rgba(54, 142, 6, 1);
+					//   box-shadow:
+					//    -7px -7px 20px 0px rgba(255,255,255,.9),
+					//    -4px -4px 5px 0px rgba(255,255,255,.9),
+					//    7px 7px 20px 0px rgba(0,0,0,.2),
+					//    4px 4px 5px 0px rgba(0,0,0,.3);
+					//   transition: all 0.3s ease;
+					// }
+					// .buttonGameStart span:before {
+					//   width: 2px;
+					//   height: 0%;
+					// }
+					// .buttonGameStart span:after {
+					//   height: 2px;
+					//   width: 0%;
+					// }
+					// .buttonGameStart span:hover:before {
+					//   height: 100%;
+					// }
+					// .buttonGameStart span:hover:after {
+					//   width: 100%;
+					// }
 
 					.buttonGameReady {
 						// font-size: 40px;
@@ -855,7 +862,7 @@ export default function OpenViduComponent({
 						// border: 3px solid black;
 					}
 					.buttonGameReady {
-						background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+						// background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
 						font-size: 120px;
 						color: white;
 						width: 300px;
