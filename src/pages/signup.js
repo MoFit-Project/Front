@@ -10,6 +10,7 @@ export default function SignupForm() {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [isSignUpFail, setIsSignUpFail] = useState(false);
+	const [isIdLimit, setIsIdLimit] = useState(false);
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,6 +21,10 @@ export default function SignupForm() {
             setIsSignUpFail(true); // isSignUpFail 상태를 true로 업데이트합니다.
             return; // 함수 실행을 중지합니다.
         }
+        if (id.length > 5) {
+			setIsIdLimit(true);
+			return;
+		}
 
         try {
             await axios.post(API_URL + "/register", {
@@ -69,6 +74,9 @@ export default function SignupForm() {
                     </div>
                     {isSignUpFail && (
                         <span className="text-red-600 text-sm">아이디와 비밀번호를 입력해주세요.</span>
+                    )}
+                    {isIdLimit && (
+                        <span className="text-red-600 text-sm">아이디를 5글자이내로 입력해주세요.</span>
                     )}
                     <div className="text-center text-13xl">
                         < button
