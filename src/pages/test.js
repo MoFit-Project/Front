@@ -21,7 +21,7 @@ const Home = () => {
     return (
 
         <div id="multigame">
-<MultiGameResult/>
+<SingleGameResult/>
         </div>
     );
 };

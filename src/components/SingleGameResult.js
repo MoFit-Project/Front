@@ -57,7 +57,7 @@ export default function Result(props) {
                 <div className="bg-modal rounded-lg shadow-xl p-8 flex flex-col items-center justify-center"
                 >
                     <h1 className="text-7xl font-bold text-gray-800 text-center mt-6">🥇 COMPLETE!</h1>
-                    <h1 className="text-7xl font-bold text-gray-800 text-center mt-16">기록 : {props.scores} 초</h1>
+                    <h1 className="text-7xl font-bold text-gray-800 text-center mt-6">기록 : {props.scores} 초</h1>
                     {/* {names.map((name, index) => ( */}
                     {/* <div className="flex justify-between items-center mb-4">
               <span className="text-gray-700"></span>
@@ -70,7 +70,7 @@ export default function Result(props) {
               
             </div> */}
                     {/* ))} */}
-                    <button className="btn-1 text-white font-bold py-4 px-10 rounded-full ml-16 mt-8"
+                    <button className="btn-1 text-white font-bold py-4 px-10 rounded-full ml-16 mt-6"
                             onClick={handleClick}>
                         확인
                     </button>
@@ -96,7 +96,8 @@ export default function Result(props) {
                     box-shadow: 0px 0px 50px 40px rgba(7, 140, 229, 0.57), 0px 0px 30px 10px rgba(40, 0, 255, 0.6);
                     width: 1000px;
                     height: 400px;
-                    background-image: url('/result-img.jpg');
+                    // background-image: url('/result-img.jpg');
+                    background-image: url('/resultImgSingle.png');
                     background-size: cover;
                     background-position: bottom;
                     position: absolute;
