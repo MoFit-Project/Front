@@ -661,7 +661,7 @@ export default function OpenViduComponent({
 			<span className="user-name" style={{ position: "absolute", top: "800px", left: "100px", color: "yellow" }}>{userName}</span>
 			<span className="user-name" style={{ position: "absolute", top: "800px", right: "140px", color: "yellow" }}>{rightUserName}</span>
             <button
-                style={{ position: "absolute", top: "400px", left: "700px" }}
+                style={{ position: "absolute", top: "600px", left: "800px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -669,7 +669,7 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "absolute", top: "400px", left: "700px" }}
+                style={{ position: "absolute", top: "600px", left: "800px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
@@ -767,7 +767,7 @@ export default function OpenViduComponent({
                 }
                 
 				.buttonGameStart {
-					font-size: 80px;
+					// font-size: 80px;
 					color: white;
 					// background-color: red;
 					// width: 500px;
@@ -777,16 +777,16 @@ export default function OpenViduComponent({
 				}
 				.buttonGameStart {
 					background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
-					font-size: 170px;
+					font-size: 120px;
 					color: white;
-					width: 500px;
-					height: 200px;
+					width: 300px;
+					height: 150px;
 					  line-height: 42px;
 					  padding: 0;
 					  border: none;
 					}
 					.buttonGameStart span {
-						line-height: 190px;
+						line-height: 140px;
 					  position: relative;
 					  display: block;
 					  width: 100%;
@@ -855,7 +855,7 @@ export default function OpenViduComponent({
 					}
 
 					.buttonGameReady {
-						font-size: 40px;
+						// font-size: 40px;
 						color: white;
 						// background-color: red;
 						// width: 250px;
@@ -865,16 +865,16 @@ export default function OpenViduComponent({
 					}
 					.buttonGameReady {
 						background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
-						font-size: 170px;
+						font-size: 120px;
 						color: white;
-						width: 500px;
-						height: 200px;
+						width: 300px;
+						height: 150px;
 						  line-height: 42px;
 						  padding: 0;
 						  border: none;
 						}
 						.buttonGameReady span {
-							line-height: 190px;
+							line-height: 140px;
 						  position: relative;
 						  display: block;
 						  width: 100%;
