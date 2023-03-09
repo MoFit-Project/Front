@@ -28,7 +28,7 @@ export default function Result(props) {
   }
 
   return (
-    
+
     <motion.div
       className="fixed top-0 left-0 w-full h-3/4  bg-opacity-50 z-10 flex items-center justify-center"
       initial={{ x: "-100%" }}

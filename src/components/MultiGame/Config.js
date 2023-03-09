@@ -51,6 +51,8 @@ export default class Main extends Phaser.Scene {
     phaserStart = 0;
     guideText;
     circle;
+    winSound;
+    loseSound;
 
     constructor() {
         super();
@@ -132,7 +134,8 @@ export default class Main extends Phaser.Scene {
         this.load.audio('bee', ['../assets/sound/bee.mp3'])
         this.load.audio('ding', ['../assets/sound/ding.mp3'])
         this.load.audio('start', ['../assets/sound/start.mp3'])
-
+        this.load.audio('winSound', ['../assets/sound/win.mp3'])
+        this.load.audio('loseSound', ['../assets/sound/lose.mp3'])
 
     }
 
@@ -159,6 +162,8 @@ export default class Main extends Phaser.Scene {
         this.bee = this.sound.add('bee').setVolume(5);
         this.ding = this.sound.add('ding').setVolume(5);
         this.start = this.sound.add('start').setVolume(10);
+        this.winSound = this.sound.add('winSound').setVolume(10);
+        this.loseSound = this.sound.add('loseSound').setVolume(10);
 
         this.waitBgm.play();
 
@@ -314,6 +319,15 @@ export default class Main extends Phaser.Scene {
             currentGameTime = 0
         } else if (currentGameTime > 1) {
             currentGameTime = 1
+        }
+        if(currentGameTime === 0){
+            if(mySquart > heSquart){
+                this.winSound.play()
+            }else if(mySquart < heSquart){
+                this.loseSound.play()
+            } else{
+                this.winSound.play()
+            }
         }
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
