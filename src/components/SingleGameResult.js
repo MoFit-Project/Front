@@ -10,11 +10,11 @@ export default function Result(props) {
   const handleClick = async () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const assessToken = Cookies.get("token");
-    console.log("@@@@@@@@@@@" + props.scores);
+    console.log("@@@@@@@@@@@" + props.scores.toString());
     try {
       const response = await axios.post(API_URL + '/result/single', {
         userId: `${localStorage.getItem("username")}`,
-        score: props.scores
+        score: props.scores.toString()
       },
       {
         headers: { Authorization: `Bearer ${assessToken}` }
@@ -32,13 +32,26 @@ export default function Result(props) {
     
     <motion.div
       className="fixed top-0 left-0 w-full h-full  bg-opacity-50 z-10 flex items-center justify-center"
-      initial={{ x: "-100%" }}
-      animate={{ x: 0 }}
+      initial={{ y: "100%" }}
+      animate={{ y: 0 }}
       transition={{ duration: 1.5 }}
      >
+      {/*<div className="flex items-center justify-center">*/}
+      {/*  <div*/}
+      {/*      className="bg-modal rounded-lg shadow-xl p-8 flex flex-col items-start justify-center"*/}
+      {/*  >*/}
+      {/*    <h1 className="text-7xl font-bold text-gray-800 text-left mt-16 ml-16">*/}
+      {/*      🥇 COMPLETE!*/}
+      {/*    </h1>*/}
+      {/*    <h1 className="text-7xl font-bold text-gray-800 text-left mt-16 ml-16">*/}
+      {/*      기록 : {props.scores}초*/}
+      {/*    </h1>*/}
+
       <div className="flex items-center justify-center">
-        <div className="bg-modal rounded-lg shadow-xl p-8 flex flex-col items-center justify-center">
-          <h1 className="text-7xl font-bold text-gray-800 text-center mt-16">🥇 COMPLETE !!!</h1>
+        <div className="bg-modal rounded-lg shadow-xl p-8 flex flex-col items-center justify-center"
+             >
+          <h1 className="text-7xl font-bold text-gray-800 text-center mt-6">🥇 COMPLETE!</h1>
+          <h1 className="text-7xl font-bold text-gray-800 text-center mt-16">기록 : {props.scores} 초</h1>
           {/* {names.map((name, index) => ( */}
             {/* <div className="flex justify-between items-center mb-4">
               <span className="text-gray-700"></span>
@@ -51,9 +64,9 @@ export default function Result(props) {
               
             </div> */}
           {/* ))} */}
-          <button className="bg-blue-500 text-white font-bold py-3 px-4 rounded btn-1 mt-8" onClick={handleClick}>
-              확인
-            </button>
+          <button className="btn-1 text-white font-bold py-4 px-10 rounded-full ml-16 mt-8" onClick={handleClick}>
+            확인
+          </button>
         </div>
         <style jsx>{`
           .btn-1 {
@@ -64,6 +77,7 @@ export default function Result(props) {
               rgba(12, 25, 180, 1) 100%
             );
             border: none;
+            font-size: 2rem;
           }
           .btn-1:hover {
             background: rgb(0, 3, 255);
@@ -75,11 +89,14 @@ export default function Result(props) {
           }
           .bg-modal {
             box-shadow: 0px 0px 50px 40px rgba(7, 140, 229, 0.57), 0px 0px 30px 10px rgba(40, 0, 255, 0.6);
-            width: 600px;
-            height: 300px;
+            width: 1000px;
+            height: 400px;
             background-image: url('/result-img.jpg');
             background-size: cover;
-            background-position: center;
+            background-position: bottom;
+            position : absolute;
+            bottom: 20px;
+            right: 100px;
           }
         `}</style>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
+// import { motionStart } from "../../recoil/motionStart";
 import {
 	leftCalculateAngle,
 	rightCalculateAngle,
@@ -12,7 +13,9 @@ import {
 	sendSignalThrow,
 	sendSignalJumpingJacks,
 } from "../openvidu/OpenviduComponent";
-
+// export let isMotionStart = false;
+let start = false;
+let notHostReady = false;
 export default function OvVideo({
 	streamManager,
 	userName,
@@ -20,12 +23,14 @@ export default function OvVideo({
 	children,
 	setIsOpenViduLoaded,
 	setIsMovenetLoaded,
-	isMoveNetStart
+	isMoveNetStart,
+	setIsMotionStart
 }) {
 	const videoRef = useRef(null);
 	const detectorRef = useRef(null);
 	const requestAnimeRef = useRef(null);
 	const [isLoaded, setIsLoaded] = useState(false);
+	// const [isMotionStart, setIsMotionStart] = useRecoilState(motionStart);
 	//const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
 	//console.log(isRoomHost);
 	useEffect(() => {
@@ -37,7 +42,7 @@ export default function OvVideo({
 
 	useEffect(() => {
 		if (isMoveNetStart) {
-			detectSquat();
+			// detectSquat();
 		}
 	}, [isMoveNetStart]);
 
@@ -63,7 +68,7 @@ export default function OvVideo({
 			if (detectorRef.current && videoRef.current) {
 				console.log("detectSquat");
 				setIsMovenetLoaded(true);
-				// detectSquat();
+				detectSquat();
 			}
 		}
 	}, [isLoaded]);
@@ -82,8 +87,15 @@ export default function OvVideo({
 
 	let isICurrSquartState = false;
 	let jumpingJack = false;
+	let circleStart = false;
 	let run = false;
 	async function detectSquat() {
+		// let phaserStart111;
+		// if (typeof window !== 'undefined') {
+		// 	phaserStart111 = JSON.parse(localStorage.getItem('phaserStart'));
+		// }
+		let phaserStart111 = JSON.parse(localStorage.getItem('phaserStart'));
+		// console.log(phaserStart111);
 		if (detectorRef.current) {
 			try {
 				let video = videoRef.current;
@@ -121,7 +133,8 @@ export default function OvVideo({
 
 					// 스쿼트
 					if (
-						(leftHip &&
+						( 
+							leftHip &&
 							rightHip &&
 							leftKnee &&
 							rightKnee &&
@@ -142,12 +155,14 @@ export default function OvVideo({
 							rightKnee,
 							rightAnkle
 						);
-
+							
 						// Detect squat by checking if the average knee angle is below 90 degrees.
 						if (leftHipAngle < 120 && rightHipAngle < 120) {
-							if (session && !isICurrSquartState) {
-								console.log("squat");
-								sendSignalThrow(session);
+							if ((JSON.parse(localStorage.getItem('phaserStart')) === 1)) {
+								if (session && !isICurrSquartState) {
+									console.log("squat");
+									sendSignalThrow(session);
+								}
 							}
 							isICurrSquartState = true;
 						}
@@ -206,7 +221,11 @@ export default function OvVideo({
 						) {
 							jumpingJack = true;
 							console.log("Jumping Jacks detected!");
-							if (session) sendSignalJumpingJacks(session);
+							if ((JSON.parse(localStorage.getItem('phaserStart')) === 1)) {
+								if (session) {
+									sendSignalJumpingJacks(session);
+								}
+							}
 							// console.log(jumpingJack);
 						} else if (
 							leftShoulderAngle < 30 &&
@@ -255,6 +274,66 @@ export default function OvVideo({
 					//       run = true;
 					//     }
 					//   }
+
+					// 만세
+					if (
+						pose[0].keypoints[10] &&
+						pose[0].keypoints[8] &&
+						pose[0].keypoints[6] &&
+						pose[0].keypoints[12] &&
+						pose[0].keypoints[9] &&
+						pose[0].keypoints[7] &&
+						pose[0].keypoints[5] &&
+						pose[0].keypoints[11] 
+					) {
+						const rightArmAngle = calculateAngle(
+							pose[0].keypoints[10],
+							pose[0].keypoints[8],
+							pose[0].keypoints[6]
+						);
+						const leftArmAngle = calculateAngle(
+							pose[0].keypoints[9],
+							pose[0].keypoints[7],
+							pose[0].keypoints[5]
+						);
+						const leftShoulderAngle = calculateAngle(
+							pose[0].keypoints[11],
+							pose[0].keypoints[5],
+							pose[0].keypoints[7]
+						);
+						const rightShoulderAngle = calculateAngle(
+							pose[0].keypoints[12],
+							pose[0].keypoints[6],
+							pose[0].keypoints[8]
+						);
+						
+						if (leftArmAngle > 240 &&
+							rightArmAngle < 120 &&
+							leftShoulderAngle < 240 && 
+							rightShoulderAngle > 120
+						) {
+							const key = localStorage.getItem('readyToStart')
+							const host = localStorage.getItem('host')
+							if(key === 'ready' && start === false && host === 'true'){
+								setIsMotionStart(true);
+								start = true;
+							} else if (host === 'false' && notHostReady === false) {
+								setIsMotionStart(true);
+								notHostReady = true;
+							}
+							// setIsMotionStart(true);
+							// isMotionStart = true;
+							
+							// console.log("TRUETRUETRUETRUETRUE   " + isMotionStart);
+						} 
+						// console.log("left Shoulder   " + leftShoulderAngle);
+						// console.log("right Shoulder  " + rightShoulderAngle);
+						// console.log("left Arm   " + leftArmAngle);
+						// console.log("right Arm   " + rightArmAngle);
+						// console.log(circleStart);
+						// console.log("@@@@@@@@@@@@@@@@@   " + isMotionStart);
+						console.log("@@@@@@111111111@@@@@@" + JSON.parse(localStorage.getItem('phaserStart')));
+					}
 				}
 			} catch (e) {
 				detectorRef.current.dispose();

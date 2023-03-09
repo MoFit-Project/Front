@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
+import SingleGameResult from '../components/SingleGameResult'
 // import styled from 'styled-components';
 
 const DynamicComponentWithNoSSR = dynamic(
@@ -9,7 +10,6 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 const Home = () => {
-
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -19,13 +19,7 @@ const Home = () => {
     return (
 
         <div id="multigame">
-            <Head>
-                <title>Phaser Starter</title>
-                {/* <link rel="icon" href="/favicon.ico" /> */}
-            </Head>
-
-            <div key={Math.random()} id="game"></div>
-            {loading ? <DynamicComponentWithNoSSR /> : null}
+<SingleGameResult/>
         </div>
     );
 };

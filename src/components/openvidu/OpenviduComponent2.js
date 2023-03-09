@@ -80,6 +80,10 @@ export default function OpenViduComponent({
     setIsMovenetLoaded,
     setIsOpenViduLoaded
 }) {
+    useEffect(() => {
+        localStorage.setItem("refresh", "1");
+        localStorage.setItem("readyToStart", "notReady");
+    }, []);
 
     const [loading, setLoading] = useState(false);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -144,6 +148,8 @@ export default function OpenViduComponent({
     const [isIWinning, setIsIWinning] = useState("");
     const [isRWinning, setIsRWinning] = useState("");
 
+    const [isMotionStart, setIsMotionStart] = useState(false);
+
   let isClicked = false;
   let isAllReady = false;
   let isRoomOutBtnClicked = false
@@ -158,9 +164,15 @@ export default function OpenViduComponent({
         if (myInRoomState === 1) {
             const targetBtn = document.getElementById("buttonGameReady");
             targetBtn.style.display = "none";
+            localStorage.setItem('host', 'true')
+
+            const targetBtnS = document.getElementById("buttonGameStart");
+            targetBtnS.style.backgroundColor = "gray";
         } else if (myInRoomState === 2) {
             const targetBtn = document.getElementById("buttonGameStart");
             targetBtn.style.display = "none";
+            localStorage.setItem('host', 'false')
+
         }
 		const targetStringVS = document.getElementById("stringVS");
 		targetStringVS.style.display = "none";
@@ -188,6 +200,19 @@ export default function OpenViduComponent({
 			leaveSession();
 		}
 	}, [isModalClose]);
+
+    useEffect(() => {
+        if (isMotionStart) {
+            if (myInRoomState === 1) {
+                console.log("@@@@@@@@@@@@@@@@@  start !!!  " + isMotionStart);
+                gameStart();
+            } else if (myInRoomState === 2) {
+                console.log("@@@@@@@@@@@@@@@@@  ready !!!  " + isMotionStart);
+                gameReady();
+            }
+        }
+        setIsMotionStart(false);
+    }, [isMotionStart]);
 
     const onbeforeunload = (event) => {
         leaveSession();
@@ -331,13 +356,14 @@ export default function OpenViduComponent({
                 // 추후 삭제 예정
                 // alert("방장이 방나감");
                 console.log(event.from);
-                sendSurverLeaveSession();
                 leaveSession();
 
-                Swal.fire({
-                    title: '방장이 나갔습니다',
-                    icon: 'warning',
-                });
+                if (myInRoomState === 2) {
+                    Swal.fire({
+                        title: '방장이 나갔습니다',
+                        icon: 'warning',
+                    });
+                }
             });
 
             mySession.on("start", (event) => {
@@ -382,11 +408,16 @@ export default function OpenViduComponent({
       		mySession.on("signal:otherPlayerReady", (event) => {
 				isAllReady = true;
 				isOtherPlayerReady = true;
+                localStorage.setItem("readyToStart", "ready");
 				// setRightUserName(event.data);
 				console.log("PlayerReady !!!" + rightUserName);
 
-				const targetBtnStart = document.getElementById("buttonGameStart");
-				targetBtnStart.style.display = "block";
+				// const targetBtnStart = document.getElementById("buttonGameStart");
+				// targetBtnStart.style.display = "block";
+                const targetBtnS = document.getElementById("buttonGameStart");
+                targetBtnS.style.backgroundColor = "red";
+                const targetBtnR = document.getElementById("buttonGameReady");
+                targetBtnR.style.backgroundColor = "green";
 			});
 
             // On every asynchronous exception...
@@ -401,7 +432,7 @@ export default function OpenViduComponent({
                         let publisher = await OV.initPublisherAsync(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
-                            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
                             resolution: "445x800", // 비율 정하기 The resolution of your video
                             frameRate: 30, // The frame rate of your video
@@ -612,6 +643,7 @@ export default function OpenViduComponent({
                         setIsOpenViduLoaded={setIsOpenViduLoaded}
                         setIsMovenetLoaded={setIsMovenetLoaded}
 						isMoveNetStart={isMoveNetStart}
+                        setIsMotionStart={setIsMotionStart}
                     />
                     </div>
                 ) : (
@@ -627,7 +659,7 @@ export default function OpenViduComponent({
 			<span className="user-name" style={{ position: "absolute", top: "800px", left: "100px", color: "yellow" }}>{userName}</span>
 			<span className="user-name" style={{ position: "absolute", top: "800px", right: "140px", color: "yellow" }}>{rightUserName}</span>
             <button
-                style={{ position: "absolute", top: "400px", left: "700px" }}
+                style={{ position: "absolute", top: "600px", left: "800px" }}
                 className="buttonGameStart"
                 id="buttonGameStart"
                 onClick={gameStart}
@@ -635,7 +667,7 @@ export default function OpenViduComponent({
                 <span>시작</span>
             </button>
             <button
-                style={{ position: "absolute", top: "400px", left: "700px" }}
+                style={{ position: "absolute", top: "600px", left: "800px" }}
                 className="buttonGameReady"
                 id="buttonGameReady"
                 onClick={gameReady}
@@ -733,7 +765,7 @@ export default function OpenViduComponent({
                 }
                 
 				.buttonGameStart {
-					font-size: 80px;
+					// font-size: 80px;
 					color: white;
 					// background-color: red;
 					// width: 500px;
@@ -742,86 +774,86 @@ export default function OpenViduComponent({
 					// border: 3px solid black;
 				}
 				.buttonGameStart {
-					background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
-					font-size: 170px;
+					// background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+					font-size: 120px;
 					color: white;
-					width: 500px;
-					height: 200px;
+					width: 300px;
+					height: 150px;
 					  line-height: 42px;
 					  padding: 0;
 					  border: none;
 					}
 					.buttonGameStart span {
-						line-height: 190px;
+						line-height: 140px;
 					  position: relative;
 					  display: block;
 					  width: 100%;
 					  height: 100%;
 					}
-					.buttonGameStart:before,
-					.buttonGameStart:after {
-					  position: absolute;
-					  content: "";
-					  right: 0;
-					  bottom: 0;
-					  background: rgba(54, 142, 6, 1);
-					  box-shadow:
-					   -7px -7px 20px 0px rgba(255,255,255,.9),
-					   -4px -4px 5px 0px rgba(255,255,255,.9),
-					   7px 7px 20px 0px rgba(0,0,0,.2),
-					   4px 4px 5px 0px rgba(0,0,0,.3);
-					  transition: all 0.3s ease;
-					}
-					.buttonGameStart:before{
-					   height: 0%;
-					   width: 2px;
-					}
-					.buttonGameStart:after {
-					  width: 0%;
-					  height: 2px;
-					}
-					.buttonGameStart:hover{
-					  color: rgba(54, 142, 6, 1);
-					//   background: transparent;
-                        background: white;
-					}
-					.buttonGameStart:hover:before {
-					  height: 100%;
-					}
-					.buttonGameStart:hover:after {
-					  width: 100%;
-					}
-					.buttonGameStart span:before,
-					.buttonGameStart span:after {
-					  position: absolute;
-					  content: "";
-					  left: 0;
-					  top: 0;
-					  background: rgba(54, 142, 6, 1);
-					  box-shadow:
-					   -7px -7px 20px 0px rgba(255,255,255,.9),
-					   -4px -4px 5px 0px rgba(255,255,255,.9),
-					   7px 7px 20px 0px rgba(0,0,0,.2),
-					   4px 4px 5px 0px rgba(0,0,0,.3);
-					  transition: all 0.3s ease;
-					}
-					.buttonGameStart span:before {
-					  width: 2px;
-					  height: 0%;
-					}
-					.buttonGameStart span:after {
-					  height: 2px;
-					  width: 0%;
-					}
-					.buttonGameStart span:hover:before {
-					  height: 100%;
-					}
-					.buttonGameStart span:hover:after {
-					  width: 100%;
-					}
+					// .buttonGameStart:before,
+					// .buttonGameStart:after {
+					//   position: absolute;
+					//   content: "";
+					//   right: 0;
+					//   bottom: 0;
+					//   background: rgba(54, 142, 6, 1);
+					//   box-shadow:
+					//    -7px -7px 20px 0px rgba(255,255,255,.9),
+					//    -4px -4px 5px 0px rgba(255,255,255,.9),
+					//    7px 7px 20px 0px rgba(0,0,0,.2),
+					//    4px 4px 5px 0px rgba(0,0,0,.3);
+					//   transition: all 0.3s ease;
+					// }
+					// .buttonGameStart:before{
+					//    height: 0%;
+					//    width: 2px;
+					// }
+					// .buttonGameStart:after {
+					//   width: 0%;
+					//   height: 2px;
+					// }
+					// .buttonGameStart:hover{
+					//   color: rgba(54, 142, 6, 1);
+					// //   background: transparent;
+                    //     background: white;
+					// }
+					// .buttonGameStart:hover:before {
+					//   height: 100%;
+					// }
+					// .buttonGameStart:hover:after {
+					//   width: 100%;
+					// }
+					// .buttonGameStart span:before,
+					// .buttonGameStart span:after {
+					//   position: absolute;
+					//   content: "";
+					//   left: 0;
+					//   top: 0;
+					//   background: rgba(54, 142, 6, 1);
+					//   box-shadow:
+					//    -7px -7px 20px 0px rgba(255,255,255,.9),
+					//    -4px -4px 5px 0px rgba(255,255,255,.9),
+					//    7px 7px 20px 0px rgba(0,0,0,.2),
+					//    4px 4px 5px 0px rgba(0,0,0,.3);
+					//   transition: all 0.3s ease;
+					// }
+					// .buttonGameStart span:before {
+					//   width: 2px;
+					//   height: 0%;
+					// }
+					// .buttonGameStart span:after {
+					//   height: 2px;
+					//   width: 0%;
+					// }
+					// .buttonGameStart span:hover:before {
+					//   height: 100%;
+					// }
+					// .buttonGameStart span:hover:after {
+					//   width: 100%;
+					// }
 
 					.buttonGameReady {
-						font-size: 40px;
+						// font-size: 40px;
 						color: white;
 						// background-color: red;
 						// width: 250px;
@@ -830,17 +862,17 @@ export default function OpenViduComponent({
 						// border: 3px solid black;
 					}
 					.buttonGameReady {
-						background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
-						font-size: 170px;
+						// background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+						font-size: 120px;
 						color: white;
-						width: 500px;
-						height: 200px;
+						width: 300px;
+						height: 150px;
 						  line-height: 42px;
 						  padding: 0;
 						  border: none;
 						}
 						.buttonGameReady span {
-							line-height: 190px;
+							line-height: 140px;
 						  position: relative;
 						  display: block;
 						  width: 100%;

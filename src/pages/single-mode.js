@@ -1,6 +1,6 @@
 import Loading from '../components/Loading'
 import SingleWebcam from '../components/SingleWebcam'
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import dynamic from "next/dynamic";
 
 const DynamicComponentWithNoSSR = dynamic(
@@ -9,7 +9,9 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 export default function SingleMode() {
-
+    useEffect(() => {
+        localStorage.setItem("refresh", "1");
+    }, []);
     const [isLoad, setIsLoad] = useState(true);
     const [startDetect, setStartDetect] = useState(false);
     return (
