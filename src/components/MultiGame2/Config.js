@@ -6,7 +6,7 @@ import {
     mySquart2,
     heSquart2
 } from "../openvidu/OpenviduComponent2";
-import {gameTimePassed, gameTimeTotal} from "@/components/openvidu/OpenviduComponent";
+import {gameTimePassed, gameTimeTotal, heSquart, mySquart} from "@/components/openvidu/OpenviduComponent";
 
 
 //통신
@@ -51,6 +51,9 @@ export default class Main2 extends Phaser.Scene {
     phaserStart = 0;
     guideText;
     circle;
+    winSound;
+    loseSound;
+    playWin = false;
 
 
     constructor() {
@@ -117,7 +120,8 @@ export default class Main2 extends Phaser.Scene {
         this.load.audio('waitBgm2', ['../assets/sound/waitBgm2.mp3'])
         this.load.audio('start', ['../assets/sound/start.mp3'])
         this.load.image('circle', '../assets/circle.png')
-
+        this.load.audio('winSound', ['../assets/sound/win.mp3'])
+        this.load.audio('loseSound', ['../assets/sound/lose.mp3'])
 
 
     }
@@ -143,6 +147,8 @@ export default class Main2 extends Phaser.Scene {
         this.inGameBgm = this.sound.add('inGameBgm')
         this.waitBgm2 = this.sound.add('waitBgm2')
         this.start = this.sound.add('start').setVolume(10);
+        this.winSound = this.sound.add('winSound').setVolume(10);
+        this.loseSound = this.sound.add('loseSound').setVolume(10);
         this.waitBgm2.play();
 
         this.sky = this.add.tileSprite(950, 230, 250, 140, '1_game_background')
@@ -252,12 +258,22 @@ export default class Main2 extends Phaser.Scene {
     update(time, delta) {
         const cursors = this.input.keyboard.createCursorKeys();
 
+        const end = gameTimeTotal2 - gameTimePassed2
         let currentGameTime = (gameTimeTotal2 - (gameTimePassed2 - 5)) / (gameTimeTotal2)
+        if (end <= -5 && !this.playWin){
+            if(mySquart2 >= heSquart2){
+                this.winSound.play();
+            }else{
+                this.loseSound.play();
+            }
+            this.playWin = true;
+        }
         if (currentGameTime < 0) {
             currentGameTime = 0
         } else if (currentGameTime > 1) {
             currentGameTime = 1
         }
+
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
         this.timeBar.fillRect(860, 77, 480 * currentGameTime, 60);

@@ -2,6 +2,8 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 import SingleGameResult from '../components/SingleGameResult'
+import MultiGameResult from '../components/MultiGameResult'
+import MultiGameResultLose from '../components/MultiGameResultLose'
 // import styled from 'styled-components';
 
 const DynamicComponentWithNoSSR = dynamic(

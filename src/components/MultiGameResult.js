@@ -43,7 +43,7 @@ export default function Result(props) {
      >
       <div className="flex items-center justify-center">
         <div className="bg-modal rounded-xl shadow-xl p-8 flex flex-col items-center justify-center">
-          <h1 className="text-9xl font-bold text-center mt-16">🥇 You win!!</h1>
+          <h1 className="text-9xl font-bold text-center mt-16">🥇You Win!</h1>
           {/* {names.map((name, index) => ( */}
             {/* <div className="flex justify-between items-center mb-4">
               <span className="text-gray-700"></span>
@@ -82,11 +82,13 @@ export default function Result(props) {
             );
           }
           .bg-modal {
-            box-shadow: 0px 0px 30px 20px rgba(7, 229, 156, 0.42), 0px 0px 30px 10px rgba(40, 0, 255, 0.37);
+            // box-shadow: 0px 0px 30px 20px rgba(7, 229, 156, 0.42), 0px 0px 30px 10px rgba(40, 0, 255, 0.37);
             width: 900px;
-            height: 700px;
-            background-image: url('/result-img.jpg');
-            background-size: cover;
+            height: 745px;
+            // background-image: url('/result-img.jpg');
+            // background-size: cover;
+            background-image: url('/resultImg.png');
+            background-size: 900px;
             background-position: center;
           }
           h1 {

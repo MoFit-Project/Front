@@ -17,11 +17,11 @@ export default function Home() {
     return (
         <LayoutAuthenticated>
             <Navbar>
-            
+
+                <title>MOFIT 모드 선택</title>
 
             <div className="flex justify-center items-center">
                 <Head>
-                    <title>MOFIT 모드 선택</title>
                     <link rel="icon" href="/mofit.ico" />
                 </Head>
                 <Background>

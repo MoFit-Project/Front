@@ -6,6 +6,7 @@ import {
     mySquart,
     heSquart
 } from "../openvidu/OpenviduComponent";
+import {gameTimePassed2, gameTimeTotal2} from "@/components/openvidu/OpenviduComponent2";
 
 //통신
 
@@ -51,6 +52,10 @@ export default class Main extends Phaser.Scene {
     phaserStart = 0;
     guideText;
     circle;
+    winSound;
+    loseSound;
+    playWin = false;
+
 
     constructor() {
         super();
@@ -132,7 +137,8 @@ export default class Main extends Phaser.Scene {
         this.load.audio('bee', ['../assets/sound/bee.mp3'])
         this.load.audio('ding', ['../assets/sound/ding.mp3'])
         this.load.audio('start', ['../assets/sound/start.mp3'])
-
+        this.load.audio('winSound', ['../assets/sound/win.mp3'])
+        this.load.audio('loseSound', ['../assets/sound/lose.mp3'])
 
     }
 
@@ -159,7 +165,8 @@ export default class Main extends Phaser.Scene {
         this.bee = this.sound.add('bee').setVolume(5);
         this.ding = this.sound.add('ding').setVolume(5);
         this.start = this.sound.add('start').setVolume(10);
-
+        this.winSound = this.sound.add('winSound').setVolume(10);
+        this.loseSound = this.sound.add('loseSound').setVolume(10);
         this.waitBgm.play();
 
 
@@ -310,11 +317,24 @@ export default class Main extends Phaser.Scene {
 
     update(time, delta) {
         let currentGameTime = (gameTimeTotal - (gameTimePassed - 5)) / (gameTimeTotal)
+
+
+        const end = gameTimeTotal - gameTimePassed
+        if (end <= -5 && !this.playWin){
+            if(mySquart >= heSquart){
+                this.winSound.play()
+            }else{
+                this.loseSound.play()
+            }
+            this.playWin = true;
+        }
         if (currentGameTime < 0) {
+
             currentGameTime = 0
         } else if (currentGameTime > 1) {
             currentGameTime = 1
         }
+
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
         this.timeBar.fillRect(860, 77, 480 * currentGameTime, 60);

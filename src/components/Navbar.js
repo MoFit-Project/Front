@@ -1,8 +1,24 @@
 import Link from 'next/link'
 import LogoutButton from "./LogoutButton";
+import Head from "next/head";
+import {useEffect, useRef} from "react";
 
 
 export default function NavBar({ children }) {
+  const myAudioRef = useRef(null);
+
+  useEffect(() => {
+    const myAudio = new Audio("webBgm.mp3");
+    myAudio.loop = true;
+    myAudioRef.current = myAudio;
+    myAudio.play();
+
+    return () => {
+      myAudio.pause();
+      myAudioRef.current = null;
+    }
+  }, []);
+
   return (
     <>
       <nav className='bg-blue-700 p-2'>

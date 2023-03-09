@@ -32,8 +32,8 @@ export default class Main3 extends Phaser.Scene {
     singleGameMovenetInputTempSave = 0;
     startTime = 0;
     exerciseText;
-    stage2Exercise = 10;
-    stage3Exercise = 20;
+    stage2Exercise = 5;
+    stage3Exercise = 10;
     saveStartTime = false;
     jumpingJack;
     run;
@@ -44,6 +44,7 @@ export default class Main3 extends Phaser.Scene {
     goodText;
     circle;
     guideText;
+    clapSound;
 
     constructor() {
         super();
@@ -114,6 +115,7 @@ export default class Main3 extends Phaser.Scene {
         this.load.audio('singleBGM', ['../assets/sound/singleBGM.mp3'])
         this.load.audio('ding', ['../assets/sound/ding.mp3'])
         this.load.audio('diriring', ['../assets/sound/diriring.mp3'])
+        this.load.audio('clap', ['../assets/sound/clap.mp3'])
 
 
     }
@@ -123,6 +125,7 @@ export default class Main3 extends Phaser.Scene {
         this.start = this.sound.add('start').setVolume(10);
         this.ding = this.sound.add('ding').setVolume(5);
         this.diriring = this.sound.add('diriring').setVolume(5);
+        this.clapSound = this.sound.add('clap').setVolume(10);
 
         this.bg = this.add.image(700, 0, 'bg').setOrigin(0, 0).setScale(1.55, 2).setDepth(1)
 
@@ -286,7 +289,7 @@ export default class Main3 extends Phaser.Scene {
                     this.goodText.setVisible(true)
                     this.tweens.add({
                         targets: this.goodText,
-                        duration: 1500,
+                        duration: 2000,
                         scale : 3,// 애니메이션 지속 시간
                         alpha : 0,
                         repeat: 0,
@@ -309,7 +312,7 @@ export default class Main3 extends Phaser.Scene {
                     this.goodText.setVisible(true)
                     this.tweens.add({
                         targets: this.goodText,
-                        duration: 1500,
+                        duration: 2000,
                         scale : 3,// 애니메이션 지속 시간
                         alpha : 0,
                         repeat: 0,
@@ -334,7 +337,7 @@ export default class Main3 extends Phaser.Scene {
         } else {
         }
         if (speed > 0) {
-            if (this.inputCount[0] + 3000 < time) {
+            if (this.inputCount[0] + 2000 < time) {
                 this.inputCount.shift();
             }
             if (speed > 5) {
@@ -364,7 +367,7 @@ export default class Main3 extends Phaser.Scene {
         this.playerNumber10.setFrame(Math.floor((this.recordTime % 1000) / 100))
 
         // 스테이지 변경
-        if (this.state === 1 && this.runCount > 3000) {
+        if (this.state === 1 && this.runCount > 2000) {
             this.state += 1
             this.runCount = 0
             this.sky.setTexture(`${this.state}`)
@@ -404,6 +407,7 @@ export default class Main3 extends Phaser.Scene {
             this.runCount = 0;
             this.inputCount = [];
             this.dust.visible = false;
+            this.clapSound.play();
             this.tweens.add({
                 targets: this.dogHouse,
                 duration: 500, // 애니메이션 지속 시간

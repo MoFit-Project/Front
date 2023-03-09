@@ -32,7 +32,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 
 	const [roomName, setRoomName] = useState("");
 	const [gameMode, setGameMode] = useState('모드 선택');
-	const [gameTime, setGameTime] = useState(30);
+	const [gameTime, setGameTime] = useState(10);
 
 	function handleOnRequestClose() {
 		onClose();
@@ -41,7 +41,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 		setIsModeNotSelected(false);
 		setRoomName('')
 		setGameMode('모드 선택')
-		setGameTime(30);
+		setGameTime(10);
 	}
 
 	useEffect(() => {
@@ -192,7 +192,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 				<div className='modal-contents'>
 					<label className="text-3xl ml-7">
 						게임 시간:
-						<input type="range" min="30" max="180" step="10" value={gameTime} onChange={handleGameTimeChange} />
+						<input type="range" min="10" max="180" step="5" value={gameTime} onChange={handleGameTimeChange} />
 						{gameTime}초
 					</label>
 				</div>
