@@ -85,8 +85,10 @@ export default function Result(props) {
             box-shadow: 0px 0px 30px 20px rgba(7, 229, 156, 0.42), 0px 0px 30px 10px rgba(40, 0, 255, 0.37);
             width: 900px;
             height: 700px;
-            background-image: url('/result-img.jpg');
-            background-size: cover;
+            // background-image: url('/result-img.jpg');
+            // background-size: cover;
+            background-image: url('/resultImg.png');
+            background-size: 535px;
             background-position: center;
           }
           h1 {

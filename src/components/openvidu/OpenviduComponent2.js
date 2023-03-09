@@ -417,7 +417,7 @@ export default function OpenViduComponent({
                 const targetBtnS = document.getElementById("buttonGameStart");
                 targetBtnS.style.backgroundColor = "red";
                 const targetBtnR = document.getElementById("buttonGameReady");
-                targetBtnR.style.backgroundColor = "green";
+                targetBtnR.style.backgroundColor = "gray";
 			});
 
             // On every asynchronous exception...
@@ -863,6 +863,7 @@ export default function OpenViduComponent({
 					}
 					.buttonGameReady {
 						// background: linear-gradient(0deg, rgba(213, 252, 191, 1) 0%, rgba(54, 142, 6, 1) 100%);
+                        background-color: green;
 						font-size: 120px;
 						color: white;
 						width: 300px;

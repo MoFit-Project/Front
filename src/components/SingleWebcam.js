@@ -127,6 +127,10 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
                     if (isStart && (JSON.parse(localStorage.getItem('gameState')) === 5)) {
                         // console.log("squat" + singleGameMovenetInput);
                         singleGameMovenetInput += 1;
+                        const targetBtnSS = document.getElementById("btnSingleStart");
+                        targetBtnSS.style.display = "none";
+                        const targetBtn = document.getElementById("btnSingleOut");
+                        targetBtn.style.display = "none";
                     }
                     // 스쿼트
                     isSquat = squatDetect(pose);
@@ -176,10 +180,26 @@ export default function SingleWebcam({ setIsLoad, startDetect }) {
         animeIdRef.current = requestAnimationFrame(detectSquat);
     }
 
+    const startSingleRoom = () => {
+        singleGameMovenetInput += 1;
+        const targetBtnSS = document.getElementById("btnSingleStart");
+        targetBtnSS.style.display = "none";
+        const targetBtn = document.getElementById("btnSingleOut");
+        targetBtn.style.display = "none";
+    }
+    const leaveSingleRoom = () => {
+        router.push("/");
+    }
+
+
     return (
         <>
         <video ref={videoRef} style={{ width: "700px", height: "1000px" }}></video>
         {isCompleteModalOpen && <SingleGameResult scores={scores} setIsModalClose={setIsModalClose}/>}
+        <div>
+            <button id='btnSingleStart' onClick={startSingleRoom} style={{ position: "absolute", top: "680px", left: "900px", width: "200px", height: "80px", fontSize: "50px", backgroundColor: "skyblue", borderRadius: "20px" }}>시작</button>
+            <button id='btnSingleOut' onClick={leaveSingleRoom} style={{ position: "absolute", top: "680px", left: "1490px", width: "200px", height: "80px", fontSize: "50px", backgroundColor: "red", borderRadius: "20px" }}>나가기</button>
+        </div>
         </>
     )
 }
