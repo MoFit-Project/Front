@@ -53,6 +53,7 @@ export default class Main2 extends Phaser.Scene {
     circle;
     winSound;
     loseSound;
+    playWin = false;
 
 
     constructor() {
@@ -257,21 +258,22 @@ export default class Main2 extends Phaser.Scene {
     update(time, delta) {
         const cursors = this.input.keyboard.createCursorKeys();
 
+        const end = gameTimeTotal2 - gameTimePassed2
         let currentGameTime = (gameTimeTotal2 - (gameTimePassed2 - 5)) / (gameTimeTotal2)
+        if (end <= -5 && !this.playWin){
+            if(mySquart2 >= heSquart2){
+                this.winSound.play();
+            }else{
+                this.loseSound.play();
+            }
+            this.playWin = true;
+        }
         if (currentGameTime < 0) {
             currentGameTime = 0
         } else if (currentGameTime > 1) {
             currentGameTime = 1
         }
-        if(currentGameTime === 0){
-            if(mySquart > heSquart){
-                this.winSound.play()
-            }else if(mySquart < heSquart){
-                this.loseSound.play()
-            } else{
-                this.winSound.play()
-            }
-        }
+
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
         this.timeBar.fillRect(860, 77, 480 * currentGameTime, 60);

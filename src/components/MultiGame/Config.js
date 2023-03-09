@@ -6,6 +6,7 @@ import {
     mySquart,
     heSquart
 } from "../openvidu/OpenviduComponent";
+import {gameTimePassed2, gameTimeTotal2} from "@/components/openvidu/OpenviduComponent2";
 
 //통신
 
@@ -53,6 +54,8 @@ export default class Main extends Phaser.Scene {
     circle;
     winSound;
     loseSound;
+    playWin = false;
+
 
     constructor() {
         super();
@@ -164,7 +167,6 @@ export default class Main extends Phaser.Scene {
         this.start = this.sound.add('start').setVolume(10);
         this.winSound = this.sound.add('winSound').setVolume(10);
         this.loseSound = this.sound.add('loseSound').setVolume(10);
-
         this.waitBgm.play();
 
 
@@ -315,20 +317,24 @@ export default class Main extends Phaser.Scene {
 
     update(time, delta) {
         let currentGameTime = (gameTimeTotal - (gameTimePassed - 5)) / (gameTimeTotal)
+
+
+        const end = gameTimeTotal - gameTimePassed
+        if (end <= -5 && !this.playWin){
+            if(mySquart >= heSquart){
+                this.winSound.play()
+            }else{
+                this.loseSound.play()
+            }
+            this.playWin = true;
+        }
         if (currentGameTime < 0) {
+
             currentGameTime = 0
         } else if (currentGameTime > 1) {
             currentGameTime = 1
         }
-        if(currentGameTime === 0){
-            if(mySquart > heSquart){
-                this.winSound.play()
-            }else if(mySquart < heSquart){
-                this.loseSound.play()
-            } else{
-                this.winSound.play()
-            }
-        }
+
         this.timeBar.clear();
         this.timeBar.fillStyle(0xff0000, 1);
         this.timeBar.fillRect(860, 77, 480 * currentGameTime, 60);
