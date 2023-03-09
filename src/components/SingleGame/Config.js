@@ -42,6 +42,8 @@ export default class Main3 extends Phaser.Scene {
     ding;
     diriring;
     goodText;
+    circle;
+    guideText;
 
     constructor() {
         super();
@@ -96,6 +98,8 @@ export default class Main3 extends Phaser.Scene {
         this.load.image('2', '../assets/singlegame/bg/2.png')
         this.load.image('3', '../assets/singlegame/bg/3.png')
         this.load.image('4', '../assets/singlegame/bg/4.png')
+        this.load.image('circle', '../assets/circle.png')
+
 
 
         this.load.spritesheet(
@@ -237,6 +241,14 @@ export default class Main3 extends Phaser.Scene {
         this.squat.anims.play('squatGuide')
         this.run.anims.play('runGuide')
 
+        this.circle = this.add.image(1700, 880, 'circle').setScale(1).setDepth(1)
+        this.guideText = this.add
+            .text(800, 800,
+                "버튼을 클릭하거나, 머리 위로\n\n동그라미를 만드세요.",
+                {color: "#000000", fontSize: "60px", fontFamily: 'dalmoori'}
+            )
+            .setDepth(1)
+
         // 변수 내보내기
         localStorage.setItem("recordTime", JSON.stringify(0));
 
@@ -257,6 +269,8 @@ export default class Main3 extends Phaser.Scene {
             if (this.gameState === 1) {
                 this.inputCount.push(time);
             } else if (this.gameState === 5 && !this.isPhaserHasStarted) {
+                this.guideText.destroy();
+                this.circle.destroy();
                 this.isPhaserHasStarted = true;
                 this.singleBGM.play();
                 this.exerciseText.setText('준비하세요.').setVisible(true);
