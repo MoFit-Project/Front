@@ -169,11 +169,11 @@ export default function RoomList() {
 
           <div className="tb-container flex-col items-center flex">
 
-            <div className="mt-6 w-11/12 flex ">
+            <div className="mt-6 db-table flex ">
               <table className="w-full" style={{ overflow: 'auto' }} >
                 <thead>
                   <tr className="text-white text-6xl">
-                    <th className="w-3/12 py-2 px-4">방 제목</th>
+                    <th className="w-4/12 py-2 px-4">방 제목</th>
                     <th className="w-3/12 py-2 px-4">모드</th>
                     <th className="w-3/12 py-2 px-4">인원</th>
                     <th className="w-2/12 py-2 px-4"></th>
@@ -293,6 +293,9 @@ export default function RoomList() {
           top: -120px;
           right: 1400px;
 
+        }
+        .db-table{
+          width: 1500px;
         }
 
       `}</style>
