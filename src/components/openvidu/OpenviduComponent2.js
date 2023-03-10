@@ -577,7 +577,7 @@ export default function OpenViduComponent({
 	
 	console.log("지난 시간 : ", gameTimePassed2);
 
-	if (gameTimePassed2 + 5 > gamePlayTime) {
+	if (gameTimePassed2 + 5 >= gamePlayTime) {
 		console.log("SetTimePassed 에서 게임이 끝나따 !!! ");
 		clearInterval(gameTimer);
 		if (mySquart2 >= heSquart2) {
