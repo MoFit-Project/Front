@@ -60,7 +60,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 			setIsRoomNameEmpty(true);
 			return;
 		}
-		if (roomName.length > 10) {
+		if (roomName.length > 9) {
 			setIsRoomNameOver(true);
 			return;
 		}
@@ -201,7 +201,7 @@ export default function CreateRoomModal({ isOpen, onClose, setIsLoading }) {
 				)}
 
 				{isRoomNameOver && (
-					<div style={{ color: "red" }}>10자 이하로 작성해 주세요</div>
+					<div style={{ color: "red" }}>9자 이하로 작성해 주세요</div>
 				)}
 
 				{isModeNotSelected && (
