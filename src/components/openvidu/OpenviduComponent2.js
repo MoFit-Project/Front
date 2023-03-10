@@ -8,6 +8,7 @@ import { isRoomHostState } from "../../recoil/states";
 import { currSessionId } from "../../recoil/currSessionId";
 import { inroomState } from "../../recoil/imroomState";
 import { gamePlayTime } from "../../recoil/gamePlayTime";
+import { isGaming } from "../../recoil/isGaming"
 import SubVideo from "./SubVideo";
 import Loading from "../Loading";
 import dynamic from "next/dynamic";
@@ -91,6 +92,7 @@ export default function OpenViduComponent({
     const [currSession, setCurrSession] = useRecoilState(currSessionId);
     const [myInRoomState, setInRoomState] = useRecoilState(inroomState);
 	const [timeOfGamePlay, setTimeOfGamePlay] = useRecoilState(gamePlayTime);
+    const [playerGaming, setPlayerGaming] = useRecoilState(isGaming);
 
     const userIdRef = useRef("");
 
@@ -178,6 +180,7 @@ export default function OpenViduComponent({
 		targetStringVS.style.display = "none";
         // console.log("myInRoomState : " + myInRoomState);
         // isClicked = false;
+        setPlayerGaming(1);
         return () => {
             // if (!isClicked) leaveSession();
         };
@@ -396,6 +399,7 @@ export default function OpenViduComponent({
                 // Phaser 종료
                 console.log("PhaserGameEnd : " + event.data);
                 // alert("PhaserGameEnd : " + event.data);
+                setPlayerGaming(0);
 				clearInterval(gameTimer);
 				// handleOpenWinModal();
 				if (mySquart2 >= heSquart2) {
@@ -577,7 +581,7 @@ export default function OpenViduComponent({
 	
 	console.log("지난 시간 : ", gameTimePassed2);
 
-	if (gameTimePassed2 + 5 > gamePlayTime) {
+	if (gameTimePassed2 + 5 >= gamePlayTime) {
 		console.log("SetTimePassed 에서 게임이 끝나따 !!! ");
 		clearInterval(gameTimer);
 		if (mySquart2 >= heSquart2) {
