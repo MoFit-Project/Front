@@ -257,7 +257,7 @@ export default class Main2 extends Phaser.Scene {
 
     update(time, delta) {
         const cursors = this.input.keyboard.createCursorKeys();
-
+        let endTime;
         const end = gameTimeTotal2 - gameTimePassed2
         let currentGameTime = (gameTimeTotal2 - (gameTimePassed2 - 5)) / (gameTimeTotal2)
         if (end <= -5 && !this.playWin){
@@ -267,6 +267,10 @@ export default class Main2 extends Phaser.Scene {
                 this.loseSound.play();
             }
             this.playWin = true;
+            endTime = time
+        }
+        if (endTime + 2500){
+            this.game.destroy();
         }
         if (currentGameTime < 0) {
             currentGameTime = 0

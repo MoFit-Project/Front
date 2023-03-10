@@ -317,7 +317,7 @@ export default class Main extends Phaser.Scene {
 
     update(time, delta) {
         let currentGameTime = (gameTimeTotal - (gameTimePassed - 5)) / (gameTimeTotal)
-
+        let endTime;
 
         const end = gameTimeTotal - gameTimePassed
         if (end <= -5 && !this.playWin){
@@ -327,6 +327,10 @@ export default class Main extends Phaser.Scene {
                 this.loseSound.play()
             }
             this.playWin = true;
+            endTime = time;
+        }
+        if (endTime + 2500){
+            this.game.destroy();
         }
         if (currentGameTime < 0) {
 
