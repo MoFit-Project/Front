@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { isRoomHostState } from "../../recoil/states";
+import { isGaming } from "../../recoil/isGaming";
 // import { motionStart } from "../../recoil/motionStart";
 import {
 	leftCalculateAngle,
@@ -16,6 +17,7 @@ import {
 // export let isMotionStart = false;
 let start = false;
 let notHostReady = false;
+let isGameIng = false;
 export default function OvVideo({
 	streamManager,
 	userName,
@@ -30,9 +32,19 @@ export default function OvVideo({
 	const detectorRef = useRef(null);
 	const requestAnimeRef = useRef(null);
 	const [isLoaded, setIsLoaded] = useState(false);
+	const [playerGaming, setPlayerGaming] = useRecoilState(isGaming);
 	// const [isMotionStart, setIsMotionStart] = useRecoilState(motionStart);
 	//const [isRoomHost, setIsRoomHost] = useRecoilState(isRoomHostState);
 	//console.log(isRoomHost);
+	useEffect(() => {
+		if (playerGaming) {
+			isGameIng = true;
+		}
+		else {
+			isGameIng = false;
+		}
+	}, [playerGaming]);
+
 	useEffect(() => {
 		if (streamManager && !!videoRef.current) {
 			streamManager.addVideoElement(videoRef.current);
@@ -96,7 +108,7 @@ export default function OvVideo({
 		// }
 		let phaserStart111 = JSON.parse(localStorage.getItem('phaserStart'));
 		// console.log(phaserStart111);
-		if (detectorRef.current) {
+		if (detectorRef.current && isGameIng) {
 			try {
 				let video = videoRef.current;
 				const { videoWidth, videoHeight } = video;

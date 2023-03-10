@@ -270,6 +270,7 @@ export default class Main2 extends Phaser.Scene {
             endTime = time
         }
         if (endTime + 2500){
+            localStorage.setItem("phaserEndgame", "phaserEndgame");
             this.game.destroy();
         }
         if (currentGameTime < 0) {
